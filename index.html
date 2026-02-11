@@ -21,7 +21,7 @@
             --accent-pink: #ff00cc;
             --accent-cyan: #00ffff;
             --accent-yellow: #fff000;
-            --accent-red: #ff3333; /* マグロレッド */
+            --accent-red: #ff3333;
             --shadow-color: rgba(0, 0, 0, 0.5);
             
             --font-main: 'Helvetica Neue', Arial, sans-serif;
@@ -292,6 +292,10 @@
             overflow: hidden;
             box-shadow: 0 4px 15px var(--shadow-color);
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            text-decoration: none; /* リンクの下線消し */
+            display: block; /* aタグにしたのでブロック化 */
+            color: inherit;
         }
 
         .work-card:hover {
@@ -410,6 +414,7 @@
             text-decoration: none;
             line-height: 1;
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .social-btn:hover {
@@ -470,6 +475,140 @@
             60% {transform: translateY(-5px);}
         }
 
+        /* --- Modal (Common) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            text-align: center;
+            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 51, 51, 0.5);
+            border: 2px solid var(--accent-red);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            color: #fff;
+            font-size: 3rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-red);
+            transform: scale(1.2);
+        }
+
+        /* Coming Soon Custom Box */
+        .coming-soon-box {
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 20px; 
+            border: 3px solid var(--accent-cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            min-width: 300px;
+            max-width: 600px;
+        }
+        
+        .coming-soon-title {
+            color: var(--accent-yellow);
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0px var(--accent-pink);
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .coming-soon-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-weight: bold;
+        }
+
+        /* Effects */
+        .effect-breath .coming-soon-title {
+            color: var(--accent-yellow);
+            text-shadow: 0 0 10px var(--accent-yellow), 0 0 20px var(--accent-yellow);
+            animation: breath 3s infinite alternate ease-in-out;
+        }
+        .effect-breath .coming-soon-box {
+            border-color: var(--accent-yellow);
+            box-shadow: 0 0 30px rgba(255, 255, 0, 0.3);
+        }
+        @keyframes breath {
+            0% { opacity: 0.3; text-shadow: none; }
+            100% { opacity: 1; text-shadow: 0 0 20px var(--accent-yellow), 0 0 40px var(--accent-yellow); }
+        }
+
+        .effect-shake .coming-soon-title {
+            color: var(--accent-red);
+            text-shadow: 3px 0 0 #000;
+            animation: spicy-shake 0.1s infinite;
+        }
+        .effect-shake .coming-soon-box {
+            border-color: var(--accent-red);
+            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
+        }
+        @keyframes spicy-shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .effect-rainbow .coming-soon-title {
+            background: linear-gradient(to right, #ff0000, #ff8000, #ffff00, #008000, #0000ff, #4b0082, #ee82ee, #ff0000);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: none;
+            animation: rainbow-flow 4s linear infinite;
+        }
+        .effect-rainbow .coming-soon-box {
+            border-color: #fff;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+        @keyframes rainbow-flow {
+            to { background-position: 200% center; }
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
         @media (max-width: 768px) {
             header {
                 padding: 15px 20px;
@@ -527,6 +666,11 @@
             .sushi-btn {
                 width: 70px;
                 height: 70px;
+            }
+            .modal-close {
+                top: -60px;
+                right: 50%;
+                transform: translateX(50%);
             }
         }
     </style>
@@ -605,15 +749,21 @@
     <section id="works">
         <h2>OUR WORKS</h2>
         <div class="works-grid">
-            <div class="work-card">
+            <!-- 
+                1. The Classic (Garage Link) 
+                divではなくaタグに変更し、garage.htmlへ飛ばします
+            -->
+            <a href="garage.html" class="work-card" data-type="classic">
                 <div class="work-icon">🌭</div>
                 <div class="work-title">THE CLASSIC</div>
                 <p class="work-desc">
                     <span class="lang-ja">基本にして至高。極太ソーセージと自家製ピクルスが踊り出す、最初の一本。</span>
                     <span class="lang-en">Basic and supreme. Thick sausage and homemade pickles dancing together. The origin.</span>
                 </p>
-            </div>
-            <div class="work-card">
+            </a>
+            
+            <!-- 2. Cheese Bomb (Breath Effect) -->
+            <div class="work-card" data-type="cheese">
                 <div class="work-icon">🧀</div>
                 <div class="work-title">CHEESE BOMB</div>
                 <p class="work-desc">
@@ -621,7 +771,9 @@
                     <span class="lang-en">For those who want to drown in cheese. It's not even solid anymore. Caution: Hot.</span>
                 </p>
             </div>
-            <div class="work-card">
+            
+            <!-- 3. Volcano (Shake Effect) -->
+            <div class="work-card" data-type="spicy">
                 <div class="work-icon">🌶️</div>
                 <div class="work-title">VOLCANO</div>
                 <p class="work-desc">
@@ -629,7 +781,9 @@
                     <span class="lang-en">Jalapeño x 300%. Don't think about tomorrow. Live for today.</span>
                 </p>
             </div>
-            <div class="work-card">
+            
+            <!-- 4. Graffiti Dog (Rainbow Effect) -->
+            <div class="work-card" data-type="art">
                 <div class="work-icon">🎨</div>
                 <div class="work-title">GRAFFITI DOG</div>
                 <p class="work-desc">
@@ -659,14 +813,13 @@
                 
                 <div class="visible-buttons">
                     <a href="https://www.instagram.com/funky_hotdog?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram" style="font-family: sans-serif; font-weight: 900; letter-spacing: -1px;">IG</a>
-                    <!-- ここに lang="en" を追加し、日本語モードでも英語フォントの形を強制 -->
-                    <a href="#" class="social-btn" title="YouTube" style="font-size: 1.8rem;" lang="en">▶</a>
-                    <a href="#" class="social-btn" title="Etsy" style="font-family: serif; font-weight: 900; font-style: italic; font-size: 1.6rem;">E</a>
-                    <a href="#" class="social-btn" title="Amazon" style="font-family: sans-serif; font-weight: 900; font-size: 1.6rem; padding-bottom: 4px;">a</a>
+                    <a href="#" class="social-btn coming-soon-btn" title="YouTube" style="font-size: 1.8rem;" lang="en">▶</a>
+                    <a href="#" class="social-btn coming-soon-btn" title="Etsy" style="font-family: serif; font-weight: 900; font-style: italic; font-size: 1.6rem;">E</a>
+                    <a href="#" class="social-btn coming-soon-btn" title="Amazon" style="font-family: sans-serif; font-weight: 900; font-size: 1.6rem; padding-bottom: 4px;">a</a>
                 </div>
 
                 <div class="hidden-area">
-                    <a href="#" class="social-btn sushi-btn" title="Secret Sushi Shop">
+                    <a href="javascript:void(0)" class="social-btn sushi-btn" id="sushiBtn" title="Secret Sushi Shop">
                         <svg class="sushi-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <ellipse cx="32" cy="42" rx="22" ry="12" fill="#eeeeee" />
                             <ellipse cx="32" cy="42" rx="20" ry="10" fill="#ffffff" />
@@ -681,6 +834,26 @@
         
         <p class="copyright">&copy; 2024 FUNKY HOTDOG WORKS. All Rights Reserved.</p>
     </footer>
+
+    <!-- Secret Character Modal -->
+    <div class="modal" id="secretModal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closeModal('secretModal')">×</div>
+            <img src="secret.png" alt="Secret Sushi Master" class="modal-img">
+        </div>
+    </div>
+
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoonModal">
+        <div class="modal-content coming-soon-box" id="comingSoonBox">
+            <div class="modal-close" onclick="closeModal('comingSoonModal')">×</div>
+            <h2 class="coming-soon-title" id="comingSoonTitle">COMING SOON...</h2>
+            <p class="coming-soon-text" id="comingSoonText">
+                <span class="lang-ja">現在準備中だぜ！<br>震えて待て！</span>
+                <span class="lang-en">Under Construction!<br>Stay Tuned!</span>
+            </p>
+        </div>
+    </div>
 
     <script>
         const themeToggleBtn = document.getElementById('themeToggle');
@@ -741,12 +914,105 @@
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                // works-cardでリンクがあるものは無視（ガレージリンクなど）
+                if (this.classList.contains('work-card') && this.getAttribute('href')) return;
+
+                if(this.getAttribute('href') === 'javascript:void(0)' 
+                   || this.classList.contains('coming-soon-btn')
+                   || this.classList.contains('social-btn')) return;
+
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
             });
+        });
+
+        // --- Modals Logic ---
+        const sushiBtn = document.getElementById('sushiBtn');
+        const secretModal = document.getElementById('secretModal');
+        
+        const comingSoonModal = document.getElementById('comingSoonModal');
+        const comingSoonBox = document.getElementById('comingSoonBox');
+        const comingSoonText = document.getElementById('comingSoonText');
+        
+        const comingSoonBtns = document.querySelectorAll('.coming-soon-btn');
+        const workCards = document.querySelectorAll('.work-card');
+
+        // Secret Button
+        sushiBtn.addEventListener('click', () => {
+            secretModal.classList.add('active');
+        });
+
+        // Footer Coming Soon Buttons
+        comingSoonBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                resetEffects();
+                comingSoonText.innerHTML = `
+                    <span class="lang-ja">現在準備中だぜ！<br>震えて待て！</span>
+                    <span class="lang-en">Under Construction!<br>Stay Tuned!</span>
+                `;
+                comingSoonModal.classList.add('active');
+            });
+        });
+
+        // Works Cards Click Event
+        workCards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                const type = card.getAttribute('data-type');
+                
+                // ガレージリンク(classic)は普通にリンク遷移させるため、ここでの処理はスキップ
+                if (type === 'classic') return;
+
+                // 他のカードはモーダル表示
+                e.preventDefault();
+                resetEffects();
+
+                if (type === 'cheese') {
+                    comingSoonBox.classList.add('effect-breath');
+                    comingSoonText.innerHTML = `
+                        <span class="lang-ja">濃厚すぎる新体験。<br>溺れる準備はできてるか？</span>
+                        <span class="lang-en">Too Cheesy to Handle.<br>Are you ready to drown?</span>
+                    `;
+                } else if (type === 'spicy') {
+                    comingSoonBox.classList.add('effect-shake');
+                    comingSoonText.innerHTML = `
+                        <span class="lang-ja">危険度MAX。<br>この刺激、耐えられるか？</span>
+                        <span class="lang-en">Warning: Extreme Heat.<br>Can you survive the spice?</span>
+                    `;
+                } else if (type === 'art') {
+                    comingSoonBox.classList.add('effect-rainbow');
+                    comingSoonText.innerHTML = `
+                        <span class="lang-ja">常識を塗り替えろ。<br>食べるアート、まもなく解禁。</span>
+                        <span class="lang-en">Paint Your Taste.<br>Edible art is coming soon.</span>
+                    `;
+                }
+
+                comingSoonModal.classList.add('active');
+            });
+        });
+
+        function resetEffects() {
+            comingSoonBox.classList.remove('effect-breath', 'effect-shake', 'effect-rainbow');
+        }
+
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            if (modalId === 'comingSoonModal') {
+                setTimeout(resetEffects, 500);
+            }
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target === secretModal) {
+                secretModal.classList.remove('active');
+            }
+            if (e.target === comingSoonModal) {
+                comingSoonModal.classList.remove('active');
+                setTimeout(resetEffects, 500);
+            }
         });
     </script>
 </body>
