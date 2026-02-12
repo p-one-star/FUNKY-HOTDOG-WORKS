@@ -192,7 +192,6 @@
             align-items: center;
             margin-bottom: 20px;
             animation: heroPop .7s ease-out both, float 6s ease-in-out infinite;
-            filter: drop-shadow(0 0 40px rgba(0,255,255,0.9));
             @keyframes heroPop { from{opacity:0;transform:translateY(16px) scale(.98)} to{opacity:1;transform:none} }
         }
 
@@ -798,7 +797,9 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-img-container">
-            <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img">
+            <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img">.hero-img{
+  filter: drop-shadow(0 14px 28px rgba(0,255,255,.2));
+}
         </div>
 
         <p class="hero-tagline">
