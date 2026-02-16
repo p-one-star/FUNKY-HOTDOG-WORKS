@@ -152,35 +152,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: border-color 0.2s, filter 0.2s; /* 色と明度のアニメーション */
+            transition: border-color 0.2s, filter 0.2s;
             width: 44px;
             height: 44px;
             padding: 0;
-            position: relative; /* 擬似要素の位置基準 */
-            overflow: hidden;   /* ラインのはみ出し防止 */
+            position: relative;
+            overflow: hidden;
         }
         
-        /* ホバー時の演出 */
         .icon-btn:hover {
-            border-color: var(--accent-cyan); /* 枠線シアン点灯 */
-            filter: brightness(1.2);          /* ほんの少し明度アップ */
-            background: rgba(0, 255, 255, 0.05); /* うっすら背景色 */
+            border-color: var(--accent-cyan);
+            filter: brightness(1.2);
+            background: rgba(0, 255, 255, 0.05);
         }
 
-        /* 下を走る極細シアンライン */
         .icon-btn::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 0%; /* 初期状態は幅ゼロ */
+            width: 0%;
             height: 2px;
             background: var(--accent-cyan);
-            transition: width 0.2s ease-out; /* 0.2秒でシュッと伸びる */
+            transition: width 0.2s ease-out;
         }
 
         .icon-btn:hover::after {
-            width: 100%; /* ホバー時に幅いっぱい */
+            width: 100%;
         }
 
         .menu-toggle {
@@ -252,6 +250,10 @@
             font-size: 2rem;
             cursor: pointer;
             z-index: 10;
+            text-decoration: none;
+            line-height: 1;
+            font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+            font-weight: bold;
         }
 
         /* --- コンテンツセクション --- */
@@ -303,7 +305,7 @@
             gap: 40px;
         }
 
-        /* --- 通常のカードスタイル (Cheese, Spicy, Art用) --- */
+        /* --- 通常のカードスタイル (Spicy, Art用) --- */
         .work-card:not([data-type="classic"]) {
             background: var(--card-bg);
             border: 2px solid var(--card-border);
@@ -344,28 +346,24 @@
             text-decoration: none;
             display: block;
             color: inherit;
-            /* 通常時はうっすら青い枠線 */
             border: 1px solid rgba(0, 255, 255, 0.3);
         }
 
-        /* 回転する光のグラデーション層 */
         .work-card[data-type="classic"]::before {
             content: '';
             position: absolute;
             top: -50%; left: -50%;
             width: 200%; height: 200%;
-            /* 回転する青い光の筋 */
             background: conic-gradient(
                 transparent, 
                 transparent 70%, 
                 var(--accent-cyan) 100%
             );
             z-index: 0;
-            opacity: 0; /* 最初は隠す */
+            opacity: 0; 
             transition: opacity 0.3s ease;
         }
 
-        /* カードの背景層 */
         .work-card[data-type="classic"]::after {
             content: '';
             position: absolute;
@@ -375,7 +373,6 @@
             z-index: 1;
         }
 
-        /* コンテンツ */
         .work-card[data-type="classic"] .inner-content {
             position: relative;
             z-index: 10;
@@ -386,23 +383,21 @@
             align-items: center;
         }
 
-        /* ホバー時の演出 (IGNITION) */
         .work-card[data-type="classic"]:hover {
             transform: translateY(-6px) scale(1.02);
-            border-color: transparent; /* ボーダーを消す */
+            border-color: transparent;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
         }
 
         .work-card[data-type="classic"]:hover::before {
             opacity: 1;
-            animation: rotate-ignition 1.5s linear infinite; /* 高速回転 */
+            animation: rotate-ignition 1.5s linear infinite;
         }
 
         @keyframes rotate-ignition {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
 
         .work-icon {
             font-size: 4rem;
@@ -654,20 +649,6 @@
         }
 
         /* Effects */
-        .effect-breath .coming-soon-title {
-            color: var(--accent-yellow);
-            text-shadow: 0 0 10px var(--accent-yellow), 0 0 20px var(--accent-yellow);
-            animation: breath 3s infinite alternate ease-in-out;
-        }
-        .effect-breath .coming-soon-box {
-            border-color: var(--accent-yellow);
-            box-shadow: 0 0 30px rgba(255, 255, 0, 0.3);
-        }
-        @keyframes breath {
-            0% { opacity: 0.3; text-shadow: none; }
-            100% { opacity: 1; text-shadow: 0 0 20px var(--accent-yellow), 0 0 40px var(--accent-yellow); }
-        }
-
         .effect-shake .coming-soon-title {
             color: var(--accent-red);
             text-shadow: 3px 0 0 #000;
@@ -875,10 +856,6 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-img-container">
-            <!-- 
-               変更点：画像のファイル名 (image.PNG)
-               大文字拡張子を指定。
-            -->
             <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img">
         </div>
 
@@ -893,7 +870,8 @@
             </span>
         </p>
 
-        <a href="#about" class="scroll-down">⬇</a>
+        <!-- 矢印を ▼ に変更 (U+2B07 U+FE0E) -->
+        <a href="#about" class="scroll-down">⬇&#xFE0E;</a>
     </section>
 
     <!-- About Section -->
@@ -940,14 +918,15 @@
                 </div>
             </a>
             
-            <div class="work-card" data-type="cheese">
+            <!-- 2. Cheese Bomb (Link to MELT-ZONE) -->
+            <a href="https://p-one-star.github.io/MELT-ZONE/" class="work-card" data-type="cheese">
                 <div class="work-icon">🧀</div>
                 <div class="work-title">CHEESE BOMB</div>
                 <p class="work-desc">
                     <span class="lang-ja">チーズの海に溺れたいあなたへ。もはや個体ではない何か。火傷注意。</span>
                     <span class="lang-en">For those who want to drown in cheese. It's not even solid anymore. Caution: Hot.</span>
                 </p>
-            </div>
+            </a>
             
             <div class="work-card" data-type="spicy">
                 <div class="work-icon">🌶️</div>
@@ -1149,18 +1128,17 @@
         workCards.forEach(card => {
             card.addEventListener('click', (e) => {
                 const type = card.getAttribute('data-type');
-                if (type === 'classic') return;
+                
+                // ガレージとメルトゾーンはリンク遷移（JS処理不要）
+                if (type === 'classic' || type === 'cheese') return;
 
+                // 他のカードはモーダル表示
                 e.preventDefault();
                 resetEffects();
 
-                if (type === 'cheese') {
-                    comingSoonBox.classList.add('effect-breath');
-                    comingSoonText.innerHTML = `
-                        <span class="lang-ja">濃厚すぎる新体験。<br>溺れる準備はできてるか？</span>
-                        <span class="lang-en">Too Cheesy to Handle.<br>Are you ready to drown?</span>
-                    `;
-                } else if (type === 'spicy') {
+                // cheese の分岐削除（リンク遷移になったため）
+
+                if (type === 'spicy') {
                     comingSoonBox.classList.add('effect-shake');
                     comingSoonText.innerHTML = `
                         <span class="lang-ja">危険度MAX。<br>この刺激、耐えられるか？</span>
@@ -1180,6 +1158,7 @@
         });
 
         function resetEffects() {
+            // breath (cheese) は削除
             comingSoonBox.classList.remove('effect-breath', 'effect-shake', 'effect-rainbow');
             stopSpicyChaos();
             if(comingSoonTitle) {
@@ -1245,4 +1224,3 @@
 </html>
 
 
- 
