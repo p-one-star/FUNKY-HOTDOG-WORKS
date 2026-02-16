@@ -305,7 +305,7 @@
             gap: 40px;
         }
 
-        /* --- 通常のカードスタイル (Spicy, Art用) --- */
+        /* --- 通常のカードスタイル (Art用) --- */
         .work-card:not([data-type="classic"]) {
             background: var(--card-bg);
             border: 2px solid var(--card-border);
@@ -398,6 +398,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
 
         .work-icon {
             font-size: 4rem;
@@ -649,42 +650,6 @@
         }
 
         /* Effects */
-        .effect-shake .coming-soon-title {
-            color: var(--accent-red);
-            text-shadow: 3px 0 0 #000;
-            animation: spicy-base-shake 0.05s infinite; 
-        }
-        .effect-shake .coming-soon-box {
-            border-color: var(--accent-red);
-            box-shadow: 0 0 30px rgba(255, 51, 51, 0.3);
-        }
-
-        @keyframes spicy-base-shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            20% { transform: translate(-1px, -2px) rotate(-1deg); }
-            40% { transform: translate(-2px, 0px) rotate(1deg); }
-            60% { transform: translate(2px, 1px) rotate(0deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
-
-        .spicy-surge {
-            animation: spicy-surge-shake 0.08s infinite !important;
-            color: #fff !important;
-            text-shadow: 0 0 15px red, 5px 5px 0 #000 !important;
-            z-index: 10;
-        }
-        @keyframes spicy-surge-shake {
-            0% { transform: scale(1.3) translate(2px, 2px); }
-            50% { transform: scale(1.35) translate(-2px, -2px) rotate(5deg); }
-            100% { transform: scale(1.3) translate(0px, 2px) rotate(-5deg); }
-        }
-
-        .spicy-vanish {
-            opacity: 0.1 !important;
-            filter: blur(2px);
-        }
-
         .effect-rainbow .coming-soon-title {
             background: linear-gradient(to right, #ff0000, #ff8000, #ffff00, #008000, #0000ff, #4b0082, #ee82ee, #ff0000);
             background-size: 200% auto;
@@ -928,14 +893,15 @@
                 </p>
             </a>
             
-            <div class="work-card" data-type="spicy">
+            <!-- 3. Volcano (Link to RIOT-CARNIVAL) -->
+            <a href="https://p-one-star.github.io/RIOT-CARNIVAL/" class="work-card" data-type="spicy">
                 <div class="work-icon">🌶️</div>
                 <div class="work-title">VOLCANO</div>
                 <p class="work-desc">
                     <span class="lang-ja">ハラペーニョ×300%。翌日のことは考えるな。今を生きろ。</span>
                     <span class="lang-en">Jalapeño x 300%. Don't think about tomorrow. Live for today.</span>
                 </p>
-            </div>
+            </a>
             
             <div class="work-card" data-type="art">
                 <div class="work-icon">🎨</div>
@@ -1129,23 +1095,16 @@
             card.addEventListener('click', (e) => {
                 const type = card.getAttribute('data-type');
                 
-                // ガレージとメルトゾーンはリンク遷移（JS処理不要）
-                if (type === 'classic' || type === 'cheese') return;
+                // リンクがあるカード(classic, cheese, spicy)は通常の遷移をさせる
+                if (type === 'classic' || type === 'cheese' || type === 'spicy') return;
 
                 // 他のカードはモーダル表示
                 e.preventDefault();
                 resetEffects();
 
-                // cheese の分岐削除（リンク遷移になったため）
+                // spicy の分岐削除（リンク遷移になったため）
 
-                if (type === 'spicy') {
-                    comingSoonBox.classList.add('effect-shake');
-                    comingSoonText.innerHTML = `
-                        <span class="lang-ja">危険度MAX。<br>この刺激、耐えられるか？</span>
-                        <span class="lang-en">Warning: Extreme Heat.<br>Can you survive the spice?</span>
-                    `;
-                    startSpicyChaos();
-                } else if (type === 'art') {
+                if (type === 'art') {
                     comingSoonBox.classList.add('effect-rainbow');
                     comingSoonText.innerHTML = `
                         <span class="lang-ja">常識を塗り替えろ。<br>食べるアート、まもなく解禁。</span>
@@ -1158,9 +1117,8 @@
         });
 
         function resetEffects() {
-            // breath (cheese) は削除
             comingSoonBox.classList.remove('effect-breath', 'effect-shake', 'effect-rainbow');
-            stopSpicyChaos();
+            stopSpicyChaos(); // 不要だが残しておく（エラー防止）
             if(comingSoonTitle) {
                 comingSoonTitle.classList.remove('spicy-surge', 'spicy-vanish');
                 comingSoonTitle.style.transform = '';
@@ -1168,29 +1126,23 @@
             }
         }
 
-        // JSで制御するランダムカオスエフェクト
+        // JSで制御するランダムカオスエフェクト (現在は未使用だが残しておく)
         function startSpicyChaos() {
             if(!comingSoonTitle) return;
 
             const loop = () => {
-                const nextTime = Math.random() * 1200 + 100; // 0.1s ~ 1.3s後に次のイベント
-                
+                const nextTime = Math.random() * 1200 + 100;
                 spicyInterval = setTimeout(() => {
                     const action = Math.random();
-                    
-                    // 一旦リセット
                     comingSoonTitle.classList.remove('spicy-surge', 'spicy-vanish');
 
                     if (action < 0.25) { 
-                        // 25% 巨大化＆激震
                         comingSoonTitle.classList.add('spicy-surge');
                         setTimeout(() => comingSoonTitle.classList.remove('spicy-surge'), 150);
                     } else if (action < 0.45) {
-                        // 20% 一瞬消える
                         comingSoonTitle.classList.add('spicy-vanish');
                         setTimeout(() => comingSoonTitle.classList.remove('spicy-vanish'), Math.random() * 400 + 100);
                     }
-                    
                     loop();
                 }, nextTime);
             };
