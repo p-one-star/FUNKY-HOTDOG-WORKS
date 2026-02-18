@@ -292,23 +292,34 @@
         /* --- ロゴ風レイアウト (画像版) --- */
         .logo-stack {
             display: block;
-            text-align: center; /* 画像を中央配置 */
+            text-align: center;
             width: 100%;
             margin: 20px auto 30px;
+            perspective: 1000px;
         }
 
-        /* FHW.PNG 用スタイル */
         .about-logo-img {
             max-width: 90%;
             width: 450px;
             height: auto;
             display: inline-block;
             filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: float-logo 6s ease-in-out infinite;
+            transform-origin: center center;
+        }
+        
+        @keyframes float-logo {
+            0% { transform: translateY(0) rotateX(0deg) scale(1); }
+            25% { transform: translateY(5px) rotateX(5deg) scale(0.98); }
+            50% { transform: translateY(-5px) rotateX(-5deg) scale(1.02); }
+            75% { transform: translateY(3px) rotateX(3deg) scale(0.99); }
+            100% { transform: translateY(0) rotateX(0deg) scale(1); }
         }
         
         .about-logo-img:hover {
-            transform: scale(1.05) rotate(-2deg);
+            animation-play-state: paused;
+            transform: scale(1.05) rotateX(0deg) !important;
+            transition: transform 0.3s;
         }
 
         /* --- バグらせる見出し --- */
@@ -328,17 +339,26 @@
             display: inline-block;
             color: var(--accent-cyan);
             text-shadow: 3px 3px 0 var(--accent-pink);
-            animation: bug-shake 0.15s infinite; 
+            position: relative;
+            transition: transform 0.05s;
         }
 
-        @keyframes bug-shake {
-            0% { transform: translate(0, 0); }
-            20% { transform: translate(-2px, 1px); }
-            40% { transform: translate(1px, -2px); }
-            60% { transform: translate(-1px, 2px); }
-            80% { transform: translate(2px, -1px); }
-            100% { transform: translate(0, 0); }
+        /* --- 各種バグエフェクト --- */
+        .effect-jit { transform: skewX(-20deg) translateX(-3px) !important; text-shadow: -2px 0 red, 2px 0 blue !important; }
+        .effect-jijit { animation: jijit-anim 0.2s linear infinite !important; }
+        @keyframes jijit-anim {
+            0% { transform: translate(2px, -2px); opacity: 1; }
+            50% { transform: translate(1px, 1px); opacity: 1; }
+            100% { transform: translate(0, 0); opacity: 1; }
         }
+        .effect-flash { color: #fff !important; text-shadow: 0 0 10px #fff, 0 0 20px #fff !important; filter: brightness(3) !important; }
+        .effect-vanish { opacity: 0.05 !important; }
+        .effect-gura { transform: translateY(6px) rotate(3deg) !important; }
+        .effect-blink { animation: blink-anim 0.1s steps(2) infinite !important; }
+        @keyframes blink-anim { 0% { opacity: 1; } 100% { opacity: 0.3; } }
+        .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform 0.3s ease-out !important; }
+        .effect-kaku { transform: rotate(-8deg) !important; }
+
 
         /* --- メッセージ本文 --- */
         .funky-message {
@@ -349,21 +369,73 @@
             margin-top: 20px;
         }
 
-        .play-more {
-            display: block;
+        /* --- 遊べ！もっと・・・ (3D複合回転) --- */
+        /* コンテナを作って3D空間を設定 */
+        .play-more-container {
+            perspective: 800px; /* 奥行き感 */
+            display: inline-block;
             margin-top: 30px;
+        }
+
+        .play-more {
+            display: block; /* インラインブロックのままだとtransformが効きにくい場合がある */
             font-size: 1.8rem;
             color: var(--accent-pink);
             font-family: var(--font-ja);
             letter-spacing: 3px;
             text-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
-            animation: pulse-text 2s infinite;
+            /* 軸は中心(center center)。
+               rotateY: 左右のひねり (5s)
+               rotateZ: 上下のシーソー (7.5s - Z軸回転と見せかけてシーソー的な揺れならZ回転で表現可能、あるいはRotateXなども使えるが、ご要望の「左右が上下する」はRotateZが近い)
+            */
+            animation: 
+                rotate-y-axis 5s ease-in-out infinite,
+                rotate-z-axis 7.5s ease-in-out infinite;
+            transform-style: preserve-3d;
         }
 
-        @keyframes pulse-text {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.05); }
+        /* 左右のひねり (Y軸) 5秒 */
+        @keyframes rotate-y-axis {
+            0% { transform: rotateY(15deg); }   /* 左が手前、右が奥 */
+            50% { transform: rotateY(-15deg); } /* 左が奥、右が手前 */
+            100% { transform: rotateY(15deg); }
         }
+
+        /* 上下のシーソー (Z軸) 7.5秒 */
+        @keyframes rotate-z-axis {
+            0% { transform: rotateZ(-5deg); }   /* 左上、右下 */
+            50% { transform: rotateZ(5deg); }   /* 左下、右上 */
+            100% { transform: rotateZ(-5deg); }
+        }
+
+        /* Note: 2つのanimationを同時に指定するとtransformプロパティが競合して片方しか動かないことがあるため、
+           親要素と子要素に分けるか、一つのkeyframesにまとめる必要があるが、
+           周期が違う(5sと7.5s)ので単純な合成は難しい。
+           
+           解決策：入れ子構造にする
+           親：Y軸回転
+           子：Z軸回転
+        */
+        
+        .play-more-outer {
+            display: inline-block;
+            animation: rotate-y-axis 5s ease-in-out infinite;
+            transform-origin: center center;
+        }
+        
+        .play-more-inner {
+            display: block;
+            animation: rotate-z-axis 7.5s ease-in-out infinite;
+            transform-origin: center center;
+            
+            /* 装飾関係はこちらに */
+            font-size: 1.8rem;
+            color: var(--accent-pink);
+            font-family: var(--font-ja);
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
+        }
+
 
         /* --- Works Grid --- */
         .works-grid {
@@ -961,22 +1033,26 @@
         <div class="about-text">
             <span class="lang-ja">
                 <div class="logo-stack">
-                    <!-- FHW.PNG 画像に変更 -->
                     <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
                 </div>
                 
-                <!-- 新しいキャッチコピー -->
                 <h3 class="bug-headline">
                     ホットドッグが<br>
                     <span class="glitch-text">世界をバグらせる！</span>
                 </h3>
 
-                <!-- 本文 -->
                 <p class="funky-message">
                     ルール無用。カロリー無用。<br>
                     常識に囚われるな！<br>
                     FUNKYであれ。<br>
-                    <span class="play-more">遊べ！もっと・・・</span>
+                    <!-- ここに 3D複合回転アニメーションを適用 -->
+                    <div class="play-more-container">
+                        <span class="play-more-outer">
+                            <span class="play-more-inner">
+                                遊べ！もっと・・・
+                            </span>
+                        </span>
+                    </div>
                 </p>
             </span>
             
@@ -992,7 +1068,13 @@
                     No Rules. No Calories.<br>
                     Break the Common Sense!<br>
                     Be FUNKY.<br>
-                    <span class="play-more">Play! More...</span>
+                    <div class="play-more-container">
+                        <span class="play-more-outer">
+                            <span class="play-more-inner">
+                                Play! More...
+                            </span>
+                        </span>
+                    </div>
                 </p>
             </span>
         </div>
@@ -1227,14 +1309,12 @@
             card.addEventListener('click', (e) => {
                 const type = card.getAttribute('data-type');
                 
-                // リンクがあるカード(classic, cheese, spicy)は通常の遷移をさせる
+                // リンクがあるカードは通常の遷移をさせる
                 if (type === 'classic' || type === 'cheese' || type === 'spicy') return;
 
                 // 他のカードはモーダル表示
                 e.preventDefault();
                 resetEffects();
-
-                // spicy の分岐削除（リンク遷移になったため）
 
                 if (type === 'art') {
                     comingSoonBox.classList.add('effect-rainbow');
@@ -1252,13 +1332,91 @@
             comingSoonBox.classList.remove('effect-breath', 'effect-shake', 'effect-rainbow');
             stopSpicyChaos(); // 不要だが残しておく（エラー防止）
             if(comingSoonTitle) {
-                comingSoonTitle.classList.remove('spicy-surge', 'spicy-vanish');
+                // クラスを全削除しなくても、基本状態に戻ればOK
+                comingSoonTitle.className = 'coming-soon-title';
                 comingSoonTitle.style.transform = '';
                 comingSoonTitle.style.opacity = '';
+                comingSoonTitle.style.textShadow = '';
             }
         }
 
-        // JSで制御するランダムカオスエフェクト (現在は未使用だが残しておく)
+        // --- GLITCH EFFECT (Random Timing) ---
+        const glitchText = document.querySelector('.glitch-text');
+
+        function triggerGlitch() {
+            if (!glitchText) return;
+
+            // 次の発生までの時間（3秒 〜 6秒）
+            const nextTime = Math.random() * 3000 + 3000;
+
+            setTimeout(() => {
+                // パターンくじ引き (0～9)
+                const pattern = Math.floor(Math.random() * 10);
+                
+                // リセット用関数
+                const reset = () => {
+                    glitchText.className = 'glitch-text'; // 基本クラスのみに戻す
+                    glitchText.style = ''; // インラインスタイルも消す
+                    triggerGlitch(); // 次の予約
+                };
+
+                // アクション実行
+                switch(pattern) {
+                    case 0: // ジッ (一瞬歪む)
+                        glitchText.classList.add('effect-jit');
+                        setTimeout(reset, 50);
+                        break;
+                    
+                    case 1: // ジジッ (連続ノイズ)
+                        glitchText.classList.add('effect-jijit');
+                        setTimeout(reset, 200);
+                        break;
+                    
+                    case 2: // 発光 (ホワイトアウト)
+                        glitchText.classList.add('effect-flash');
+                        setTimeout(reset, 100);
+                        break;
+
+                    case 3: // 消滅 (接触不良)
+                        glitchText.classList.add('effect-vanish');
+                        setTimeout(reset, 150);
+                        break;
+
+                    case 4: // グラッ (大きな揺れ)
+                        glitchText.classList.add('effect-gura');
+                        setTimeout(reset, 150);
+                        break;
+
+                    case 5: // チカッ (点滅)
+                        glitchText.classList.add('effect-blink');
+                        setTimeout(reset, 300);
+                        break;
+                    
+                    case 6: // フワフワ (浮遊)
+                        glitchText.classList.add('effect-fuwa');
+                        setTimeout(reset, 400);
+                        break;
+
+                    case 7: // カクッ (角度ズレ)
+                        glitchText.classList.add('effect-kaku');
+                        setTimeout(reset, 100);
+                        break;
+
+                    default: 
+                        // 8, 9: 何もしない (虚無)
+                        // これがあることで「いつ来るかわからない」感が出る
+                        setTimeout(reset, 100); 
+                        break;
+                }
+
+            }, nextTime);
+        }
+        
+        // 初回起動
+        triggerGlitch();
+
+
+        // JSで制御するランダムカオスエフェクト (モーダル用：現在は未使用だが残しておく)
         function startSpicyChaos() {
             if(!comingSoonTitle) return;
 
