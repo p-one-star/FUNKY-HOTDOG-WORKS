@@ -299,23 +299,73 @@
 
         /* FHW.PNG 用スタイル */
         .about-logo-img {
-            max-width: 90%; /* スマホではみ出さないように */
-            width: 450px;   /* PCでの適度なサイズ */
+            max-width: 90%;
+            width: 450px;
             height: auto;
             display: inline-block;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5)); /* 影で浮き上がらせる */
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
         .about-logo-img:hover {
-            transform: scale(1.05) rotate(-2deg); /* ホバーで少し傾いて大きくなる */
-        }
-        
-        [data-theme="light"] .about-logo-img {
-            /* ライトモードでの視認性調整が必要ならここに記述 */
-            /* 現状はそのまま表示 */
+            transform: scale(1.05) rotate(-2deg);
         }
 
+        /* --- バグらせる見出し --- */
+        .bug-headline {
+            font-family: var(--font-ja);
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin: 30px 0;
+            color: var(--accent-yellow);
+            text-shadow: 4px 4px 0 var(--accent-red);
+            transform: rotate(-2deg);
+            display: block;
+        }
+
+        .glitch-text {
+            display: inline-block;
+            color: var(--accent-cyan);
+            text-shadow: 3px 3px 0 var(--accent-pink);
+            animation: bug-shake 0.15s infinite; 
+        }
+
+        @keyframes bug-shake {
+            0% { transform: translate(0, 0); }
+            20% { transform: translate(-2px, 1px); }
+            40% { transform: translate(1px, -2px); }
+            60% { transform: translate(-1px, 2px); }
+            80% { transform: translate(2px, -1px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* --- メッセージ本文 --- */
+        .funky-message {
+            font-size: 1.4rem;
+            line-height: 2;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-top: 20px;
+        }
+
+        .play-more {
+            display: block;
+            margin-top: 30px;
+            font-size: 1.8rem;
+            color: var(--accent-pink);
+            font-family: var(--font-ja);
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
+            animation: pulse-text 2s infinite;
+        }
+
+        @keyframes pulse-text {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        /* --- Works Grid --- */
         .works-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -910,34 +960,39 @@
         <h2>WHO WE ARE</h2>
         <div class="about-text">
             <span class="lang-ja">
-                <p>
-                    私たちは普通のホットドッグ屋<br>ではありません。<br><br>
-                    
-                    <!-- FHW.PNG 画像配置 -->
-                    <div class="logo-stack">
-                        <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
-                    </div>
-                    とは、<br>
-                    アートとストリートカルチャー<br>そして、<br>
-                    美味しいソーセージを融合させた<br>
-                    謎のクリエイティブ集団です。<br><br>
-                    ルール無用。 カロリー無用。<br>
-                    ただひたすらに、<br>
-                    心を震わせる<br>1本を創り続けます。
+                <div class="logo-stack">
+                    <!-- FHW.PNG 画像に変更 -->
+                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
+                </div>
+                
+                <!-- 新しいキャッチコピー -->
+                <h3 class="bug-headline">
+                    ホットドッグが<br>
+                    <span class="glitch-text">世界をバグらせる！</span>
+                </h3>
+
+                <!-- 本文 -->
+                <p class="funky-message">
+                    ルール無用。カロリー無用。<br>
+                    常識に囚われるな！<br>
+                    FUNKYであれ。<br>
+                    <span class="play-more">遊べ！もっと・・・</span>
                 </p>
             </span>
+            
             <span class="lang-en">
-                <p>
-                    We are not your average<br>hot dog stand.<br><br>
-                    <div class="logo-stack">
-                        <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
-                    </div><br>
-                    is a mysterious creative collective<br>
-                    fusing art, street culture,<br>
-                    and delicious sausages.<br><br>
-                    No rules. Ignore the calories.<br>
-                    We simply keep making hot dogs<br>
-                    that shake your soul.
+                 <div class="logo-stack">
+                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
+                </div>
+                <h3 class="bug-headline">
+                    Hot Dogs Will<br>
+                    <span class="glitch-text">Bug The World!</span>
+                </h3>
+                <p class="funky-message">
+                    No Rules. No Calories.<br>
+                    Break the Common Sense!<br>
+                    Be FUNKY.<br>
+                    <span class="play-more">Play! More...</span>
                 </p>
             </span>
         </div>
@@ -1253,4 +1308,3 @@
 </html>
 
 
- 
