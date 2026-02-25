@@ -110,13 +110,15 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* ヘッダーロゴ画像（余計な装飾を削除し、画像をそのまま表示） */
+        /* ヘッダーロゴ画像 */
         .header-logo {
-            height: 44px; /* 右側のアイコンボタンと高さを揃える */
+            height: 64px; /* 44pxから64pxに拡大して大きく目立たせる！ */
             width: auto;
-            object-fit: contain; /* 画像を切り抜かずに全体を表示 */
+            object-fit: contain; 
             cursor: pointer;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            margin-top: -5px; /* 上下の余白を少し詰めてヘッダーが太くなりすぎないように調整 */
+            margin-bottom: -5px;
         }
 
         .header-logo:hover {
@@ -399,14 +401,14 @@
         }
 
         @keyframes rotate-y-axis {
-            0% { transform: rotateY(15deg); }
-            50% { transform: rotateY(-15deg); }
+            0% { transform: rotateY(15deg); }   
+            50% { transform: rotateY(-15deg); } 
             100% { transform: rotateY(15deg); }
         }
 
         @keyframes rotate-z-axis {
-            0% { transform: rotateZ(-5deg); }
-            50% { transform: rotateZ(5deg); }
+            0% { transform: rotateZ(-5deg); }   
+            50% { transform: rotateZ(5deg); }   
             100% { transform: rotateZ(-5deg); }
         }
 
@@ -922,6 +924,11 @@
                 font-size: 1.2rem;
             }
             
+            /* スマホ版でもロゴを少し大きめに */
+            .header-logo {
+                height: 54px;
+            }
+            
             .header-right {
                 gap: 8px;
             }
@@ -962,7 +969,7 @@
     </div>
 
     <header>
-        <!-- ヘッダーロゴを画像に変更（装飾なし） -->
+        <!-- ヘッダーロゴ (大きくしました！) -->
         <img src="icon.PNG" alt="FHW" class="header-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
         
         <div class="header-right">
