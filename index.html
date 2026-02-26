@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ja" data-theme="dark">
+<!-- 初期言語を en に設定 -->
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,7 +70,7 @@
             list-style: none;
         }
 
-        /* --- 言語切り替え用 CSS --- */
+        /* --- 言語切り替え用 CSS (ページ全体の言語用) --- */
         html[lang="ja"] .lang-en { display: none !important; }
         html[lang="en"] .lang-ja { display: none !important; }
 
@@ -99,10 +100,11 @@
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 15px 40px;
+            height: 70px; /* ヘッダーの基本高さをスリムに固定 */
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end; /* ロゴが絶対配置になるので、中身は右寄せ */
             align-items: center;
+            padding: 0 40px;
             z-index: 100;
             background: var(--header-bg);
             backdrop-filter: blur(5px);
@@ -110,25 +112,29 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* ヘッダーロゴ画像（指定サイズ・配置・角度に調整） */
-        .header-logo {
-            height: 100px; /* 大きさを100pxに指定 */
-            width: auto;
-            object-fit: contain; 
-            cursor: pointer;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            /* ヘッダーが太くなりすぎないように余白を相殺 */
-            margin-top: -20px; 
-            margin-bottom: -20px;
-            /* 10px下にズラして、右上がりで5度 */
-            transform: translateY(10px) rotate(-5deg);
-            position: relative;
+        /* はみ出しロゴのコンテナ */
+        .header-logo-container {
+            position: absolute;
+            left: 40px;
+            top: 10px; /* 下に少しズラすことで、ヘッダー枠を突き抜ける */
             z-index: 101;
         }
 
+        /* はみ出しロゴ画像 */
+        .header-logo {
+            width: 100px; /* ガッツリ大きく100px */
+            height: auto;
+            object-fit: contain; 
+            cursor: pointer;
+            /* 基本は右上がり5度 */
+            transform: rotate(-5deg);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); /* 浮き出させる影 */
+        }
+
         .header-logo:hover {
-            /* ホバー時に1.1倍＆右上がりの角度を12度に強化 */
-            transform: translateY(10px) scale(1.1) rotate(-12deg); 
+            /* ホバーで1.1倍、角度12度に強化！ */
+            transform: scale(1.1) rotate(-12deg); 
         }
 
         .header-right {
@@ -153,50 +159,68 @@
             color: var(--accent-cyan);
         }
 
-        .icon-btn {
-            background: none;
-            border: 2px solid var(--text-color);
+        /* --- カプセル型トグルボタン (STORAGEスタイル) --- */
+        .toggle-capsule {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             color: var(--text-color);
-            border-radius: 12px;
+            border-radius: 25px; /* カプセル状 */
             cursor: pointer;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 5px 12px;
+            gap: 8px;
             transition: 0.3s;
-            width: 44px;
-            height: 44px;
-            padding: 0;
-            position: relative;
-            overflow: hidden;
+            line-height: 1;
         }
         
-        .icon-btn:hover {
+        .toggle-capsule:hover {
             border-color: var(--accent-cyan);
-            filter: brightness(1.2);
             background: rgba(0, 255, 255, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 255, 255, 0.1);
         }
 
-        .icon-btn::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: var(--accent-cyan);
-            transition: width 0.2s ease-out;
+        .toggle-capsule span {
+            transition: opacity 0.3s, filter 0.3s;
         }
 
-        .icon-btn:hover::after {
-            width: 100%;
+        /* セパレーター (|) */
+        .separator {
+            font-size: 0.8rem;
+            opacity: 0.4;
+            color: var(--text-color);
+            padding-bottom: 2px;
         }
 
+        /* 言語トグルの表示切替 (HTMLのlang属性に連動) */
+        html[lang="ja"] .ja-icon { opacity: 1; filter: grayscale(0%); }
+        html[lang="ja"] .en-icon { opacity: 0.3; filter: grayscale(100%); }
+        html[lang="en"] .en-icon { opacity: 1; filter: grayscale(0%); }
+        html[lang="en"] .ja-icon { opacity: 0.3; filter: grayscale(100%); }
+
+        /* テーマトグルの表示切替 (HTMLのdata-theme属性に連動) */
+        html[data-theme="dark"] .dark-icon { opacity: 1; filter: grayscale(0%); }
+        html[data-theme="dark"] .light-icon { opacity: 0.3; filter: grayscale(100%); }
+        html[data-theme="light"] .light-icon { opacity: 1; filter: grayscale(0%); }
+        html[data-theme="light"] .dark-icon { opacity: 0.3; filter: grayscale(100%); }
+
+        /* --- メニューアイコン (🌭) --- */
         .menu-toggle {
             display: none;
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
-            margin-left: 10px;
+            margin-left: 5px;
+            /* 枠線をなくし、斜めに構える */
+            transform: rotate(-10deg);
+            transition: transform 0.3s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.15) rotate(-20deg);
         }
 
         /* --- ヒーローセクション --- */
@@ -893,9 +917,11 @@
             100% { opacity: 0; }
         }
 
+        /* --- スマホ時のレイアウト調整 --- */
         @media (max-width: 768px) {
             header {
-                padding: 15px 20px;
+                height: 60px; /* スマホは少しヘッダーを細く */
+                padding: 0 15px;
             }
             .menu-toggle {
                 display: block;
@@ -903,7 +929,7 @@
             
             nav {
                 position: absolute;
-                top: 74px;
+                top: 60px;
                 left: 0;
                 width: 100%;
                 background: var(--header-bg);
@@ -924,14 +950,25 @@
                 gap: 20px;
             }
             
-            .icon-btn {
-                width: 38px;
-                height: 38px;
-                font-size: 1.2rem;
+            /* スマホ版でもロゴをガッツリはみ出させる */
+            .header-logo-container {
+                left: 15px;
+                top: 5px; 
+            }
+            .header-logo {
+                width: 85px; /* スマホでも十分はみ出す大きさ */
+                height: auto;
             }
             
             .header-right {
                 gap: 8px;
+            }
+            
+            /* スマホ時はカプセルボタンを少し小さく */
+            .toggle-capsule {
+                padding: 4px 10px;
+                font-size: 1.1rem;
+                gap: 6px;
             }
 
             .hero-img-container {
@@ -970,8 +1007,10 @@
     </div>
 
     <header>
-        <!-- ヘッダーロゴ (PC・スマホ共通で100px固定、下ズレ＆傾き) -->
-        <img src="icon.PNG" alt="FHW" class="header-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+        <!-- ヘッダーロゴ (完全はみ出し配置！) -->
+        <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <img src="icon.PNG" alt="FHW" class="header-logo">
+        </div>
         
         <div class="header-right">
             <nav id="nav">
@@ -983,8 +1022,21 @@
                 </ul>
             </nav>
 
-            <button class="icon-btn" id="langToggle" aria-label="言語切り替え">🇺🇸</button>
-            <button class="icon-btn" id="themeToggle" aria-label="テーマ切り替え">🌙</button>
+            <!-- カプセル型トグルボタン (言語) -->
+            <button class="toggle-capsule" id="langToggle" aria-label="言語切り替え">
+                <span class="en-icon">🇺🇸</span>
+                <span class="separator">|</span>
+                <span class="ja-icon">🇯🇵</span>
+            </button>
+            
+            <!-- カプセル型トグルボタン (テーマ) -->
+            <button class="toggle-capsule" id="themeToggle" aria-label="テーマ切り替え">
+                <span class="dark-icon">🌙</span>
+                <span class="separator">|</span>
+                <span class="light-icon">☀️</span>
+            </button>
+            
+            <!-- メニューアイコン -->
             <div class="menu-toggle" id="menuToggle">🌭</div>
         </div>
     </header>
@@ -1177,18 +1229,21 @@
         const htmlElement = document.documentElement;
         const scanEffect = document.getElementById('scanEffect');
         
+        // ローカルストレージからの読み込み
+        // 言語のデフォルトは 'en' に寄せる（ストレージになければen）
         const savedTheme = localStorage.getItem('theme');
-        const savedLang = localStorage.getItem('lang');
+        let savedLang = localStorage.getItem('lang');
         
+        if (!savedLang) {
+            savedLang = 'en'; // 初回訪問時は英語！
+        }
+
         if (savedTheme) {
             htmlElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcon(savedTheme);
         }
         
-        if (savedLang) {
-            htmlElement.setAttribute('lang', savedLang);
-            updateLangIcon(savedLang);
-        }
+        // HTMLタグに言語をセット
+        htmlElement.setAttribute('lang', savedLang);
 
         themeToggleBtn.addEventListener('click', () => {
             const currentTheme = htmlElement.getAttribute('data-theme') || 'dark';
@@ -1196,12 +1251,7 @@
             
             htmlElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
         });
-
-        function updateThemeIcon(theme) {
-            themeToggleBtn.textContent = theme === 'light' ? '☀️' : '🌙';
-        }
 
         // 言語切り替え時のスキャン演出
         langToggleBtn.addEventListener('click', () => {
@@ -1210,12 +1260,11 @@
 
             // 0.15秒後（暗転中）に切り替え実行
             setTimeout(() => {
-                const currentLang = htmlElement.getAttribute('lang') || 'ja';
+                const currentLang = htmlElement.getAttribute('lang') || 'en';
                 const newLang = currentLang === 'ja' ? 'en' : 'ja';
                 
                 htmlElement.setAttribute('lang', newLang);
                 localStorage.setItem('lang', newLang);
-                updateLangIcon(newLang);
             }, 150);
 
             // アニメーション完了後にクラス削除 (0.3s)
@@ -1224,9 +1273,6 @@
             }, 400);
         });
 
-        function updateLangIcon(lang) {
-            langToggleBtn.textContent = lang === 'ja' ? '🇺🇸' : '🇯🇵';
-        }
 
         const menuToggle = document.getElementById('menuToggle');
         const nav = document.getElementById('nav');
