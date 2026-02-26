@@ -110,23 +110,25 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* ヘッダーロゴ画像（超巨大化＆はみ出し演出！） */
+        /* ヘッダーロゴ画像（指定サイズ・配置・角度に調整） */
         .header-logo {
-            height: 110px; /* PC版でドカンと大きく */
+            height: 100px; /* 大きさを100pxに指定 */
             width: auto;
             object-fit: contain; 
             cursor: pointer;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            /* 上下のマイナスマージンで、ヘッダーの黒帯からはみ出させる */
-            margin-top: -30px; 
-            margin-bottom: -30px;
-            /* はみ出しても他の要素より手前に来るように */
+            /* ヘッダーが太くなりすぎないように余白を相殺 */
+            margin-top: -20px; 
+            margin-bottom: -20px;
+            /* 10px下にズラして、右上がりで5度 */
+            transform: translateY(10px) rotate(-5deg);
             position: relative;
             z-index: 101;
         }
 
         .header-logo:hover {
-            transform: scale(1.1) rotate(-5deg); /* ホバーで少し弾む */
+            /* ホバー時に1.1倍＆右上がりの角度を12度に強化 */
+            transform: translateY(10px) scale(1.1) rotate(-12deg); 
         }
 
         .header-right {
@@ -928,13 +930,6 @@
                 font-size: 1.2rem;
             }
             
-            /* スマホ版でもロゴをがっつり大きく */
-            .header-logo {
-                height: 90px; /* ここも大幅アップ！ */
-                margin-top: -20px;
-                margin-bottom: -20px;
-            }
-            
             .header-right {
                 gap: 8px;
             }
@@ -975,7 +970,7 @@
     </div>
 
     <header>
-        <!-- ヘッダーロゴ (ドカンと大きくしました！) -->
+        <!-- ヘッダーロゴ (PC・スマホ共通で100px固定、下ズレ＆傾き) -->
         <img src="icon.PNG" alt="FHW" class="header-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
         
         <div class="header-right">
