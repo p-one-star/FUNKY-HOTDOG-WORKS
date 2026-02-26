@@ -439,7 +439,7 @@
             gap: 40px;
         }
 
-        /* --- 通常のカードスタイル --- */
+        /* --- 通常のカードスタイル (.touch-hover を追加) --- */
         .work-card:not([data-type="classic"]) {
             background: var(--card-bg);
             border: 2px solid var(--card-border);
@@ -457,18 +457,20 @@
         }
 
         .work-card:not([data-type="classic"]):hover,
-        .work-card:not([data-type="classic"]):active {
+        .work-card:not([data-type="classic"]):active,
+        .work-card:not([data-type="classic"]).touch-hover {
             border-color: var(--accent-cyan);
             transform: translateY(-6px);
             box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
         }
         
         [data-theme="light"] .work-card:not([data-type="classic"]):hover,
-        [data-theme="light"] .work-card:not([data-type="classic"]):active {
+        [data-theme="light"] .work-card:not([data-type="classic"]):active,
+        [data-theme="light"] .work-card:not([data-type="classic"]).touch-hover {
             box-shadow: 0 15px 30px rgba(0, 204, 204, 0.3);
         }
 
-        /* --- THE CLASSIC (IGNITION STYLE) --- */
+        /* --- THE CLASSIC (IGNITION STYLE) (.touch-hover を追加) --- */
         .work-card[data-type="classic"] {
             background: transparent;
             border-radius: 20px;
@@ -520,14 +522,16 @@
         }
 
         .work-card[data-type="classic"]:hover,
-        .work-card[data-type="classic"]:active {
+        .work-card[data-type="classic"]:active,
+        .work-card[data-type="classic"].touch-hover {
             transform: translateY(-6px) scale(1.02);
             border-color: transparent;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
         }
 
         .work-card[data-type="classic"]:hover::before,
-        .work-card[data-type="classic"]:active::before {
+        .work-card[data-type="classic"]:active::before,
+        .work-card[data-type="classic"].touch-hover::before {
             opacity: 1;
             animation: rotate-ignition 1.5s linear infinite;
         }
@@ -545,7 +549,8 @@
         }
         
         .work-card:hover .work-icon,
-        .work-card:active .work-icon {
+        .work-card:active .work-icon,
+        .work-card.touch-hover .work-icon {
             transform: scale(1.15) rotate(-5deg);
         }
 
@@ -1278,7 +1283,7 @@
             });
         });
 
-        // --- Modals Logic ---
+        // --- Modals Logic & Smart Touch Controls ---
         const sushiBtn = document.getElementById('sushiBtn');
         const secretModal = document.getElementById('secretModal');
         
@@ -1291,6 +1296,10 @@
         const workCards = document.querySelectorAll('.work-card');
 
         let spicyInterval;
+
+        // タッチデバイスかどうか判定
+        const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+        let activeTouchCard = null; // 現在発光しているカードを記憶
 
         sushiBtn.addEventListener('click', () => {
             secretModal.classList.add('active');
@@ -1312,10 +1321,35 @@
             card.addEventListener('click', (e) => {
                 const type = card.getAttribute('data-type');
                 
-                // リンクが設定されているカードは遷移させるため何もしない
-                if (type === 'classic' || type === 'cheese' || type === 'spicy') return;
+                // --- リンク遷移するカード専用の「1回目発光、2回目ジャンプ」処理 ---
+                if (type === 'classic' || type === 'cheese' || type === 'spicy') {
+                    if (isTouchDevice) {
+                        if (activeTouchCard !== card) {
+                            // 1回目のタップ：リンク遷移を止めて、光らせる
+                            e.preventDefault();
+                            
+                            // 他のカードが光っていたら消す
+                            workCards.forEach(c => c.classList.remove('touch-hover'));
+                            
+                            // 自分が光る
+                            card.classList.add('touch-hover');
+                            activeTouchCard = card;
+                        } else {
+                            // 2回目のタップ：すでに光っている状態なので、何もせずそのままジャンプ！
+                        }
+                    }
+                    return; // リンク用カードはここで処理終了（モーダルには行かない）
+                }
 
+                // --- アート等、モーダルを開くカードの処理 ---
                 e.preventDefault();
+                
+                // モーダルを開く前に、他の発光しているカードがあればリセット
+                if (isTouchDevice) {
+                    workCards.forEach(c => c.classList.remove('touch-hover'));
+                    activeTouchCard = null;
+                }
+
                 resetEffects();
 
                 if (type === 'art') {
@@ -1329,6 +1363,16 @@
                 comingSoonModal.classList.add('active');
             });
         });
+
+        // 画面のどこか（カード以外）をタップしたら、カードの発光状態を解除
+        if (isTouchDevice) {
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.work-card')) {
+                    workCards.forEach(c => c.classList.remove('touch-hover'));
+                    activeTouchCard = null;
+                }
+            });
+        }
 
         function resetEffects() {
             comingSoonBox.classList.remove('effect-breath', 'effect-shake', 'effect-rainbow');
@@ -1430,4 +1474,5 @@
     </script>
 </body>
 </html>
+
 
