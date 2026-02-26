@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- 初期言語を en に設定 -->
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -49,6 +48,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent; 
         }
 
         body {
@@ -63,14 +63,14 @@
         a {
             text-decoration: none;
             color: inherit;
-            transition: 0.3s;
+            transition: 0.1s;
         }
 
         ul {
             list-style: none;
         }
 
-        /* --- 言語切り替え用 CSS (ページ全体の言語用) --- */
+        /* --- 言語切り替え用 CSS --- */
         html[lang="ja"] .lang-en { display: none !important; }
         html[lang="en"] .lang-ja { display: none !important; }
 
@@ -100,9 +100,9 @@
             position: fixed;
             top: 0;
             width: 100%;
-            height: 70px; /* ヘッダーの基本高さをスリムに固定 */
+            height: 70px;
             display: flex;
-            justify-content: flex-end; /* ロゴが絶対配置になるので、中身は右寄せ */
+            justify-content: flex-end; 
             align-items: center;
             padding: 0 40px;
             z-index: 100;
@@ -112,28 +112,25 @@
             transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* はみ出しロゴのコンテナ */
         .header-logo-container {
             position: absolute;
             left: 40px;
-            top: 10px; /* 下に少しズラすことで、ヘッダー枠を突き抜ける */
+            top: 10px;
             z-index: 101;
         }
 
-        /* はみ出しロゴ画像 */
         .header-logo {
-            width: 100px; /* ガッツリ大きく100px */
+            width: 100px; 
             height: auto;
             object-fit: contain; 
             cursor: pointer;
-            /* 基本は右上がり5度 */
             transform: rotate(-5deg);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); /* 浮き出させる影 */
+            transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); 
         }
 
-        .header-logo:hover {
-            /* ホバーで1.1倍、角度12度に強化！ */
+        .header-logo:hover,
+        .header-logo:active {
             transform: scale(1.1) rotate(-12deg); 
         }
 
@@ -159,12 +156,12 @@
             color: var(--accent-cyan);
         }
 
-        /* --- カプセル型トグルボタン (STORAGEスタイル) --- */
+        /* --- カプセル型トグルボタン --- */
         .toggle-capsule {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             color: var(--text-color);
-            border-radius: 25px; /* カプセル状 */
+            border-radius: 25px;
             cursor: pointer;
             font-size: 1.2rem;
             display: flex;
@@ -172,11 +169,12 @@
             justify-content: center;
             padding: 5px 12px;
             gap: 8px;
-            transition: 0.3s;
+            transition: 0.1s;
             line-height: 1;
         }
         
-        .toggle-capsule:hover {
+        .toggle-capsule:hover,
+        .toggle-capsule:active {
             border-color: var(--accent-cyan);
             background: rgba(0, 255, 255, 0.05);
             transform: translateY(-2px);
@@ -187,7 +185,6 @@
             transition: opacity 0.3s, filter 0.3s;
         }
 
-        /* セパレーター (|) */
         .separator {
             font-size: 0.8rem;
             opacity: 0.4;
@@ -195,31 +192,29 @@
             padding-bottom: 2px;
         }
 
-        /* 言語トグルの表示切替 (HTMLのlang属性に連動) */
         html[lang="ja"] .ja-icon { opacity: 1; filter: grayscale(0%); }
         html[lang="ja"] .en-icon { opacity: 0.3; filter: grayscale(100%); }
         html[lang="en"] .en-icon { opacity: 1; filter: grayscale(0%); }
         html[lang="en"] .ja-icon { opacity: 0.3; filter: grayscale(100%); }
 
-        /* テーマトグルの表示切替 (HTMLのdata-theme属性に連動) */
         html[data-theme="dark"] .dark-icon { opacity: 1; filter: grayscale(0%); }
         html[data-theme="dark"] .light-icon { opacity: 0.3; filter: grayscale(100%); }
         html[data-theme="light"] .light-icon { opacity: 1; filter: grayscale(0%); }
         html[data-theme="light"] .dark-icon { opacity: 0.3; filter: grayscale(100%); }
 
-        /* --- メニューアイコン (🌭) --- */
+        /* --- メニューアイコン --- */
         .menu-toggle {
             display: none;
             font-size: 1.8rem;
             cursor: pointer;
             margin-left: 5px;
-            /* 枠線をなくし、斜めに構える */
             transform: rotate(-10deg);
-            transition: transform 0.3s;
+            transition: transform 0.1s;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        .menu-toggle:hover {
+        .menu-toggle:hover,
+        .menu-toggle:active {
             transform: scale(1.15) rotate(-20deg);
         }
 
@@ -246,7 +241,6 @@
             align-items: center;
             margin-bottom: 20px;
             animation: float 6s ease-in-out infinite;
-            filter: none;
         }
 
         .hero-img {
@@ -254,10 +248,6 @@
             height: 100%;
             object-fit: contain;
             display: block;
-            filter: none;
-            box-shadow: none;
-            border: none;
-            background: transparent;
         }
 
         .hero-tagline {
@@ -325,7 +315,7 @@
             margin-bottom: 2rem;
         }
 
-        /* --- ロゴ風レイアウト (画像版) --- */
+        /* --- ロゴ風レイアウト --- */
         .logo-stack {
             display: block;
             text-align: center;
@@ -405,9 +395,9 @@
             margin-top: 20px;
         }
 
-        /* --- 遊べ！もっと・・・ (3D複合回転) --- */
+        /* --- 遊べ！もっと・・・ --- */
         .play-more-container {
-            perspective: 800px; /* 奥行き感 */
+            perspective: 800px;
             display: inline-block;
             margin-top: 30px;
         }
@@ -422,7 +412,6 @@
             display: block;
             animation: rotate-z-axis 7.5s ease-in-out infinite;
             transform-origin: center center;
-            
             font-size: 1.8rem;
             color: var(--accent-pink);
             font-family: var(--font-ja);
@@ -460,20 +449,22 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 15px var(--shadow-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
             cursor: pointer;
             text-decoration: none;
             display: block;
             color: inherit;
         }
 
-        .work-card:not([data-type="classic"]):hover {
+        .work-card:not([data-type="classic"]):hover,
+        .work-card:not([data-type="classic"]):active {
             border-color: var(--accent-cyan);
             transform: translateY(-6px);
             box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
         }
         
-        [data-theme="light"] .work-card:not([data-type="classic"]):hover {
+        [data-theme="light"] .work-card:not([data-type="classic"]):hover,
+        [data-theme="light"] .work-card:not([data-type="classic"]):active {
             box-shadow: 0 15px 30px rgba(0, 204, 204, 0.3);
         }
 
@@ -486,7 +477,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 15px var(--shadow-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
             cursor: pointer;
             text-decoration: none;
             display: block;
@@ -506,7 +497,7 @@
             );
             z-index: 0;
             opacity: 0; 
-            transition: opacity 0.3s ease;
+            transition: opacity 0.1s ease;
         }
 
         .work-card[data-type="classic"]::after {
@@ -528,13 +519,15 @@
             align-items: center;
         }
 
-        .work-card[data-type="classic"]:hover {
+        .work-card[data-type="classic"]:hover,
+        .work-card[data-type="classic"]:active {
             transform: translateY(-6px) scale(1.02);
             border-color: transparent;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
         }
 
-        .work-card[data-type="classic"]:hover::before {
+        .work-card[data-type="classic"]:hover::before,
+        .work-card[data-type="classic"]:active::before {
             opacity: 1;
             animation: rotate-ignition 1.5s linear infinite;
         }
@@ -548,10 +541,11 @@
             font-size: 4rem;
             margin-bottom: 20px;
             display: inline-block;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
-        .work-card:hover .work-icon {
+        .work-card:hover .work-icon,
+        .work-card:active .work-icon {
             transform: scale(1.15) rotate(-5deg);
         }
 
@@ -646,14 +640,15 @@
             font-family: var(--font-display);
             font-size: 1.4rem;
             border: 1px solid var(--card-border);
-            transition: 0.3s;
+            transition: 0.1s;
             text-decoration: none;
             line-height: 1;
             flex-shrink: 0;
             cursor: pointer;
         }
 
-        .social-btn:hover {
+        .social-btn:hover,
+        .social-btn:active {
             background: var(--accent-pink);
             color: #fff;
             border-color: var(--accent-pink);
@@ -674,7 +669,8 @@
             padding: 10px;
         }
         
-        .sushi-btn:hover {
+        .sushi-btn:hover,
+        .sushi-btn:active {
             background: var(--accent-red);
             border-color: var(--accent-red);
             box-shadow: 0 0 30px var(--accent-red);
@@ -711,7 +707,7 @@
             60% {transform: translateY(-5px);}
         }
 
-        /* --- Modal (Common) --- */
+        /* --- Modal --- */
         .modal {
             display: none;
             position: fixed;
@@ -760,7 +756,8 @@
             transition: 0.3s;
         }
         
-        .modal-close:hover {
+        .modal-close:hover,
+        .modal-close:active {
             color: var(--accent-red);
             transform: scale(1.2);
         }
@@ -866,7 +863,7 @@
             to { transform: scale(1); opacity: 1; }
         }
 
-        /* --- 3. クリック演出（スキャン切替） --- */
+        /* --- スキャン切替演出 --- */
         .scan-effect {
             position: fixed;
             top: 0;
@@ -881,7 +878,6 @@
             display: block;
         }
 
-        /* スキャンライン（上から下へ） */
         .scan-line {
             position: absolute;
             top: -10%;
@@ -894,14 +890,13 @@
             animation: scan-move 0.3s cubic-bezier(0.2, 0, 0.2, 1) forwards;
         }
 
-        /* 画面暗転用オーバーレイ */
         .scan-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 5, 5, 0.2); /* 軽く暗転 */
+            background: rgba(0, 5, 5, 0.2);
             opacity: 0;
             animation: scan-flash 0.3s ease forwards;
         }
@@ -920,7 +915,7 @@
         /* --- スマホ時のレイアウト調整 --- */
         @media (max-width: 768px) {
             header {
-                height: 60px; /* スマホは少しヘッダーを細く */
+                height: 60px;
                 padding: 0 15px;
             }
             .menu-toggle {
@@ -950,13 +945,12 @@
                 gap: 20px;
             }
             
-            /* スマホ版でもロゴをガッツリはみ出させる */
             .header-logo-container {
                 left: 15px;
                 top: 5px; 
             }
             .header-logo {
-                width: 85px; /* スマホでも十分はみ出す大きさ */
+                width: 85px; 
                 height: auto;
             }
             
@@ -964,7 +958,6 @@
                 gap: 8px;
             }
             
-            /* スマホ時はカプセルボタンを少し小さく */
             .toggle-capsule {
                 padding: 4px 10px;
                 font-size: 1.1rem;
@@ -1007,9 +1000,9 @@
     </div>
 
     <header>
-        <!-- ヘッダーロゴ (完全はみ出し配置！) -->
+        <!-- ヘッダーロゴ -->
         <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <img src="icon.PNG" alt="FHW" class="header-logo">
+            <img src="icon.PNG" alt="FHW" class="header-logo" onerror="this.style.display='none'">
         </div>
         
         <div class="header-right">
@@ -1022,21 +1015,19 @@
                 </ul>
             </nav>
 
-            <!-- カプセル型トグルボタン (言語) -->
+            <!-- カプセル型トグルボタン -->
             <button class="toggle-capsule" id="langToggle" aria-label="言語切り替え">
                 <span class="en-icon">🇺🇸</span>
                 <span class="separator">|</span>
                 <span class="ja-icon">🇯🇵</span>
             </button>
             
-            <!-- カプセル型トグルボタン (テーマ) -->
             <button class="toggle-capsule" id="themeToggle" aria-label="テーマ切り替え">
                 <span class="dark-icon">🌙</span>
                 <span class="separator">|</span>
                 <span class="light-icon">☀️</span>
             </button>
             
-            <!-- メニューアイコン -->
             <div class="menu-toggle" id="menuToggle">🌭</div>
         </div>
     </header>
@@ -1044,7 +1035,7 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-img-container">
-            <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img">
+            <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23333\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'40\' fill=\'%23fff\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EFUNKY HOTDOG WORKS%3C/text%3E%3C/svg%3E'">
         </div>
 
         <p class="hero-tagline">
@@ -1058,7 +1049,6 @@
             </span>
         </p>
 
-        <!-- 矢印を ▼ に変更 (U+2B07 U+FE0E) -->
         <a href="#about" class="scroll-down">⬇&#xFE0E;</a>
     </section>
 
@@ -1068,7 +1058,7 @@
         <div class="about-text">
             <span class="lang-ja">
                 <div class="logo-stack">
-                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
+                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img" onerror="this.style.display='none'">
                 </div>
                 
                 <h3 class="bug-headline">
@@ -1076,10 +1066,8 @@
                     <span class="glitch-text">世界をバグらせる！</span>
                 </h3>
 
-                <p class="funky-message">
-                    ルール無用。カロリー無用。<br>
-                    常識に囚われるな！<br>
-                    FUNKYであれ。<br>
+                <div class="funky-message">
+                    <p>ルール無用。カロリー無用。<br>常識に囚われるな！<br>FUNKYであれ。</p>
                     <div class="play-more-container">
                         <span class="play-more-outer">
                             <span class="play-more-inner">
@@ -1087,21 +1075,19 @@
                             </span>
                         </span>
                     </div>
-                </p>
+                </div>
             </span>
             
             <span class="lang-en">
                  <div class="logo-stack">
-                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
+                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img" onerror="this.style.display='none'">
                 </div>
                 <h3 class="bug-headline">
                     Hot Dogs Will<br>
                     <span class="glitch-text">Bug The World!</span>
                 </h3>
-                <p class="funky-message">
-                    No Rules. No Calories.<br>
-                    Break the Common Sense!<br>
-                    Be FUNKY.<br>
+                <div class="funky-message">
+                    <p>No Rules. No Calories.<br>Break the Common Sense!<br>Be FUNKY.</p>
                     <div class="play-more-container">
                         <span class="play-more-outer">
                             <span class="play-more-inner">
@@ -1109,18 +1095,16 @@
                             </span>
                         </span>
                     </div>
-                </p>
+                </div>
             </span>
         </div>
     </section>
 
-    <!-- Works/Menu Section -->
+    <!-- Works Section -->
     <section id="works">
         <h2>OUR WORKS</h2>
         <div class="works-grid">
-            <a href="https://p-one-star.github.io/GARAGE-01/" class="work-card" data-type="classic">
-                <div class="ignition-effect left"></div>
-                <div class="ignition-effect right"></div>
+            <a href="https://p-one-star.github.io/GARAGE-01/" class="work-card" data-type="classic" target="_blank" rel="noopener noreferrer">
                 <div class="inner-content">
                     <div class="work-icon">🌭</div>
                     <div class="work-title">THE CLASSIC</div>
@@ -1131,8 +1115,7 @@
                 </div>
             </a>
             
-            <!-- 2. Cheese Bomb (リンク先をFUNKY-STORAGEに変更) -->
-            <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card" data-type="cheese">
+            <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card" data-type="cheese" target="_blank" rel="noopener noreferrer">
                 <div class="work-icon">🍔</div>
                 <div class="work-title">CHEESE BOMB</div>
                 <p class="work-desc">
@@ -1141,8 +1124,7 @@
                 </p>
             </a>
             
-            <!-- 3. Volcano (Link to RIOT-CARNIVAL) -->
-            <a href="https://p-one-star.github.io/RIOT-CARNIVAL/" class="work-card" data-type="spicy">
+            <a href="https://p-one-star.github.io/RIOT-CARNIVAL/" class="work-card" data-type="spicy" target="_blank" rel="noopener noreferrer">
                 <div class="work-icon">🌶️</div>
                 <div class="work-title">VOLCANO</div>
                 <p class="work-desc">
@@ -1180,7 +1162,7 @@
             <div class="social-track">
                 
                 <div class="visible-buttons">
-                    <a href="https://www.instagram.com/funky_hotdog?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram" style="font-family: sans-serif; font-weight: 900; letter-spacing: -1px;">IG</a>
+                    <a href="https://www.instagram.com/funky_hotdog" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram" style="font-family: sans-serif; font-weight: 900; letter-spacing: -1px;">IG</a>
                     <a href="#" class="social-btn coming-soon-btn" title="YouTube" style="font-size: 1.8rem;" lang="en">▶</a>
                     <a href="#" class="social-btn coming-soon-btn" title="Etsy" style="font-family: serif; font-weight: 900; font-style: italic; font-size: 1.6rem;">E</a>
                     <a href="#" class="social-btn coming-soon-btn" title="Amazon" style="font-family: sans-serif; font-weight: 900; font-size: 1.6rem; padding-bottom: 4px;">a</a>
@@ -1207,7 +1189,7 @@
     <div class="modal" id="secretModal">
         <div class="modal-content">
             <div class="modal-close" onclick="closeModal('secretModal')">×</div>
-            <img src="secret.png" alt="Secret Sushi Master" class="modal-img">
+            <img src="secret.png" alt="Secret Sushi Master" class="modal-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f33\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'30\' fill=\'%23fff\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3E🍣 SECRET 🍣%3C/text%3E%3C/svg%3E'">
         </div>
     </div>
 
@@ -1229,20 +1211,17 @@
         const htmlElement = document.documentElement;
         const scanEffect = document.getElementById('scanEffect');
         
-        // ローカルストレージからの読み込み
-        // 言語のデフォルトは 'en' に寄せる（ストレージになければen）
         const savedTheme = localStorage.getItem('theme');
         let savedLang = localStorage.getItem('lang');
         
         if (!savedLang) {
-            savedLang = 'en'; // 初回訪問時は英語！
+            savedLang = 'en'; 
         }
 
         if (savedTheme) {
             htmlElement.setAttribute('data-theme', savedTheme);
         }
         
-        // HTMLタグに言語をセット
         htmlElement.setAttribute('lang', savedLang);
 
         themeToggleBtn.addEventListener('click', () => {
@@ -1253,12 +1232,9 @@
             localStorage.setItem('theme', newTheme);
         });
 
-        // 言語切り替え時のスキャン演出
         langToggleBtn.addEventListener('click', () => {
-            // スキャン開始
             scanEffect.classList.add('active');
 
-            // 0.15秒後（暗転中）に切り替え実行
             setTimeout(() => {
                 const currentLang = htmlElement.getAttribute('lang') || 'en';
                 const newLang = currentLang === 'ja' ? 'en' : 'ja';
@@ -1267,7 +1243,6 @@
                 localStorage.setItem('lang', newLang);
             }, 150);
 
-            // アニメーション完了後にクラス削除 (0.3s)
             setTimeout(() => {
                 scanEffect.classList.remove('active');
             }, 400);
@@ -1337,10 +1312,9 @@
             card.addEventListener('click', (e) => {
                 const type = card.getAttribute('data-type');
                 
-                // リンクがあるカードは通常の遷移をさせる
+                // リンクが設定されているカードは遷移させるため何もしない
                 if (type === 'classic' || type === 'cheese' || type === 'spicy') return;
 
-                // 他のカードはモーダル表示
                 e.preventDefault();
                 resetEffects();
 
@@ -1358,9 +1332,8 @@
 
         function resetEffects() {
             comingSoonBox.classList.remove('effect-breath', 'effect-shake', 'effect-rainbow');
-            stopSpicyChaos(); // 不要だが残しておく（エラー防止）
+            stopSpicyChaos(); 
             if(comingSoonTitle) {
-                // クラスを全削除しなくても、基本状態に戻ればOK
                 comingSoonTitle.className = 'coming-soon-title';
                 comingSoonTitle.style.transform = '';
                 comingSoonTitle.style.opacity = '';
@@ -1369,82 +1342,44 @@
         }
 
         // --- GLITCH EFFECT (Random Timing) ---
-        const glitchText = document.querySelector('.glitch-text');
-
         function triggerGlitch() {
-            if (!glitchText) return;
+            const glitchElements = document.querySelectorAll('.glitch-text');
+            if (glitchElements.length === 0) return;
 
-            // 次の発生までの時間（3秒 〜 6秒）
             const nextTime = Math.random() * 3000 + 3000;
 
             setTimeout(() => {
-                // パターンくじ引き (0～9)
                 const pattern = Math.floor(Math.random() * 10);
                 
-                // リセット用関数
                 const reset = () => {
-                    glitchText.className = 'glitch-text'; // 基本クラスのみに戻す
-                    glitchText.style = ''; // インラインスタイルも消す
-                    triggerGlitch(); // 次の予約
+                    glitchElements.forEach(el => {
+                        el.className = 'glitch-text'; 
+                        el.style = ''; 
+                    });
+                    triggerGlitch(); 
                 };
 
-                // アクション実行
-                switch(pattern) {
-                    case 0: // ジッ (一瞬歪む)
-                        glitchText.classList.add('effect-jit');
-                        setTimeout(reset, 50);
-                        break;
-                    
-                    case 1: // ジジッ (連続ノイズ)
-                        glitchText.classList.add('effect-jijit');
-                        setTimeout(reset, 200);
-                        break;
-                    
-                    case 2: // 発光 (ホワイトアウト)
-                        glitchText.classList.add('effect-flash');
-                        setTimeout(reset, 100);
-                        break;
-
-                    case 3: // 消滅 (接触不良)
-                        glitchText.classList.add('effect-vanish');
-                        setTimeout(reset, 150);
-                        break;
-
-                    case 4: // グラッ (大きな揺れ)
-                        glitchText.classList.add('effect-gura');
-                        setTimeout(reset, 150);
-                        break;
-
-                    case 5: // チカッ (点滅)
-                        glitchText.classList.add('effect-blink');
-                        setTimeout(reset, 300);
-                        break;
-                    
-                    case 6: // フワフワ (浮遊)
-                        glitchText.classList.add('effect-fuwa');
-                        setTimeout(reset, 400);
-                        break;
-
-                    case 7: // カクッ (角度ズレ)
-                        glitchText.classList.add('effect-kaku');
-                        setTimeout(reset, 100);
-                        break;
-
-                    default: 
-                        // 8, 9: 何もしない (虚無)
-                        // これがあることで「いつ来るかわからない」感が出る
-                        setTimeout(reset, 100); 
-                        break;
-                }
+                glitchElements.forEach(glitchText => {
+                    switch(pattern) {
+                        case 0: glitchText.classList.add('effect-jit'); setTimeout(reset, 50); break;
+                        case 1: glitchText.classList.add('effect-jijit'); setTimeout(reset, 200); break;
+                        case 2: glitchText.classList.add('effect-flash'); setTimeout(reset, 100); break;
+                        case 3: glitchText.classList.add('effect-vanish'); setTimeout(reset, 150); break;
+                        case 4: glitchText.classList.add('effect-gura'); setTimeout(reset, 150); break;
+                        case 5: glitchText.classList.add('effect-blink'); setTimeout(reset, 300); break;
+                        case 6: glitchText.classList.add('effect-fuwa'); setTimeout(reset, 400); break;
+                        case 7: glitchText.classList.add('effect-kaku'); setTimeout(reset, 100); break;
+                        default: setTimeout(reset, 100); break;
+                    }
+                });
 
             }, nextTime);
         }
         
-        // 初回起動
         triggerGlitch();
 
 
-        // JSで制御するランダムカオスエフェクト (モーダル用：現在は未使用だが残しておく)
+        // JSで制御するランダムカオスエフェクト
         function startSpicyChaos() {
             if(!comingSoonTitle) return;
 
@@ -1461,7 +1396,10 @@
                         comingSoonTitle.classList.add('spicy-vanish');
                         setTimeout(() => comingSoonTitle.classList.remove('spicy-vanish'), Math.random() * 400 + 100);
                     }
-                    loop();
+                    
+                    if (document.getElementById('comingSoonModal').classList.contains('active')) {
+                        loop();
+                    }
                 }, nextTime);
             };
             loop();
@@ -1492,5 +1430,4 @@
     </script>
 </body>
 </html>
-
 
