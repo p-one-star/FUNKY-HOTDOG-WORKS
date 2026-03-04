@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 初期言語を en に設定 -->
 <html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -63,7 +64,7 @@
         a {
             text-decoration: none;
             color: inherit;
-            transition: 0.1s;
+            transition: 0.3s;
         }
 
         ul {
@@ -73,6 +74,24 @@
         /* --- 言語切り替え用 CSS --- */
         html[lang="ja"] .lang-en { display: none !important; }
         html[lang="en"] .lang-ja { display: none !important; }
+
+        /* --- ページ遷移用暗転オーバーレイ --- */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000000;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .page-transition-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
 
         /* --- スプラッター背景エフェクト --- */
         .bg-effect {
@@ -102,7 +121,7 @@
             width: 100%;
             height: 70px;
             display: flex;
-            justify-content: flex-end; 
+            justify-content: flex-end;
             align-items: center;
             padding: 0 40px;
             z-index: 100;
@@ -125,12 +144,11 @@
             object-fit: contain; 
             cursor: pointer;
             transform: rotate(-5deg);
-            transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5)); 
         }
 
-        .header-logo:hover,
-        .header-logo:active {
+        .header-logo:hover {
             transform: scale(1.1) rotate(-12deg); 
         }
 
@@ -169,12 +187,11 @@
             justify-content: center;
             padding: 5px 12px;
             gap: 8px;
-            transition: 0.1s;
+            transition: 0.3s;
             line-height: 1;
         }
         
-        .toggle-capsule:hover,
-        .toggle-capsule:active {
+        .toggle-capsule:hover {
             border-color: var(--accent-cyan);
             background: rgba(0, 255, 255, 0.05);
             transform: translateY(-2px);
@@ -202,19 +219,18 @@
         html[data-theme="light"] .light-icon { opacity: 1; filter: grayscale(0%); }
         html[data-theme="light"] .dark-icon { opacity: 0.3; filter: grayscale(100%); }
 
-        /* --- メニューアイコン --- */
+        /* --- メニューアイコン (🌭) --- */
         .menu-toggle {
             display: none;
             font-size: 1.8rem;
             cursor: pointer;
             margin-left: 5px;
             transform: rotate(-10deg);
-            transition: transform 0.1s;
+            transition: transform 0.3s;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        .menu-toggle:hover,
-        .menu-toggle:active {
+        .menu-toggle:hover {
             transform: scale(1.15) rotate(-20deg);
         }
 
@@ -241,6 +257,7 @@
             align-items: center;
             margin-bottom: 20px;
             animation: float 6s ease-in-out infinite;
+            filter: none;
         }
 
         .hero-img {
@@ -248,6 +265,10 @@
             height: 100%;
             object-fit: contain;
             display: block;
+            filter: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
         }
 
         .hero-tagline {
@@ -315,7 +336,7 @@
             margin-bottom: 2rem;
         }
 
-        /* --- ロゴ風レイアウト --- */
+        /* --- ロゴ風レイアウト (画像版) --- */
         .logo-stack {
             display: block;
             text-align: center;
@@ -395,9 +416,9 @@
             margin-top: 20px;
         }
 
-        /* --- 遊べ！もっと・・・ --- */
+        /* --- 遊べ！もっと・・・ (3D複合回転) --- */
         .play-more-container {
-            perspective: 800px;
+            perspective: 800px; /* 奥行き感 */
             display: inline-block;
             margin-top: 30px;
         }
@@ -412,6 +433,7 @@
             display: block;
             animation: rotate-z-axis 7.5s ease-in-out infinite;
             transform-origin: center center;
+            
             font-size: 1.8rem;
             color: var(--accent-pink);
             font-family: var(--font-ja);
@@ -439,7 +461,7 @@
             gap: 40px;
         }
 
-        /* --- 通常のカードスタイル (.touch-hover を追加) --- */
+        /* --- 通常のカードスタイル --- */
         .work-card:not([data-type="classic"]) {
             background: var(--card-bg);
             border: 2px solid var(--card-border);
@@ -449,7 +471,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 15px var(--shadow-color);
-            transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             cursor: pointer;
             text-decoration: none;
             display: block;
@@ -457,20 +479,18 @@
         }
 
         .work-card:not([data-type="classic"]):hover,
-        .work-card:not([data-type="classic"]):active,
-        .work-card:not([data-type="classic"]).touch-hover {
+        .work-card:not([data-type="classic"]).force-hover {
             border-color: var(--accent-cyan);
             transform: translateY(-6px);
             box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
         }
         
         [data-theme="light"] .work-card:not([data-type="classic"]):hover,
-        [data-theme="light"] .work-card:not([data-type="classic"]):active,
-        [data-theme="light"] .work-card:not([data-type="classic"]).touch-hover {
+        [data-theme="light"] .work-card:not([data-type="classic"]).force-hover {
             box-shadow: 0 15px 30px rgba(0, 204, 204, 0.3);
         }
 
-        /* --- THE CLASSIC (IGNITION STYLE) (.touch-hover を追加) --- */
+        /* --- THE CLASSIC (IGNITION STYLE) --- */
         .work-card[data-type="classic"] {
             background: transparent;
             border-radius: 20px;
@@ -479,7 +499,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 4px 15px var(--shadow-color);
-            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
             text-decoration: none;
             display: block;
@@ -499,7 +519,7 @@
             );
             z-index: 0;
             opacity: 0; 
-            transition: opacity 0.1s ease;
+            transition: opacity 0.3s ease;
         }
 
         .work-card[data-type="classic"]::after {
@@ -522,16 +542,14 @@
         }
 
         .work-card[data-type="classic"]:hover,
-        .work-card[data-type="classic"]:active,
-        .work-card[data-type="classic"].touch-hover {
+        .work-card[data-type="classic"].force-hover {
             transform: translateY(-6px) scale(1.02);
             border-color: transparent;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
         }
 
         .work-card[data-type="classic"]:hover::before,
-        .work-card[data-type="classic"]:active::before,
-        .work-card[data-type="classic"].touch-hover::before {
+        .work-card[data-type="classic"].force-hover::before {
             opacity: 1;
             animation: rotate-ignition 1.5s linear infinite;
         }
@@ -545,12 +563,11 @@
             font-size: 4rem;
             margin-bottom: 20px;
             display: inline-block;
-            transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
         .work-card:hover .work-icon,
-        .work-card:active .work-icon,
-        .work-card.touch-hover .work-icon {
+        .work-card.force-hover .work-icon {
             transform: scale(1.15) rotate(-5deg);
         }
 
@@ -645,15 +662,14 @@
             font-family: var(--font-display);
             font-size: 1.4rem;
             border: 1px solid var(--card-border);
-            transition: 0.1s;
+            transition: 0.3s;
             text-decoration: none;
             line-height: 1;
             flex-shrink: 0;
             cursor: pointer;
         }
 
-        .social-btn:hover,
-        .social-btn:active {
+        .social-btn:hover {
             background: var(--accent-pink);
             color: #fff;
             border-color: var(--accent-pink);
@@ -674,8 +690,7 @@
             padding: 10px;
         }
         
-        .sushi-btn:hover,
-        .sushi-btn:active {
+        .sushi-btn:hover {
             background: var(--accent-red);
             border-color: var(--accent-red);
             box-shadow: 0 0 30px var(--accent-red);
@@ -712,7 +727,7 @@
             60% {transform: translateY(-5px);}
         }
 
-        /* --- Modal --- */
+        /* --- Modal (Common) --- */
         .modal {
             display: none;
             position: fixed;
@@ -761,8 +776,7 @@
             transition: 0.3s;
         }
         
-        .modal-close:hover,
-        .modal-close:active {
+        .modal-close:hover {
             color: var(--accent-red);
             transform: scale(1.2);
         }
@@ -868,7 +882,7 @@
             to { transform: scale(1); opacity: 1; }
         }
 
-        /* --- スキャン切替演出 --- */
+        /* --- 3. クリック演出（スキャン切替） --- */
         .scan-effect {
             position: fixed;
             top: 0;
@@ -883,6 +897,7 @@
             display: block;
         }
 
+        /* スキャンライン（上から下へ） */
         .scan-line {
             position: absolute;
             top: -10%;
@@ -895,13 +910,14 @@
             animation: scan-move 0.3s cubic-bezier(0.2, 0, 0.2, 1) forwards;
         }
 
+        /* 画面暗転用オーバーレイ */
         .scan-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 5, 5, 0.2);
+            background: rgba(0, 5, 5, 0.2); /* 軽く暗転 */
             opacity: 0;
             animation: scan-flash 0.3s ease forwards;
         }
@@ -998,6 +1014,9 @@
 
     <div class="bg-effect"></div>
 
+    <!-- ページ遷移時の暗転エフェクト用レイヤー -->
+    <div class="page-transition-overlay" id="pageTransition"></div>
+
     <!-- スキャンエフェクト用レイヤー -->
     <div class="scan-effect" id="scanEffect">
         <div class="scan-overlay"></div>
@@ -1005,9 +1024,8 @@
     </div>
 
     <header>
-        <!-- ヘッダーロゴ -->
         <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <img src="icon.PNG" alt="FHW" class="header-logo" onerror="this.style.display='none'">
+            <img src="icon.PNG" alt="FHW" class="header-logo">
         </div>
         
         <div class="header-right">
@@ -1020,7 +1038,6 @@
                 </ul>
             </nav>
 
-            <!-- カプセル型トグルボタン -->
             <button class="toggle-capsule" id="langToggle" aria-label="言語切り替え">
                 <span class="en-icon">🇺🇸</span>
                 <span class="separator">|</span>
@@ -1040,7 +1057,7 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-img-container">
-            <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'400\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23333\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'40\' fill=\'%23fff\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3EFUNKY HOTDOG WORKS%3C/text%3E%3C/svg%3E'">
+            <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img">
         </div>
 
         <p class="hero-tagline">
@@ -1063,7 +1080,7 @@
         <div class="about-text">
             <span class="lang-ja">
                 <div class="logo-stack">
-                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img" onerror="this.style.display='none'">
+                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
                 </div>
                 
                 <h3 class="bug-headline">
@@ -1071,8 +1088,10 @@
                     <span class="glitch-text">世界をバグらせる！</span>
                 </h3>
 
-                <div class="funky-message">
-                    <p>ルール無用。カロリー無用。<br>常識に囚われるな！<br>FUNKYであれ。</p>
+                <p class="funky-message">
+                    ルール無用。カロリー無用。<br>
+                    常識に囚われるな！<br>
+                    FUNKYであれ。<br>
                     <div class="play-more-container">
                         <span class="play-more-outer">
                             <span class="play-more-inner">
@@ -1080,19 +1099,21 @@
                             </span>
                         </span>
                     </div>
-                </div>
+                </p>
             </span>
             
             <span class="lang-en">
                  <div class="logo-stack">
-                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img" onerror="this.style.display='none'">
+                    <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
                 </div>
                 <h3 class="bug-headline">
                     Hot Dogs Will<br>
                     <span class="glitch-text">Bug The World!</span>
                 </h3>
-                <div class="funky-message">
-                    <p>No Rules. No Calories.<br>Break the Common Sense!<br>Be FUNKY.</p>
+                <p class="funky-message">
+                    No Rules. No Calories.<br>
+                    Break the Common Sense!<br>
+                    Be FUNKY.<br>
                     <div class="play-more-container">
                         <span class="play-more-outer">
                             <span class="play-more-inner">
@@ -1100,16 +1121,18 @@
                             </span>
                         </span>
                     </div>
-                </div>
+                </p>
             </span>
         </div>
     </section>
 
-    <!-- Works Section -->
+    <!-- Works/Menu Section -->
     <section id="works">
         <h2>OUR WORKS</h2>
         <div class="works-grid">
-            <a href="https://p-one-star.github.io/GARAGE-01/" class="work-card" data-type="classic" target="_blank" rel="noopener noreferrer">
+            <a href="https://p-one-star.github.io/GARAGE-01/" class="work-card js-page-transition" data-type="classic">
+                <div class="ignition-effect left"></div>
+                <div class="ignition-effect right"></div>
                 <div class="inner-content">
                     <div class="work-icon">🌭</div>
                     <div class="work-title">THE CLASSIC</div>
@@ -1120,7 +1143,7 @@
                 </div>
             </a>
             
-            <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card" data-type="cheese" target="_blank" rel="noopener noreferrer">
+            <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card js-page-transition" data-type="cheese">
                 <div class="work-icon">🍔</div>
                 <div class="work-title">CHEESE BOMB</div>
                 <p class="work-desc">
@@ -1129,7 +1152,7 @@
                 </p>
             </a>
             
-            <a href="https://p-one-star.github.io/RIOT-CARNIVAL/" class="work-card" data-type="spicy" target="_blank" rel="noopener noreferrer">
+            <a href="https://p-one-star.github.io/RIOT-CARNIVAL/" class="work-card js-page-transition" data-type="spicy">
                 <div class="work-icon">🌶️</div>
                 <div class="work-title">VOLCANO</div>
                 <p class="work-desc">
@@ -1138,14 +1161,15 @@
                 </p>
             </a>
             
-            <div class="work-card" data-type="art">
+            <!-- FUNKY-COMIC へのリンクに変更し js-page-transition を付与 -->
+            <a href="https://p-one-star.github.io/FUNKY-COMIC/" class="work-card js-page-transition" data-type="art">
                 <div class="work-icon">🎨</div>
                 <div class="work-title">GRAFFITI DOG</div>
                 <p class="work-desc">
                     <span class="lang-ja">カラフルなソースで描く食用アート。食べるのが惜しい（嘘、食べて）。</span>
                     <span class="lang-en">Edible art drawn with colorful sauces. Too good to eat (Just kidding, please eat it).</span>
                 </p>
-            </div>
+            </a>
         </div>
     </section>
 
@@ -1167,7 +1191,7 @@
             <div class="social-track">
                 
                 <div class="visible-buttons">
-                    <a href="https://www.instagram.com/funky_hotdog" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram" style="font-family: sans-serif; font-weight: 900; letter-spacing: -1px;">IG</a>
+                    <a href="https://www.instagram.com/funky_hotdog?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram" style="font-family: sans-serif; font-weight: 900; letter-spacing: -1px;">IG</a>
                     <a href="#" class="social-btn coming-soon-btn" title="YouTube" style="font-size: 1.8rem;" lang="en">▶</a>
                     <a href="#" class="social-btn coming-soon-btn" title="Etsy" style="font-family: serif; font-weight: 900; font-style: italic; font-size: 1.6rem;">E</a>
                     <a href="#" class="social-btn coming-soon-btn" title="Amazon" style="font-family: sans-serif; font-weight: 900; font-size: 1.6rem; padding-bottom: 4px;">a</a>
@@ -1194,7 +1218,7 @@
     <div class="modal" id="secretModal">
         <div class="modal-content">
             <div class="modal-close" onclick="closeModal('secretModal')">×</div>
-            <img src="secret.png" alt="Secret Sushi Master" class="modal-img" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23f33\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' font-size=\'30\' fill=\'%23fff\' text-anchor=\'middle\' dominant-baseline=\'middle\'%3E🍣 SECRET 🍣%3C/text%3E%3C/svg%3E'">
+            <img src="secret.png" alt="Secret Sushi Master" class="modal-img">
         </div>
     </div>
 
@@ -1211,6 +1235,25 @@
     </div>
 
     <script>
+        // --- 画面遷移エフェクト ---
+        document.querySelectorAll('.js-page-transition').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                const targetUrl = this.getAttribute('href');
+                
+                this.classList.add('force-hover');
+                
+                const transitionOverlay = document.getElementById('pageTransition');
+                if(transitionOverlay) {
+                    transitionOverlay.classList.add('active');
+                }
+                
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 500);
+            });
+        });
+
         const themeToggleBtn = document.getElementById('themeToggle');
         const langToggleBtn = document.getElementById('langToggle');
         const htmlElement = document.documentElement;
@@ -1253,7 +1296,6 @@
             }, 400);
         });
 
-
         const menuToggle = document.getElementById('menuToggle');
         const nav = document.getElementById('nav');
 
@@ -1283,23 +1325,11 @@
             });
         });
 
-        // --- Modals Logic & Smart Touch Controls ---
+        // --- Modals Logic ---
         const sushiBtn = document.getElementById('sushiBtn');
         const secretModal = document.getElementById('secretModal');
-        
         const comingSoonModal = document.getElementById('comingSoonModal');
-        const comingSoonBox = document.getElementById('comingSoonBox');
-        const comingSoonText = document.getElementById('comingSoonText');
-        const comingSoonTitle = document.getElementById('comingSoonTitle');
-        
         const comingSoonBtns = document.querySelectorAll('.coming-soon-btn');
-        const workCards = document.querySelectorAll('.work-card');
-
-        let spicyInterval;
-
-        // タッチデバイスかどうか判定
-        const isTouchDevice = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-        let activeTouchCard = null; // 現在発光しているカードを記憶
 
         sushiBtn.addEventListener('click', () => {
             secretModal.classList.add('active');
@@ -1308,87 +1338,15 @@
         comingSoonBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                resetEffects();
-                comingSoonText.innerHTML = `
-                    <span class="lang-ja">現在準備中だぜ！<br>震えて待て！</span>
-                    <span class="lang-en">Under Construction!<br>Stay Tuned!</span>
-                `;
                 comingSoonModal.classList.add('active');
             });
         });
-
-        workCards.forEach(card => {
-            card.addEventListener('click', (e) => {
-                const type = card.getAttribute('data-type');
-                
-                // --- リンク遷移するカード専用の「1回目発光、2回目ジャンプ」処理 ---
-                if (type === 'classic' || type === 'cheese' || type === 'spicy') {
-                    if (isTouchDevice) {
-                        if (activeTouchCard !== card) {
-                            // 1回目のタップ：リンク遷移を止めて、光らせる
-                            e.preventDefault();
-                            
-                            // 他のカードが光っていたら消す
-                            workCards.forEach(c => c.classList.remove('touch-hover'));
-                            
-                            // 自分が光る
-                            card.classList.add('touch-hover');
-                            activeTouchCard = card;
-                        } else {
-                            // 2回目のタップ：すでに光っている状態なので、何もせずそのままジャンプ！
-                        }
-                    }
-                    return; // リンク用カードはここで処理終了（モーダルには行かない）
-                }
-
-                // --- アート等、モーダルを開くカードの処理 ---
-                e.preventDefault();
-                
-                // モーダルを開く前に、他の発光しているカードがあればリセット
-                if (isTouchDevice) {
-                    workCards.forEach(c => c.classList.remove('touch-hover'));
-                    activeTouchCard = null;
-                }
-
-                resetEffects();
-
-                if (type === 'art') {
-                    comingSoonBox.classList.add('effect-rainbow');
-                    comingSoonText.innerHTML = `
-                        <span class="lang-ja">常識を塗り替えろ。<br>食べるアート、まもなく解禁。</span>
-                        <span class="lang-en">Paint Your Taste.<br>Edible art is coming soon.</span>
-                    `;
-                }
-
-                comingSoonModal.classList.add('active');
-            });
-        });
-
-        // 画面のどこか（カード以外）をタップしたら、カードの発光状態を解除
-        if (isTouchDevice) {
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.work-card')) {
-                    workCards.forEach(c => c.classList.remove('touch-hover'));
-                    activeTouchCard = null;
-                }
-            });
-        }
-
-        function resetEffects() {
-            comingSoonBox.classList.remove('effect-breath', 'effect-shake', 'effect-rainbow');
-            stopSpicyChaos(); 
-            if(comingSoonTitle) {
-                comingSoonTitle.className = 'coming-soon-title';
-                comingSoonTitle.style.transform = '';
-                comingSoonTitle.style.opacity = '';
-                comingSoonTitle.style.textShadow = '';
-            }
-        }
 
         // --- GLITCH EFFECT (Random Timing) ---
+        const glitchText = document.querySelector('.glitch-text');
+
         function triggerGlitch() {
-            const glitchElements = document.querySelectorAll('.glitch-text');
-            if (glitchElements.length === 0) return;
+            if (!glitchText) return;
 
             const nextTime = Math.random() * 3000 + 3000;
 
@@ -1396,69 +1354,30 @@
                 const pattern = Math.floor(Math.random() * 10);
                 
                 const reset = () => {
-                    glitchElements.forEach(el => {
-                        el.className = 'glitch-text'; 
-                        el.style = ''; 
-                    });
+                    glitchText.className = 'glitch-text'; 
+                    glitchText.style = ''; 
                     triggerGlitch(); 
                 };
 
-                glitchElements.forEach(glitchText => {
-                    switch(pattern) {
-                        case 0: glitchText.classList.add('effect-jit'); setTimeout(reset, 50); break;
-                        case 1: glitchText.classList.add('effect-jijit'); setTimeout(reset, 200); break;
-                        case 2: glitchText.classList.add('effect-flash'); setTimeout(reset, 100); break;
-                        case 3: glitchText.classList.add('effect-vanish'); setTimeout(reset, 150); break;
-                        case 4: glitchText.classList.add('effect-gura'); setTimeout(reset, 150); break;
-                        case 5: glitchText.classList.add('effect-blink'); setTimeout(reset, 300); break;
-                        case 6: glitchText.classList.add('effect-fuwa'); setTimeout(reset, 400); break;
-                        case 7: glitchText.classList.add('effect-kaku'); setTimeout(reset, 100); break;
-                        default: setTimeout(reset, 100); break;
-                    }
-                });
+                switch(pattern) {
+                    case 0: glitchText.classList.add('effect-jit'); setTimeout(reset, 50); break;
+                    case 1: glitchText.classList.add('effect-jijit'); setTimeout(reset, 200); break;
+                    case 2: glitchText.classList.add('effect-flash'); setTimeout(reset, 100); break;
+                    case 3: glitchText.classList.add('effect-vanish'); setTimeout(reset, 150); break;
+                    case 4: glitchText.classList.add('effect-gura'); setTimeout(reset, 150); break;
+                    case 5: glitchText.classList.add('effect-blink'); setTimeout(reset, 300); break;
+                    case 6: glitchText.classList.add('effect-fuwa'); setTimeout(reset, 400); break;
+                    case 7: glitchText.classList.add('effect-kaku'); setTimeout(reset, 100); break;
+                    default: setTimeout(reset, 100); break;
+                }
 
             }, nextTime);
         }
         
         triggerGlitch();
 
-
-        // JSで制御するランダムカオスエフェクト
-        function startSpicyChaos() {
-            if(!comingSoonTitle) return;
-
-            const loop = () => {
-                const nextTime = Math.random() * 1200 + 100;
-                spicyInterval = setTimeout(() => {
-                    const action = Math.random();
-                    comingSoonTitle.classList.remove('spicy-surge', 'spicy-vanish');
-
-                    if (action < 0.25) { 
-                        comingSoonTitle.classList.add('spicy-surge');
-                        setTimeout(() => comingSoonTitle.classList.remove('spicy-surge'), 150);
-                    } else if (action < 0.45) {
-                        comingSoonTitle.classList.add('spicy-vanish');
-                        setTimeout(() => comingSoonTitle.classList.remove('spicy-vanish'), Math.random() * 400 + 100);
-                    }
-                    
-                    if (document.getElementById('comingSoonModal').classList.contains('active')) {
-                        loop();
-                    }
-                }, nextTime);
-            };
-            loop();
-        }
-
-        function stopSpicyChaos() {
-            clearTimeout(spicyInterval);
-        }
-
         window.closeModal = function(modalId) {
             document.getElementById(modalId).classList.remove('active');
-            if (modalId === 'comingSoonModal') {
-                stopSpicyChaos();
-                setTimeout(resetEffects, 500);
-            }
         }
 
         window.addEventListener('click', (e) => {
@@ -1467,9 +1386,17 @@
             }
             if (e.target === comingSoonModal) {
                 comingSoonModal.classList.remove('active');
-                stopSpicyChaos();
-                setTimeout(resetEffects, 500);
             }
+        });
+
+        window.addEventListener('pageshow', function(event) {
+            const transitionOverlay = document.getElementById('pageTransition');
+            if (transitionOverlay && transitionOverlay.classList.contains('active')) {
+                transitionOverlay.classList.remove('active');
+            }
+            document.querySelectorAll('.force-hover').forEach(el => {
+                el.classList.remove('force-hover');
+            });
         });
     </script>
 </body>
