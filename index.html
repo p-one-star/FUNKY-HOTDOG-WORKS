@@ -22,6 +22,7 @@
             --accent-pink: #ff00cc;
             --accent-cyan: #00ffff;
             --accent-yellow: #fff000;
+            --accent-lime: #ccff00; /* ライムイエロー */
             --accent-red: #ff3333;
             --shadow-color: rgba(0, 0, 0, 0.5);
             
@@ -40,6 +41,7 @@
             --accent-pink: #d900ad;
             --accent-cyan: #00cccc;
             --accent-yellow: #e6d800;
+            --accent-lime: #99cc00;
             --accent-red: #cc0000;
             --shadow-color: rgba(0, 0, 0, 0.1);
         }
@@ -219,20 +221,201 @@
         html[data-theme="light"] .light-icon { opacity: 1; filter: grayscale(0%); }
         html[data-theme="light"] .dark-icon { opacity: 0.3; filter: grayscale(100%); }
 
-        /* --- メニューアイコン (🌭) --- */
-        .menu-toggle {
-            display: none;
-            font-size: 1.8rem;
-            cursor: pointer;
+
+        /* =========================================
+           🍅 奇妙なトマトアニメーション
+           ========================================= */
+        .tomato-wrapper {
+            display: block; 
             margin-left: 5px;
-            transform: rotate(-10deg);
-            transition: transform 0.3s;
+            cursor: pointer;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            position: relative;
+            z-index: 102; 
         }
 
-        .menu-toggle:hover {
-            transform: scale(1.15) rotate(-20deg);
+        .tomato-translate {
+            animation: move-tomato 10s linear infinite;
         }
+
+        .tomato-scale {
+            animation: scale-tomato 12s ease-in-out infinite;
+        }
+
+        .tomato-rotate {
+            font-size: 1.8rem;
+            line-height: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: rotate-tomato 8s linear infinite;
+        }
+
+        @keyframes move-tomato {
+            0%   { transform: translate(6px, 0); }     
+            25%  { transform: translate(0, -6px); }    
+            50%  { transform: translate(-6px, 0); }    
+            75%  { transform: translate(0, 6px); }     
+            100% { transform: translate(6px, 0); }     
+        }
+
+        @keyframes scale-tomato {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.2); }
+        }
+
+        @keyframes rotate-tomato {
+            0%   { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* =========================================
+           🌎 WILD MAP ドロップダウン
+           ========================================= */
+        .world-map-dropdown {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 5, 5, 0.95); 
+            backdrop-filter: blur(10px);
+            border-bottom: none; 
+            padding: 40px 20px 80px; 
+            text-align: center;
+            z-index: 99; 
+            
+            transform-origin: top center;
+            transform: scaleY(0);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+            overflow: visible; 
+        }
+
+        .world-map-dropdown.active {
+            transform: scaleY(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .world-map-title {
+            font-family: Impact, Charcoal, sans-serif;
+            font-size: clamp(3rem, 13vw, 15rem); 
+            white-space: nowrap; 
+            color: #000000; 
+            text-shadow: 
+                0 0 4px rgba(255, 255, 255, 0.9), 
+                0 0 10px rgba(255, 255, 255, 0.6), 
+                0 0 20px rgba(255, 255, 255, 0.3);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            line-height: 1;
+        }
+
+        .world-map-text {
+            color: #ffffff;
+            font-size: clamp(1rem, 3vw, 1.3rem);
+            font-weight: bold;
+            line-height: 1.6;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+            position: relative;
+            z-index: 5; 
+        }
+
+        .world-map-text .lang-ja {
+            font-family: var(--font-ja);
+        }
+
+        .world-map-text .lang-en {
+            font-family: var(--font-display);
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+
+        /* =========================================
+           激しく一閃するライムイエローのレーザーECG
+           ========================================= */
+        .ekg-container {
+            position: absolute;
+            bottom: -30px; 
+            left: 0;
+            width: 100%;
+            height: 150px; 
+            pointer-events: none;
+            z-index: 100; 
+        }
+
+        /* SVGコンテナ (画面幅全体) */
+        .wave-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
+        /* 波形の共通設定 */
+        .wave-trail, .wave-head {
+            fill: none;
+            stroke-linejoin: round;
+            vector-effect: non-scaling-stroke; /* 画面幅が変わっても線の太さは維持 */
+        }
+
+        /* 軌跡（残像）: 光る玉の後ろに伸び、闇に追われて消える */
+        .wave-trail {
+            stroke: var(--accent-lime);
+            stroke-width: 1.5px;
+            filter: drop-shadow(0 0 4px var(--accent-lime));
+            stroke-dasharray: 100 200; /* パスを100とする */
+            stroke-dashoffset: 100; /* 初期は完全に隠す */
+            opacity: 0; /* 最初は透明 */
+        }
+
+        /* 走る光の玉（先頭）: 激しく発光し、左から右へダッシュ！ */
+        .wave-head {
+            stroke: var(--accent-lime);
+            stroke-width: 6px; /* 太くして玉のような芯にする */
+            stroke-linecap: round; /* 先端を丸く */
+            /* 重ね掛けシャドウで白く飛ぶほどの強烈なレーザー発光 */
+            filter: drop-shadow(0 0 5px var(--accent-lime)) drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 25px var(--accent-lime));
+            stroke-dasharray: 0.1 300; /* 先端の「点」だけを描画 */
+            stroke-dashoffset: 0; /* 初期位置 */
+            opacity: 0; /* 最初は透明 */
+        }
+
+        /* === 9.5秒周期の無限ループアニメーション === 
+           (初回は animation-delay: 5s; で待機)
+           
+           ・1秒間 (0%〜10.53%): 光の玉が駆け抜ける ＆ 残像が描かれる
+           ・0.5秒間 (10.53%〜15.79%): 闇が追いかけて残像が消える
+           ・8秒間 (15.79%〜100%): 完全沈黙（闇）
+        */
+        
+        /* 1. 残像のアニメーション (100 -> 0 -> -100 と移動) */
+        .world-map-dropdown.active .wave-trail {
+            animation: draw-trail 9.5s infinite linear;
+            animation-delay: 5s; /* 初回のみ5秒待機 */
+        }
+        @keyframes draw-trail {
+            0% { stroke-dashoffset: 100; opacity: 0.6; } /* 光スタートと同時に描画開始 */
+            10.53% { stroke-dashoffset: 0; opacity: 0.6; } /* 1秒で右端まで到達 */
+            15.79% { stroke-dashoffset: -100; opacity: 0; } /* 0.5秒で左から右へ闇に飲まれる */
+            100% { stroke-dashoffset: -100; opacity: 0; } /* 次のループまで隠れたまま */
+        }
+
+        /* 2. 先頭の光の玉のアニメーション (0 -> -100 へ移動) */
+        .world-map-dropdown.active .wave-head {
+            animation: run-head 9.5s infinite linear;
+            animation-delay: 5s; /* 初回のみ5秒待機 */
+        }
+        @keyframes run-head {
+            0% { stroke-dashoffset: 0; opacity: 1; } /* 左端に出現 */
+            10.53% { stroke-dashoffset: -100; opacity: 1; } /* 1秒で右端まで走り抜ける！ */
+            10.6% { stroke-dashoffset: -100; opacity: 0; } /* 到達した瞬間に玉は消滅 */
+            100% { stroke-dashoffset: -100; opacity: 0; } /* 次のループまで隠れたまま */
+        }
+
 
         /* --- ヒーローセクション --- */
         .hero {
@@ -939,32 +1122,8 @@
                 height: 60px;
                 padding: 0 15px;
             }
-            .menu-toggle {
-                display: block;
-            }
-            
-            nav {
-                position: absolute;
-                top: 60px;
-                left: 0;
-                width: 100%;
-                background: var(--header-bg);
-                backdrop-filter: blur(10px);
-                height: 0;
-                overflow: hidden;
-                transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                border-bottom: 0px solid var(--card-border);
-            }
-            nav.active {
-                height: 240px;
-                border-bottom-width: 1px;
-            }
-            nav ul {
-                flex-direction: column;
-                align-items: center;
-                padding: 20px 0;
-                gap: 20px;
-            }
+            /* スマホ用の古いメニュー表示処理は一旦コメントアウトか削除 */
+            nav { display: none; } /* 今回は🍅でメニューを出すので既存navは消しておく */
             
             .header-logo-container {
                 left: 15px;
@@ -1025,10 +1184,12 @@
 
     <header>
         <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <!-- プレビュー環境で画像がないためaltテキストが表示されます -->
             <img src="icon.PNG" alt="FHW" class="header-logo">
         </div>
         
         <div class="header-right">
+            <!-- PC用のナビゲーション (スマホ時は非表示に設定済) -->
             <nav id="nav">
                 <ul>
                     <li><a href="#home">HOME</a></li>
@@ -1050,9 +1211,51 @@
                 <span class="light-icon">☀️</span>
             </button>
             
-            <div class="menu-toggle" id="menuToggle">🌭</div>
+            <!-- 🍅 奇妙な動きをするトマト (旧:地球儀) -->
+            <div class="tomato-wrapper" id="tomatoToggle">
+                <div class="tomato-translate">
+                    <div class="tomato-scale">
+                        <div class="tomato-rotate">🍅</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
+
+    <!-- 🍅 WILD MAP ドロップダウンパネル -->
+    <div class="world-map-dropdown" id="worldMapDropdown">
+        <h3 class="world-map-title">~WILD MAP~</h3>
+        <p class="world-map-text">
+            <span class="lang-ja">FUNKYな世界への<br>トビラを開く</span>
+            <span class="lang-en">ENTER THE FUNKY UNIVERSE.</span>
+        </p>
+
+        <!-- 一閃するライムイエローのレーザーECGギミック -->
+        <div class="ekg-container">
+            <!-- 画面幅全体をカバーするSVG -->
+            <svg class="wave-svg" viewBox="0 0 1000 150" preserveAspectRatio="none">
+                <!-- 
+                  【本物の心電図のような激しい波形パス】
+                  ベースラインを Y=75 とする。
+                  M 0 75 (左端スタート)
+                  L 370 75 (波形の手前まで直線)
+                  L 385 75 (P波は省略し平坦のまま)
+                  L 395 0  (100%上がる! 鋭いR波)
+                  L 405 120 (50%下がる! ベースを越えて深く突き抜けるS波)
+                  L 415 50  (15%上がる! T波のように少し山を作る)
+                  L 422 85  (5%下がる! ベースより少し下へ)
+                  L 430 75  (直線に戻る)
+                  L 1000 75 (右端まで直線)
+                -->
+                
+                <!-- 残像 (光る玉の後ろに描かれ、闇に飲まれて消える) -->
+                <path class="wave-trail" pathLength="100" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
+                
+                <!-- 光の玉 (先頭を激しく発光して走り抜ける) -->
+                <path class="wave-head" pathLength="100" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
+            </svg>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section id="home" class="hero">
@@ -1161,7 +1364,6 @@
                 </p>
             </a>
             
-            <!-- FUNKY-COMIC へのリンクに変更し js-page-transition を付与 -->
             <a href="https://p-one-star.github.io/FUNKY-COMIC/" class="work-card js-page-transition" data-type="art">
                 <div class="work-icon">🎨</div>
                 <div class="work-title">GRAFFITI DOG</div>
@@ -1296,18 +1498,22 @@
             }, 400);
         });
 
-        const menuToggle = document.getElementById('menuToggle');
-        const nav = document.getElementById('nav');
+        // --- 🍅アイコンクリックでワールドマップドロップダウンを開閉 ---
+        const tomatoToggle = document.getElementById('tomatoToggle');
+        const worldMapDropdown = document.getElementById('worldMapDropdown');
 
-        menuToggle.addEventListener('click', () => {
-            nav.classList.toggle('active');
+        tomatoToggle.addEventListener('click', () => {
+            worldMapDropdown.classList.toggle('active');
         });
 
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('active');
-            });
+        // 画面のどこか他をクリックしたらドロップダウンを閉じる
+        document.addEventListener('click', (e) => {
+            if (!tomatoToggle.contains(e.target) && !worldMapDropdown.contains(e.target)) {
+                worldMapDropdown.classList.remove('active');
+            }
         });
+
+        // -------------------------------------------------------------
 
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
