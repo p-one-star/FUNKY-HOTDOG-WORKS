@@ -419,6 +419,18 @@
             font-style: normal;
             letter-spacing: 3px;
         }
+        
+        /* 追加: 戻れない警告テキスト */
+        .world-map-warning {
+            display: block;
+            color: var(--accent-red);
+            font-size: clamp(0.8rem, 3vw, 1.5rem);
+            font-family: Impact, Charcoal, sans-serif;
+            letter-spacing: 5px;
+            margin-top: 15px;
+            opacity: 0.9;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.8);
+        }
 
         /* =========================================
            激しく一閃するライムイエローのレーザーECG
@@ -1329,13 +1341,15 @@
     <!-- 🍅 WILD MAP ドロップダウンパネル -->
     <div class="world-map-dropdown" id="worldMapDropdown">
         
-        <!-- 見出しとテキストをラップするリンクボタン (IDを付与してJSで制御) -->
+        <!-- 見出しとテキストをラップするリンクボタン -->
         <a href="https://p-one-star.github.io/FHW-WORLD-MAP/" id="worldMapLink" class="world-map-link-wrapper">
             <h3 class="world-map-title">~WILD MAP~</h3>
             <p class="world-map-text">
                 <span class="lang-ja">FUNKYな世界へのトビラを開く</span>
                 <span class="lang-en">ENTER THE FUNKY UNIVERSE.</span>
             </p>
+            <!-- 追加: 戻れない警告テキスト -->
+            <span class="world-map-warning">NO WAY BACK.</span>
         </a>
 
         <!-- 完全な無から一閃するライムイエローのレーザーECGギミック -->
@@ -1432,7 +1446,6 @@
                     <div class="work-icon">🌭</div>
                     <div class="work-title">THE CLASSIC</div>
                     <p class="work-desc">
-                        <!-- 【修正】3行で綺麗に揃える -->
                         <span class="lang-ja">基本にして至高。<br>極太ソーセージが踊り出す。<br>最初の1本。</span>
                         <span class="lang-en">Basic and supreme.<br>The thick sausage dances.<br>Your first bite.</span>
                     </p>
@@ -1463,6 +1476,16 @@
                 <p class="work-desc">
                     <span class="lang-ja">カラフルなソースで描く<br>食用アート。<br>食べるのが惜しい（嘘、食べて）。</span>
                     <span class="lang-en">Edible art drawn with<br>colorful sauces.<br>Too good to eat (Just kidding, please eat it).</span>
+                </p>
+            </a>
+
+            <!-- 宇宙への片道切符 🍅カード -->
+            <a href="https://p-one-star.github.io/FHW-WORLD-MAP/" class="work-card js-page-transition" data-type="tomato">
+                <div class="work-icon">🍅</div>
+                <div class="work-title">WILD TOMATO</div>
+                <p class="work-desc">
+                    <span class="lang-ja">ただのトマトだと思ったか？<br>甘いな。<br>押したら戻れないぞ。</span>
+                    <span class="lang-en">Thought it was just a tomato?<br>Naive.<br>There's no turning back once you click.</span>
                 </p>
             </a>
         </div>
@@ -1565,8 +1588,10 @@
 
         // --- 既存の画面遷移エフェクト ---
         document.querySelectorAll('.js-page-transition').forEach(link => {
+            // worldMapLink には個別のイベントリスナーがあるので除外する
+            if (link.id === 'worldMapLink') return;
+
             link.addEventListener('click', function(e) {
-                // burger等のリンクは通常遷移のままにするため、worldMapLinkとは処理を分ける
                 e.preventDefault(); 
                 const targetUrl = this.getAttribute('href');
                 
