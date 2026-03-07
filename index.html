@@ -1278,7 +1278,6 @@
 
     <!-- ★猛烈な突進ブラックホール演出用レイヤー★ -->
     <div class="blackhole-effect-layer" id="blackholeEffectLayer">
-        <!-- コアは削除し、リングのみで「中は真っ黒、フチはシアン」を表現 -->
         <div class="bh-ring"></div>
     </div>
 
@@ -1290,7 +1289,6 @@
 
     <header>
         <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <!-- プレビュー環境で画像がないためaltテキストが表示されます -->
             <img src="icon.PNG" alt="FHW" class="header-logo">
         </div>
         
@@ -1343,26 +1341,9 @@
         <!-- 完全な無から一閃するライムイエローのレーザーECGギミック -->
         <div class="ekg-container">
             <svg class="wave-svg" viewBox="0 0 1000 150" preserveAspectRatio="none">
-                
-                <!-- 
-                  【本物の心電図のような激しい波形パス】
-                  M 0 75 (左端スタート)
-                  L 370 75 (波形の手前まで直線)
-                  L 385 75 (平坦のまま進む)
-                  L 395 0  (100%上がる! 鋭いR波)
-                  L 405 120 (50%下がる! ベースを越えて深く突き抜けるS波)
-                  L 415 50  (15%上がる! T波のように少し山を作る)
-                  L 422 85  (5%下がる! ベースより少し下へ)
-                  L 430 75  (直線に戻る)
-                  L 1000 75 (右端まで直線)
-                -->
-                
-                <!-- 残像 -->
                 <g class="trail-group">
                     <path class="wave-trail" pathLength="1000" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
                 </g>
-                
-                <!-- 光の玉 -->
                 <path class="wave-head" pathLength="1000" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
             </svg>
         </div>
@@ -1451,18 +1432,19 @@
                     <div class="work-icon">🌭</div>
                     <div class="work-title">THE CLASSIC</div>
                     <p class="work-desc">
-                        <span class="lang-ja">基本にして至高。極太ソーセージと自家製ピクルスが踊り出す、最初の一本。</span>
-                        <span class="lang-en">Basic and supreme. Thick sausage and homemade pickles dancing together. The origin.</span>
+                        <!-- 【修正】3行で綺麗に揃える -->
+                        <span class="lang-ja">基本にして至高。<br>極太ソーセージが踊り出す。<br>最初の1本。</span>
+                        <span class="lang-en">Basic and supreme.<br>The thick sausage dances.<br>Your first bite.</span>
                     </p>
                 </div>
             </a>
             
-            <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card js-page-transition" data-type="cheese">
+            <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card js-page-transition" data-type="burger">
                 <div class="work-icon">🍔</div>
-                <div class="work-title">CHEESE BOMB</div>
+                <div class="work-title">FUNKY BURGER</div>
                 <p class="work-desc">
-                    <span class="lang-ja">チーズの海に溺れたいあなたへ。もはや個体ではない何か。火傷注意。</span>
-                    <span class="lang-en">For those who want to drown in cheese. It's not even solid anymore. Caution: Hot.</span>
+                    <span class="lang-ja">ホットドッグ屋なのにバーガー？<br>黙って食え。<br>脳が肉汁でバグるぞ。</span>
+                    <span class="lang-en">A burger in a hot dog shop?<br>Just eat it.<br>Your brain might glitch in meat juice.</span>
                 </p>
             </a>
             
@@ -1470,8 +1452,8 @@
                 <div class="work-icon">🌶️</div>
                 <div class="work-title">VOLCANO</div>
                 <p class="work-desc">
-                    <span class="lang-ja">ハラペーニョ×300%。翌日のことは考えるな。今を生きろ。</span>
-                    <span class="lang-en">Jalapeño x 300%. Don't think about tomorrow. Live for today.</span>
+                    <span class="lang-ja">ハラペーニョ×300%。<br>翌日のことは考えるな。<br>今を生きろ。</span>
+                    <span class="lang-en">Jalapeño x 300%.<br>Don't think about tomorrow.<br>Live for today.</span>
                 </p>
             </a>
             
@@ -1479,8 +1461,8 @@
                 <div class="work-icon">🎨</div>
                 <div class="work-title">GRAFFITI DOG</div>
                 <p class="work-desc">
-                    <span class="lang-ja">カラフルなソースで描く食用アート。食べるのが惜しい（嘘、食べて）。</span>
-                    <span class="lang-en">Edible art drawn with colorful sauces. Too good to eat (Just kidding, please eat it).</span>
+                    <span class="lang-ja">カラフルなソースで描く<br>食用アート。<br>食べるのが惜しい（嘘、食べて）。</span>
+                    <span class="lang-en">Edible art drawn with<br>colorful sauces.<br>Too good to eat (Just kidding, please eat it).</span>
                 </p>
             </a>
         </div>
@@ -1554,10 +1536,9 @@
 
         if (worldMapLink) {
             worldMapLink.addEventListener('click', function(e) {
-                e.preventDefault(); // デフォルトの即時ジャンプをストップ
+                e.preventDefault(); 
                 const targetUrl = this.getAttribute('href');
 
-                // 要素の中心座標を取得
                 const rect = this.getBoundingClientRect();
                 const centerX = rect.left + rect.width / 2;
                 const centerY = rect.top + rect.height / 2;
@@ -1565,7 +1546,6 @@
                 // 1. 0.6秒間はあえて何もしない「タメ」
                 setTimeout(() => {
                     
-                    // ブラックホールの発生位置をクリックした文字のド真ん中にセット
                     blackholeEffect.style.left = `${centerX}px`;
                     blackholeEffect.style.top = `${centerY}px`;
 
@@ -1586,6 +1566,7 @@
         // --- 既存の画面遷移エフェクト ---
         document.querySelectorAll('.js-page-transition').forEach(link => {
             link.addEventListener('click', function(e) {
+                // burger等のリンクは通常遷移のままにするため、worldMapLinkとは処理を分ける
                 e.preventDefault(); 
                 const targetUrl = this.getAttribute('href');
                 
