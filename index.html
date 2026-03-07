@@ -54,6 +54,11 @@
             -webkit-tap-highlight-color: transparent; 
         }
 
+        /* ブラックホールで吸い込まれた後の背景を完全な宇宙(黒)にする */
+        html {
+            background-color: #000000;
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -94,6 +99,101 @@
             opacity: 1;
             pointer-events: all;
         }
+
+        /* =========================================
+           ブラックホール演出専用 CSS
+           ========================================= */
+        .blackhole-effect-layer {
+            /* 座標はJSでクリック位置を中心にセットされる */
+            position: absolute; 
+            z-index: 9999999; /* 最前面 */
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(-50%, -50%); /* 起点を中心に */
+        }
+        .blackhole-effect-layer.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* ブラックホールの真っ黒なコア */
+        .bh-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 20px;
+            height: 20px;
+            background: #000000;
+            border-radius: 50%;
+            box-shadow: 0 0 50px 30px #000000;
+        }
+        .blackhole-effect-layer.active .bh-core {
+            /* 1.5秒かけて画面全体を覆い尽くす黒い穴になる */
+            animation: expand-bh 1.5s cubic-bezier(0.5, 0, 1, 0.5) forwards;
+        }
+        
+        /* ブラックホール周囲の光輪 */
+        .bh-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-cyan);
+            box-shadow: 0 0 20px var(--accent-cyan), inset 0 0 20px var(--accent-cyan);
+            filter: blur(2px);
+            /* 初期位置の設定（translateで中央合わせしつつrotate） */
+            transform: translate(-50%, -50%) scale(0) rotate(0deg);
+        }
+        .blackhole-effect-layer.active .bh-ring {
+            /* 拡大しながら猛烈に回転し、最後は消える */
+            animation: expand-ring 1.5s cubic-bezier(0.5, 0, 1, 0.5) forwards;
+        }
+
+        @keyframes expand-bh {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; }
+            10% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(200); opacity: 1; } 
+        }
+        @keyframes expand-ring {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
+            10% { transform: translate(-50%, -50%) scale(1) rotate(45deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(150) rotate(720deg); opacity: 0; border-width: 50px; }
+        }
+
+        /* サイト全体（body）が吸い込まれるアニメーション */
+        body.sucked {
+            overflow: hidden !important; /* スクロール禁止 */
+            animation: suck-into-blackhole 1.5s cubic-bezier(0.5, 0, 1, 0.5) forwards;
+            /* transform-origin は JS でクリック位置に動的に設定されます */
+        }
+
+        @keyframes suck-into-blackhole {
+            0% {
+                transform: scale(1) rotate(0deg);
+                filter: blur(0) brightness(1) contrast(1);
+                opacity: 1;
+            }
+            40% {
+                transform: scale(0.7) rotate(20deg);
+                filter: blur(2px) brightness(1.2) contrast(1.2);
+                opacity: 1;
+            }
+            80% {
+                transform: scale(0.1) rotate(180deg);
+                filter: blur(10px) brightness(2) contrast(2);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(0) rotate(720deg);
+                filter: blur(20px) brightness(3) contrast(3);
+                opacity: 0;
+            }
+        }
+
 
         /* --- スプラッター背景エフェクト --- */
         .bg-effect {
@@ -317,7 +417,6 @@
 
         .world-map-title {
             font-family: Impact, Charcoal, sans-serif;
-            /* 限界まで巨大化。見切れないようにvwの上限を少し調整 */
             font-size: clamp(3rem, 15vw, 22rem); 
             white-space: nowrap; 
             color: #000000; 
@@ -328,12 +427,11 @@
             margin-bottom: 5px;
             letter-spacing: 0;
             line-height: 1;
-            transform: scaleY(1.2); /* 縦長にして圧迫感キープ */
+            transform: scaleY(1.2); 
         }
 
         .world-map-text {
             color: #ffffff;
-            /* サブコピーも限界まで巨大化 */
             font-size: clamp(1rem, 4vw, 2.5rem);
             line-height: 1.6;
             white-space: nowrap; 
@@ -341,13 +439,11 @@
             position: relative;
             z-index: 5; 
             margin-top: 15px; 
-            /* サブコピーもIMPACTに変更 */
             font-family: Impact, Charcoal, sans-serif;
             letter-spacing: 2px;
         }
 
         .world-map-text .lang-ja {
-            /* 日本語も可能な限りゴツいフォントで */
             font-family: var(--font-ja);
             font-weight: 900;
         }
@@ -409,7 +505,8 @@
             stroke-linecap: round; 
             filter: drop-shadow(0 0 5px var(--accent-lime)) drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 25px var(--accent-lime));
             stroke-dasharray: 0.1 3000; 
-            stroke-dashoffset: 1000; 
+            /* 初期位置を遥か外（1500）に設定し、玉ちゃんバグを完全抹殺 */
+            stroke-dashoffset: 1500; 
             opacity: 0; 
         }
 
@@ -419,16 +516,16 @@
            [5.3s〜7.0s]  (35.33%〜46.66%) : 闇が1.7秒で左から右へ追いかけ、軌跡を消す！
            [7.0s〜15.0s] (46.66%〜100%) : 完全待機（闇）
         */
-        
+
         /* 1. 光の玉 (1.5秒で走る) */
         .world-map-dropdown.active .wave-head {
             animation: run-head 15s infinite linear;
         }
         @keyframes run-head {
-            0%, 33.32% { stroke-dashoffset: 1000; opacity: 0; }
+            0%, 33.32% { stroke-dashoffset: 1500; opacity: 0; } /* 遥か左外に待機 */
             33.33% { stroke-dashoffset: 1000; opacity: 1; }     /* 5.0s: 左端に出現 */
             43.33% { stroke-dashoffset: 0; opacity: 1; }        /* 6.5s: 右端に到達 */
-            43.34%, 100% { stroke-dashoffset: 0; opacity: 0; }  /* 走り抜けたら即消滅 */
+            43.34%, 100% { stroke-dashoffset: -500; opacity: 0; } /* 走り抜けたら遥か右外へ退避して消滅 */
         }
 
         /* 2. 軌跡の描画 (光と一緒に伸びて、闇に消されるまで維持) */
@@ -1213,6 +1310,12 @@
     <!-- ページ遷移時の暗転エフェクト用レイヤー -->
     <div class="page-transition-overlay" id="pageTransition"></div>
 
+    <!-- ★ブラックホール演出用レイヤー★ -->
+    <div class="blackhole-effect-layer" id="blackholeEffectLayer">
+        <div class="bh-core"></div>
+        <div class="bh-ring"></div>
+    </div>
+
     <!-- スキャンエフェクト用レイヤー -->
     <div class="scan-effect" id="scanEffect">
         <div class="scan-overlay"></div>
@@ -1221,6 +1324,7 @@
 
     <header>
         <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <!-- プレビュー環境で画像がないためaltテキストが表示されます -->
             <img src="icon.PNG" alt="FHW" class="header-logo">
         </div>
         
@@ -1261,11 +1365,11 @@
     <!-- 🍅 WILD MAP ドロップダウンパネル -->
     <div class="world-map-dropdown" id="worldMapDropdown">
         
-        <!-- 見出しとテキストをラップするリンクボタン (既存の暗転遷移を使用) -->
-        <a href="https://p-one-star.github.io/FHW-WORLD-MAP/" class="world-map-link-wrapper js-page-transition">
+        <!-- 見出しとテキストをラップするリンクボタン (IDを付与してJSで制御) -->
+        <a href="https://p-one-star.github.io/FHW-WORLD-MAP/" id="worldMapLink" class="world-map-link-wrapper">
             <h3 class="world-map-title">~WILD MAP~</h3>
             <p class="world-map-text">
-                <!-- 改行タグを削除し、完全に1行で限界まで巨大化させる -->
+                <!-- 完全に1行で限界まで巨大化させる -->
                 <span class="lang-ja">FUNKYな世界へのトビラを開く</span>
                 <span class="lang-en">ENTER THE FUNKY UNIVERSE.</span>
             </p>
@@ -1480,7 +1584,48 @@
     </div>
 
     <script>
-        // --- 画面遷移エフェクト ---
+        // --- ★ ブラックホール吸い込み遷移アニメーション ★ ---
+        const worldMapLink = document.getElementById('worldMapLink');
+        const blackholeEffect = document.getElementById('blackholeEffectLayer');
+
+        if (worldMapLink) {
+            worldMapLink.addEventListener('click', function(e) {
+                e.preventDefault(); // デフォルトの即時ジャンプをストップ
+                const targetUrl = this.getAttribute('href');
+
+                // 要素の中心座標を取得 (viewportに対する相対座標)
+                const rect = this.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                // bodyの基点用に絶対座標(スクロール量込み)も計算
+                const absoluteCenterY = centerY + window.scrollY;
+
+                // 1. 0.4秒間はあえて何もしない「タメ」
+                setTimeout(() => {
+                    
+                    // ブラックホールの位置をクリックした文字のド真ん中にセット！
+                    blackholeEffect.style.left = `${centerX}px`;
+                    blackholeEffect.style.top = `${centerY}px`;
+                    
+                    // サイト全体(body)が吸い込まれる基点をセット！
+                    document.body.style.transformOrigin = `${centerX}px ${absoluteCenterY}px`;
+
+                    // 2. ブラックホール演出の起爆！
+                    document.body.classList.add('sucked');
+                    blackholeEffect.classList.add('active');
+
+                    // 3. 1.5秒(吸い込み演出) ＋ 0.4秒(暗転後の余韻) ＝ 1.9秒後に遷移
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 1900);
+
+                }, 400);
+            });
+        }
+
+
+        // --- 既存の画面遷移エフェクト ---
         document.querySelectorAll('.js-page-transition').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault(); 
@@ -1638,6 +1783,7 @@
             }
         });
 
+        // ページを戻ったときにブラックホール状態を解除して元に戻す処理
         window.addEventListener('pageshow', function(event) {
             const transitionOverlay = document.getElementById('pageTransition');
             if (transitionOverlay && transitionOverlay.classList.contains('active')) {
@@ -1646,6 +1792,10 @@
             document.querySelectorAll('.force-hover').forEach(el => {
                 el.classList.remove('force-hover');
             });
+            
+            document.body.classList.remove('sucked');
+            const blackholeEffect = document.getElementById('blackholeEffectLayer');
+            if(blackholeEffect) blackholeEffect.classList.remove('active');
         });
     </script>
 </body>
