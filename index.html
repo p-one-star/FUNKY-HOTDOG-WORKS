@@ -298,38 +298,63 @@
             pointer-events: auto;
         }
 
+        /* リンク化されたテキストエリアのラッパー */
+        .world-map-link-wrapper {
+            display: inline-block;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s;
+        }
+
+        /* ホバーで少しだけ大きく＆明るく！ */
+        .world-map-link-wrapper:hover {
+            transform: scale(1.03);
+            filter: brightness(1.2);
+        }
+
         .world-map-title {
             font-family: Impact, Charcoal, sans-serif;
-            font-size: clamp(3rem, 13vw, 15rem); 
+            /* 限界まで巨大化。見切れないようにvwの上限を少し調整 */
+            font-size: clamp(3rem, 15vw, 22rem); 
             white-space: nowrap; 
             color: #000000; 
             text-shadow: 
                 0 0 4px rgba(255, 255, 255, 0.9), 
                 0 0 10px rgba(255, 255, 255, 0.6), 
                 0 0 20px rgba(255, 255, 255, 0.3);
-            margin-bottom: 15px;
-            letter-spacing: 2px;
+            margin-bottom: 5px;
+            letter-spacing: 0;
             line-height: 1;
+            transform: scaleY(1.2); /* 縦長にして圧迫感キープ */
         }
 
         .world-map-text {
             color: #ffffff;
-            font-size: clamp(1rem, 3vw, 1.3rem);
-            font-weight: bold;
+            /* サブコピーも限界まで巨大化 */
+            font-size: clamp(1rem, 4vw, 2.5rem);
             line-height: 1.6;
+            white-space: nowrap; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.8);
             position: relative;
             z-index: 5; 
+            margin-top: 15px; 
+            /* サブコピーもIMPACTに変更 */
+            font-family: Impact, Charcoal, sans-serif;
+            letter-spacing: 2px;
         }
 
         .world-map-text .lang-ja {
+            /* 日本語も可能な限りゴツいフォントで */
             font-family: var(--font-ja);
+            font-weight: 900;
         }
 
         .world-map-text .lang-en {
-            font-family: var(--font-display);
-            font-style: italic;
-            letter-spacing: 2px;
+            font-style: normal;
+            letter-spacing: 3px;
         }
 
         /* =========================================
@@ -355,65 +380,78 @@
             overflow: visible;
         }
 
+        /* 軌跡（残像）と闇のクリップマスク用グループ */
+        .trail-group {
+            clip-path: inset(0 0 0 0%);
+        }
+
         /* 波形の共通設定 */
         .wave-trail, .wave-head {
             fill: none;
             stroke-linejoin: round;
-            vector-effect: non-scaling-stroke; /* 画面幅が変わっても線の太さは維持 */
+            vector-effect: non-scaling-stroke; 
         }
 
-        /* 軌跡（残像）: 光る玉の後ろに伸び、闇に追われて消える */
+        /* 軌跡（残像） */
         .wave-trail {
             stroke: var(--accent-lime);
             stroke-width: 1.5px;
             filter: drop-shadow(0 0 4px var(--accent-lime));
-            stroke-dasharray: 100 200; /* パスを100とする */
-            stroke-dashoffset: 100; /* 初期は完全に隠す */
-            opacity: 0; /* 最初は透明 */
+            stroke-dasharray: 1000 3000; 
+            stroke-dashoffset: 1000; 
+            opacity: 0; 
         }
 
-        /* 走る光の玉（先頭）: 激しく発光し、左から右へダッシュ！ */
+        /* 走る光の玉（先頭） */
         .wave-head {
             stroke: var(--accent-lime);
-            stroke-width: 6px; /* 太くして玉のような芯にする */
-            stroke-linecap: round; /* 先端を丸く */
-            /* 重ね掛けシャドウで白く飛ぶほどの強烈なレーザー発光 */
+            stroke-width: 8px; 
+            stroke-linecap: round; 
             filter: drop-shadow(0 0 5px var(--accent-lime)) drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 25px var(--accent-lime));
-            stroke-dasharray: 0.1 300; /* 先端の「点」だけを描画 */
-            stroke-dashoffset: 0; /* 初期位置 */
-            opacity: 0; /* 最初は透明 */
+            stroke-dasharray: 0.1 3000; 
+            stroke-dashoffset: 1000; 
+            opacity: 0; 
         }
 
-        /* === 9.5秒周期の無限ループアニメーション === 
-           (初回は animation-delay: 5s; で待機)
-           
-           ・1秒間 (0%〜10.53%): 光の玉が駆け抜ける ＆ 残像が描かれる
-           ・0.5秒間 (10.53%〜15.79%): 闇が追いかけて残像が消える
-           ・8秒間 (15.79%〜100%): 完全沈黙（闇）
+        /* === 15秒周期の完璧な数学的タイムライン === 
+           [0.0s〜5.0s]  (0%〜33.33%) : 完全待機（闇）
+           [5.0s〜6.5s]  (33.33%〜43.33%) : 光の玉が1.5秒で左から右へダッシュ！
+           [5.3s〜7.0s]  (35.33%〜46.66%) : 闇が1.7秒で左から右へ追いかけ、軌跡を消す！
+           [7.0s〜15.0s] (46.66%〜100%) : 完全待機（闇）
         */
         
-        /* 1. 残像のアニメーション (100 -> 0 -> -100 と移動) */
-        .world-map-dropdown.active .wave-trail {
-            animation: draw-trail 9.5s infinite linear;
-            animation-delay: 5s; /* 初回のみ5秒待機 */
-        }
-        @keyframes draw-trail {
-            0% { stroke-dashoffset: 100; opacity: 0.6; } /* 光スタートと同時に描画開始 */
-            10.53% { stroke-dashoffset: 0; opacity: 0.6; } /* 1秒で右端まで到達 */
-            15.79% { stroke-dashoffset: -100; opacity: 0; } /* 0.5秒で左から右へ闇に飲まれる */
-            100% { stroke-dashoffset: -100; opacity: 0; } /* 次のループまで隠れたまま */
-        }
-
-        /* 2. 先頭の光の玉のアニメーション (0 -> -100 へ移動) */
+        /* 1. 光の玉 (1.5秒で走る) */
         .world-map-dropdown.active .wave-head {
-            animation: run-head 9.5s infinite linear;
-            animation-delay: 5s; /* 初回のみ5秒待機 */
+            animation: run-head 15s infinite linear;
         }
         @keyframes run-head {
-            0% { stroke-dashoffset: 0; opacity: 1; } /* 左端に出現 */
-            10.53% { stroke-dashoffset: -100; opacity: 1; } /* 1秒で右端まで走り抜ける！ */
-            10.6% { stroke-dashoffset: -100; opacity: 0; } /* 到達した瞬間に玉は消滅 */
-            100% { stroke-dashoffset: -100; opacity: 0; } /* 次のループまで隠れたまま */
+            0%, 33.32% { stroke-dashoffset: 1000; opacity: 0; }
+            33.33% { stroke-dashoffset: 1000; opacity: 1; }     /* 5.0s: 左端に出現 */
+            43.33% { stroke-dashoffset: 0; opacity: 1; }        /* 6.5s: 右端に到達 */
+            43.34%, 100% { stroke-dashoffset: 0; opacity: 0; }  /* 走り抜けたら即消滅 */
+        }
+
+        /* 2. 軌跡の描画 (光と一緒に伸びて、闇に消されるまで維持) */
+        .world-map-dropdown.active .wave-trail {
+            animation: draw-trail 15s infinite linear;
+        }
+        @keyframes draw-trail {
+            0%, 33.32% { stroke-dashoffset: 1000; opacity: 0; }
+            33.33% { stroke-dashoffset: 1000; opacity: 0.6; }   /* 5.0s: 描画開始 */
+            43.33% { stroke-dashoffset: 0; opacity: 0.6; }      /* 6.5s: 全体描画完了 */
+            46.66% { stroke-dashoffset: 0; opacity: 0.6; }      /* 7.0s: 闇が消し終わるまで維持 */
+            46.67%, 100% { stroke-dashoffset: 0; opacity: 0; }  /* 以降は見えない */
+        }
+
+        /* 3. 闇の追いかけ (クリップマスクで左から右へ喰い殺す) */
+        .world-map-dropdown.active .trail-group {
+            animation: wipe-darkness 15s infinite linear;
+        }
+        @keyframes wipe-darkness {
+            0%, 35.32% { clip-path: inset(0 0 0 0%); opacity: 1; } /* 5.3sまでは全表示 */
+            35.33% { clip-path: inset(0 0 0 0%); opacity: 1; }     /* 5.3s: 闇スタート */
+            46.66% { clip-path: inset(0 0 0 100%); opacity: 1; }   /* 7.0s: 闇が完全に覆う */
+            46.67%, 100% { clip-path: inset(0 0 0 100%); opacity: 0; } 
         }
 
 
@@ -1122,8 +1160,7 @@
                 height: 60px;
                 padding: 0 15px;
             }
-            /* スマホ用の古いメニュー表示処理は一旦コメントアウトか削除 */
-            nav { display: none; } /* 今回は🍅でメニューを出すので既存navは消しておく */
+            nav { display: none; } 
             
             .header-logo-container {
                 left: 15px;
@@ -1184,12 +1221,11 @@
 
     <header>
         <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-            <!-- プレビュー環境で画像がないためaltテキストが表示されます -->
             <img src="icon.PNG" alt="FHW" class="header-logo">
         </div>
         
         <div class="header-right">
-            <!-- PC用のナビゲーション (スマホ時は非表示に設定済) -->
+            <!-- PC用のナビゲーション -->
             <nav id="nav">
                 <ul>
                     <li><a href="#home">HOME</a></li>
@@ -1211,7 +1247,7 @@
                 <span class="light-icon">☀️</span>
             </button>
             
-            <!-- 🍅 奇妙な動きをするトマト (旧:地球儀) -->
+            <!-- 🍅 奇妙な動きをするトマト -->
             <div class="tomato-wrapper" id="tomatoToggle">
                 <div class="tomato-translate">
                     <div class="tomato-scale">
@@ -1224,22 +1260,27 @@
 
     <!-- 🍅 WILD MAP ドロップダウンパネル -->
     <div class="world-map-dropdown" id="worldMapDropdown">
-        <h3 class="world-map-title">~WILD MAP~</h3>
-        <p class="world-map-text">
-            <span class="lang-ja">FUNKYな世界への<br>トビラを開く</span>
-            <span class="lang-en">ENTER THE FUNKY UNIVERSE.</span>
-        </p>
+        
+        <!-- 見出しとテキストをラップするリンクボタン (既存の暗転遷移を使用) -->
+        <a href="https://p-one-star.github.io/FHW-WORLD-MAP/" class="world-map-link-wrapper js-page-transition">
+            <h3 class="world-map-title">~WILD MAP~</h3>
+            <p class="world-map-text">
+                <!-- 改行タグを削除し、完全に1行で限界まで巨大化させる -->
+                <span class="lang-ja">FUNKYな世界へのトビラを開く</span>
+                <span class="lang-en">ENTER THE FUNKY UNIVERSE.</span>
+            </p>
+        </a>
 
-        <!-- 一閃するライムイエローのレーザーECGギミック -->
+        <!-- 完全な無から一閃するライムイエローのレーザーECGギミック -->
         <div class="ekg-container">
             <!-- 画面幅全体をカバーするSVG -->
             <svg class="wave-svg" viewBox="0 0 1000 150" preserveAspectRatio="none">
+                
                 <!-- 
                   【本物の心電図のような激しい波形パス】
-                  ベースラインを Y=75 とする。
                   M 0 75 (左端スタート)
                   L 370 75 (波形の手前まで直線)
-                  L 385 75 (P波は省略し平坦のまま)
+                  L 385 75 (平坦のまま進む)
                   L 395 0  (100%上がる! 鋭いR波)
                   L 405 120 (50%下がる! ベースを越えて深く突き抜けるS波)
                   L 415 50  (15%上がる! T波のように少し山を作る)
@@ -1248,11 +1289,13 @@
                   L 1000 75 (右端まで直線)
                 -->
                 
-                <!-- 残像 (光る玉の後ろに描かれ、闇に飲まれて消える) -->
-                <path class="wave-trail" pathLength="100" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
+                <!-- 残像 (光る玉の後ろに描かれ、闇に猛スピードで飲まれて消える) -->
+                <g class="trail-group">
+                    <path class="wave-trail" pathLength="1000" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
+                </g>
                 
                 <!-- 光の玉 (先頭を激しく発光して走り抜ける) -->
-                <path class="wave-head" pathLength="100" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
+                <path class="wave-head" pathLength="1000" d="M 0 75 L 370 75 L 385 75 L 395 0 L 405 120 L 415 50 L 422 85 L 430 75 L 1000 75" />
             </svg>
         </div>
     </div>
