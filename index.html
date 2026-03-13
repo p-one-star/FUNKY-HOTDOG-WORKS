@@ -290,9 +290,9 @@
 
 
         /* =========================================
-           🍅 奇妙なトマトアニメーション
+           🍙 奇妙なおにぎりアニメーション
            ========================================= */
-        .tomato-wrapper {
+        .onigiri-wrapper {
             display: block; 
             margin-left: 5px;
             cursor: pointer;
@@ -301,24 +301,24 @@
             z-index: 102; 
         }
 
-        .tomato-translate {
-            animation: move-tomato 10s linear infinite;
+        .onigiri-translate {
+            animation: move-onigiri 10s linear infinite;
         }
 
-        .tomato-scale {
-            animation: scale-tomato 12s ease-in-out infinite;
+        .onigiri-scale {
+            animation: scale-onigiri 12s ease-in-out infinite;
         }
 
-        .tomato-rotate {
+        .onigiri-rotate {
             font-size: 1.8rem;
             line-height: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: rotate-tomato 8s linear infinite;
+            animation: rotate-onigiri 8s linear infinite;
         }
 
-        @keyframes move-tomato {
+        @keyframes move-onigiri {
             0%   { transform: translate(6px, 0); }     
             25%  { transform: translate(0, -6px); }    
             50%  { transform: translate(-6px, 0); }    
@@ -326,12 +326,12 @@
             100% { transform: translate(6px, 0); }     
         }
 
-        @keyframes scale-tomato {
+        @keyframes scale-onigiri {
             0%, 100% { transform: scale(1); }
             50%      { transform: scale(1.2); }
         }
 
-        @keyframes rotate-tomato {
+        @keyframes rotate-onigiri {
             0%   { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
@@ -420,7 +420,7 @@
             letter-spacing: 3px;
         }
         
-        /* 追加: 戻れない警告テキスト */
+        /* 戻れない警告テキスト */
         .world-map-warning {
             display: block;
             color: var(--accent-red);
@@ -758,7 +758,7 @@
         }
 
         /* --- 通常のカードスタイル --- */
-        .work-card:not([data-type="classic"]) {
+        .work-card {
             background: var(--card-bg);
             border: 2px solid var(--card-border);
             border-radius: 20px;
@@ -774,85 +774,16 @@
             color: inherit;
         }
 
-        .work-card:not([data-type="classic"]):hover,
-        .work-card:not([data-type="classic"]).force-hover {
+        .work-card:hover,
+        .work-card.force-hover {
             border-color: var(--accent-cyan);
             transform: translateY(-6px);
             box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
         }
         
-        [data-theme="light"] .work-card:not([data-type="classic"]):hover,
-        [data-theme="light"] .work-card:not([data-type="classic"]).force-hover {
+        [data-theme="light"] .work-card:hover,
+        [data-theme="light"] .work-card.force-hover {
             box-shadow: 0 15px 30px rgba(0, 204, 204, 0.3);
-        }
-
-        /* --- THE CLASSIC (IGNITION STYLE) --- */
-        .work-card[data-type="classic"] {
-            background: transparent;
-            border-radius: 20px;
-            padding: 3px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 4px 15px var(--shadow-color);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-            color: inherit;
-            border: 1px solid rgba(0, 255, 255, 0.3);
-        }
-
-        .work-card[data-type="classic"]::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: conic-gradient(
-                transparent, 
-                transparent 70%, 
-                var(--accent-cyan) 100%
-            );
-            z-index: 0;
-            opacity: 0; 
-            transition: opacity 0.3s ease;
-        }
-
-        .work-card[data-type="classic"]::after {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            background: var(--card-bg);
-            border-radius: 17px;
-            z-index: 1;
-        }
-
-        .work-card[data-type="classic"] .inner-content {
-            position: relative;
-            z-index: 10;
-            padding: 30px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .work-card[data-type="classic"]:hover,
-        .work-card[data-type="classic"].force-hover {
-            transform: translateY(-6px) scale(1.02);
-            border-color: transparent;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
-        }
-
-        .work-card[data-type="classic"]:hover::before,
-        .work-card[data-type="classic"].force-hover::before {
-            opacity: 1;
-            animation: rotate-ignition 1.5s linear infinite;
-        }
-
-        @keyframes rotate-ignition {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .work-icon {
@@ -972,6 +903,12 @@
             box-shadow: 0 0 20px var(--accent-pink);
             transform: translateY(-3px);
         }
+        
+        /* SNSアイコンのサイズ調整 */
+        .social-icon {
+            width: 24px;
+            height: 24px;
+        }
 
         /* --- 隠し寿司ボタン --- */
         .sushi-btn {
@@ -1005,11 +942,14 @@
             100% { box-shadow: 0 0 0 0 rgba(255, 51, 51, 0); }
         }
 
-        .copyright {
-            color: var(--text-color);
-            opacity: 0.6;
-            font-size: 0.9rem;
-            margin-top: 20px;
+        /* --- フッター画像 --- */
+        .footer-logo-img {
+            max-width: 80%;
+            width: 300px;
+            height: auto;
+            margin: 20px auto 0;
+            display: block;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
         }
 
         @keyframes float {
@@ -1327,18 +1267,18 @@
                 <span class="light-icon">☀️</span>
             </button>
             
-            <!-- 🍅 奇妙な動きをするトマト -->
-            <div class="tomato-wrapper" id="tomatoToggle">
-                <div class="tomato-translate">
-                    <div class="tomato-scale">
-                        <div class="tomato-rotate">🍅</div>
+            <!-- 🍙 奇妙な動きをするおにぎり -->
+            <div class="onigiri-wrapper" id="onigiriToggle">
+                <div class="onigiri-translate">
+                    <div class="onigiri-scale">
+                        <div class="onigiri-rotate">🍙</div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- 🍅 WILD MAP ドロップダウンパネル -->
+    <!-- 🍙 WILD MAP ドロップダウンパネル -->
     <div class="world-map-dropdown" id="worldMapDropdown">
         
         <!-- 見出しとテキストをラップするリンクボタン -->
@@ -1348,8 +1288,11 @@
                 <span class="lang-ja">FUNKYな世界へのトビラを開く</span>
                 <span class="lang-en">ENTER THE FUNKY UNIVERSE.</span>
             </p>
-            <!-- 追加: 戻れない警告テキスト -->
-            <span class="world-map-warning">NO WAY BACK.</span>
+            <!-- 戻れない警告テキスト -->
+            <span class="world-map-warning">
+                <span class="lang-ja">NO WAY BACK.</span>
+                <span class="lang-en">NO WAY BACK.</span>
+            </span>
         </a>
 
         <!-- 完全な無から一閃するライムイエローのレーザーECGギミック -->
@@ -1439,19 +1382,18 @@
     <section id="works">
         <h2>OUR WORKS</h2>
         <div class="works-grid">
-            <a href="https://p-one-star.github.io/GARAGE-01/" class="work-card js-page-transition" data-type="classic">
-                <div class="ignition-effect left"></div>
-                <div class="ignition-effect right"></div>
-                <div class="inner-content">
-                    <div class="work-icon">🌭</div>
-                    <div class="work-title">THE CLASSIC</div>
-                    <p class="work-desc">
-                        <span class="lang-ja">基本にして至高。<br>極太ソーセージが踊り出す。<br>最初の1本。</span>
-                        <span class="lang-en">Basic and supreme.<br>The thick sausage dances.<br>Your first bite.</span>
-                    </p>
-                </div>
-            </a>
             
+            <!-- 1. 🍙 ONIGIRI -->
+            <a href="https://p-one-star.github.io/FHW-WORLD-MAP/" class="work-card js-page-transition" data-type="onigiri">
+                <div class="work-icon">🍙</div>
+                <div class="work-title">ONIGIRI</div>
+                <p class="work-desc">
+                    <span class="lang-ja">日本の味<br>ここから始まる<br>FUNKY WORLD</span>
+                    <span class="lang-en">Taste of Japan.<br>It all starts here.<br>FUNKY WORLD.</span>
+                </p>
+            </a>
+
+            <!-- 2. 🍔 FUNKY BURGER -->
             <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card js-page-transition" data-type="burger">
                 <div class="work-icon">🍔</div>
                 <div class="work-title">FUNKY BURGER</div>
@@ -1461,33 +1403,16 @@
                 </p>
             </a>
             
-            <a href="https://p-one-star.github.io/RIOT-CARNIVAL/" class="work-card js-page-transition" data-type="spicy">
-                <div class="work-icon">🌶️</div>
-                <div class="work-title">VOLCANO</div>
+            <!-- 3. 🍩 GRAFFITI DONUT -->
+            <a href="https://p-one-star.github.io/FUNKY-COMIC/" class="work-card js-page-transition" data-type="donut">
+                <div class="work-icon">🍩</div>
+                <div class="work-title">GRAFFITI DONUT</div>
                 <p class="work-desc">
-                    <span class="lang-ja">ハラペーニョ×300%。<br>翌日のことは考えるな。<br>今を生きろ。</span>
-                    <span class="lang-en">Jalapeño x 300%.<br>Don't think about tomorrow.<br>Live for today.</span>
-                </p>
-            </a>
-            
-            <a href="https://p-one-star.github.io/FUNKY-COMIC/" class="work-card js-page-transition" data-type="art">
-                <div class="work-icon">🎨</div>
-                <div class="work-title">GRAFFITI DOG</div>
-                <p class="work-desc">
-                    <span class="lang-ja">カラフルなソースで描く<br>食用アート。<br>食べるのが惜しい（嘘、食べて）。</span>
-                    <span class="lang-en">Edible art drawn with<br>colorful sauces.<br>Too good to eat (Just kidding, please eat it).</span>
+                    <span class="lang-ja">カラフルなアイシングで描く<br>食用アート。<br>食べるのが惜しい（嘘、食べて）。</span>
+                    <span class="lang-en">Edible art drawn with<br>colorful icing.<br>Too good to eat (Just kidding, please eat it).</span>
                 </p>
             </a>
 
-            <!-- 宇宙への片道切符 🍅カード -->
-            <a href="https://p-one-star.github.io/FHW-WORLD-MAP/" class="work-card js-page-transition" data-type="tomato">
-                <div class="work-icon">🍅</div>
-                <div class="work-title">WILD TOMATO</div>
-                <p class="work-desc">
-                    <span class="lang-ja">ただのトマトだと思ったか？<br>甘いな。<br>押したら戻れないぞ。</span>
-                    <span class="lang-en">Thought it was just a tomato?<br>Naive.<br>There's no turning back once you click.</span>
-                </p>
-            </a>
         </div>
     </section>
 
@@ -1509,10 +1434,33 @@
             <div class="social-track">
                 
                 <div class="visible-buttons">
-                    <a href="https://www.instagram.com/funky_hotdog?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram" style="font-family: sans-serif; font-weight: 900; letter-spacing: -1px;">IG</a>
-                    <a href="#" class="social-btn coming-soon-btn" title="YouTube" style="font-size: 1.8rem;" lang="en">▶</a>
-                    <a href="#" class="social-btn coming-soon-btn" title="Etsy" style="font-family: serif; font-weight: 900; font-style: italic; font-size: 1.6rem;">E</a>
-                    <a href="#" class="social-btn coming-soon-btn" title="Amazon" style="font-family: sans-serif; font-weight: 900; font-size: 1.6rem; padding-bottom: 4px;">a</a>
+                    <!-- Instagram SVG Icon -->
+                    <a href="https://www.instagram.com/funky_hotdog?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram">
+                        <svg class="social-icon" viewBox="0 0 448 512" fill="currentColor">
+                            <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5 9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                        </svg>
+                    </a>
+                    
+                    <!-- YouTube SVG Icon -->
+                    <a href="#" class="social-btn coming-soon-btn" title="YouTube">
+                        <svg class="social-icon" viewBox="0 0 576 512" fill="currentColor">
+                            <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/>
+                        </svg>
+                    </a>
+                    
+                    <!-- X (Twitter) SVG Icon -->
+                    <a href="#" class="social-btn coming-soon-btn" title="X">
+                        <svg class="social-icon" viewBox="0 0 512 512" fill="currentColor">
+                            <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.6 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"/>
+                        </svg>
+                    </a>
+                    
+                    <!-- Pinterest SVG Icon -->
+                    <a href="#" class="social-btn coming-soon-btn" title="Pinterest">
+                        <svg class="social-icon" viewBox="0 0 496 512" fill="currentColor">
+                            <path d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-107 0-163.9 71.8-163.9 150.1 0 36.4 19.4 81.7 50.3 96.1 4.7 2.2 7.2 1.2 8.3-3.3.8-3.4 5-20.3 6.9-28.1.6-2.5.3-4.7-1.7-7.1-10.1-12.5-18.3-35.3-18.3-56.6 0-54.7 41.4-107.6 112-107.6 60.9 0 103.6 41.5 103.6 100.9 0 67.1-33.9 113.6-78 113.6-24.3 0-42.6-20.1-36.7-44.8 7-29.5 20.5-61.3 20.5-82.6 0-19-10.2-34.9-31.4-34.9-24.9 0-44.9 25.7-44.9 60.2 0 22 7.4 36.8 7.4 36.8s-24.5 103.8-29 123.2c-5 21.4-3 51.6-.9 71.2C65.4 450.9 0 361.1 0 256 0 119 111 8 248 8s248 111 248 248z"/>
+                        </svg>
+                    </a>
                 </div>
 
                 <div class="hidden-area">
@@ -1529,7 +1477,9 @@
             </div>
         </div>
         
-        <p class="copyright">&copy; 2024 FUNKY HOTDOG WORKS. All Rights Reserved.</p>
+        <!-- 追加: フッター画像 -->
+        <img src="header.jpg" alt="FUNKY HOTDOG WORKS" class="footer-logo-img">
+        
     </footer>
 
     <!-- Secret Character Modal -->
@@ -1588,7 +1538,7 @@
 
         // --- 既存の画面遷移エフェクト ---
         document.querySelectorAll('.js-page-transition').forEach(link => {
-            // worldMapLink には個別のイベントリスナーがあるので除外する
+            // onigiri等のリンクは通常遷移のままにするため、worldMapLinkとは処理を分ける
             if (link.id === 'worldMapLink') return;
 
             link.addEventListener('click', function(e) {
@@ -1650,17 +1600,17 @@
             }, 400);
         });
 
-        // --- 🍅アイコンクリックでワールドマップドロップダウンを開閉 ---
-        const tomatoToggle = document.getElementById('tomatoToggle');
+        // --- 🍙アイコンクリックでワールドマップドロップダウンを開閉 ---
+        const onigiriToggle = document.getElementById('onigiriToggle');
         const worldMapDropdown = document.getElementById('worldMapDropdown');
 
-        tomatoToggle.addEventListener('click', () => {
+        onigiriToggle.addEventListener('click', () => {
             worldMapDropdown.classList.toggle('active');
         });
 
         // 画面のどこか他をクリックしたらドロップダウンを閉じる
         document.addEventListener('click', (e) => {
-            if (!tomatoToggle.contains(e.target) && !worldMapDropdown.contains(e.target)) {
+            if (!onigiriToggle.contains(e.target) && !worldMapDropdown.contains(e.target)) {
                 worldMapDropdown.classList.remove('active');
             }
         });
