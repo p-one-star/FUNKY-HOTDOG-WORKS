@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FHW WORLD MAP</title>
+    <!-- Black Ops One フォントの読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    
+    <style>
+        /* === CSS VARIABLES === */
+        :root {
+            --bg-color: #111111; 
+            --cyan: #00ffff;
+            --lime: #ccff00;
+            --pink: #ff00ff;
+            --red: #ff3333; 
+            --orange: #ff9900; 
+            --yellow: #ffcc00; 
+            --purple: #b026ff; 
+            --white: #ffffff; 
+            --text-color: #ffffff;
+            --font-main: 'Arial Black', Impact, 'Segoe UI', sans-serif;
+            --font-stencil: 'Black Ops One', Impact, cursive, sans-serif;
+        }
+
+        /* === BASE STYLES === */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            overflow: hidden; 
+        }
+
+        /* === MAP VIEWPORT & CANVAS === */
+        .viewport {
+            width: 100vw;
+            height: 100vh;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+            position: relative;
+        }
+        
+        .viewport:active {
+            cursor: grabbing;
+        }
+
+        .map-canvas {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            min-width: 1800px;
+            min-height: 1300px;
+            background-color: var(--bg-color);
+            /* 背景画像の上に半透明の黒を重ねてスモーク効果を出す */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url('yuka.PNG');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        /* === CENTER TITLE === */
+        .center-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            background: rgba(10, 10, 10, 0.95);
+            padding: 20px 40px;
+            border: 4px solid #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #ffffff, inset 0 0 15px rgba(255, 255, 255, 0.3);
+            pointer-events: none;
+        }
+
+        /* タイトル全体の設定 */
+        .title-wrapper {
+            position: relative;
+            display: block;
+            font-family: var(--font-stencil);
+            font-size: clamp(2.5rem, 6vw, 4rem); 
+            margin: 0;
+            line-height: 1.1;
+            font-style: italic;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            white-space: nowrap; 
+        }
+
+        /* 文字のベースとなる箱 */
+        .char-box {
+            position: relative;
+            display: inline-block;
+        }
+
+        /* 背景の固定ネオン */
+        .char-neon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            color: transparent; 
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 発光の色分け */
+        .word-fhw .char-neon { text-shadow: 0 0 3px var(--cyan), 0 0 10px var(--cyan); }
+        .word-world .char-neon { text-shadow: 0 0 3px var(--lime), 0 0 10px var(--lime); }
+        .word-map .char-neon { text-shadow: 0 0 3px var(--pink), 0 0 10px var(--pink); }
+
+        /* 手前の動く黒文字 */
+        .char-black {
+            position: relative;
+            display: inline-block;
+            color: #000000;
+            z-index: 2;
+            text-shadow: none; 
+            animation: waveScale 5.5s infinite ease-in-out;
+            animation-delay: calc(var(--i) * 0.02s);
+            transform-origin: center;
+        }
+
+        @keyframes waveScale {
+            0%   { transform: scale(1); }
+            2.7% { transform: scale(1.2); } 
+            5.5% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        .space {
+            display: inline-block;
+            width: 0.2em;
+        }
+
+        /* サブタイトル */
+        .center-title h2 {
+            font-family: var(--font-main); 
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem); 
+            font-weight: 900; 
+            color: rgba(255, 255, 255, 0.8); 
+            margin-top: 15px;
+            letter-spacing: 1.5px;
+            text-shadow: none;
+            text-transform: none; 
+            font-style: normal;
+        }
+
+        /* === ZONES === */
+        .zone {
+            position: absolute;
+            /* ロード前は一旦画面外に置いてチラつきを防ぐ */
+            left: -999%; top: -999%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            width: 220px;
+            background: #111;
+            border: 4px solid var(--theme-color);
+            border-radius: 0;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .zone::before {
+            content: '';
+            position: absolute;
+            top: 4px; left: 4px; right: 4px; bottom: 4px;
+            border: 1px dashed var(--theme-color);
+            pointer-events: none;
+        }
+
+        .zone:hover {
+            transform: translate(-50%, -50%) scale(1.08);
+            z-index: 30;
+            background: #1a1a1a;
+            box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.9);
+        }
+
+        .zone-icon {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            transition: transform 0.2s ease;
+        }
+
+        .zone:hover .zone-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .zone-title {
+            font-family: var(--font-stencil);
+            font-size: 1.4rem;
+            color: var(--theme-color);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-style: italic;
+            line-height: 1.1;
+        }
+
+        .zone-desc {
+            font-size: 0.85rem;
+            color: #ccc;
+            line-height: 1.4;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+
+        .zone.cyan { --theme-color: var(--cyan); }
+        .zone.lime { --theme-color: var(--lime); }
+        .zone.pink { --theme-color: var(--pink); }
+        .zone.red  { --theme-color: var(--red); }
+        .zone.orange { --theme-color: var(--orange); }
+        .zone.yellow { --theme-color: var(--yellow); }
+        .zone.purple { --theme-color: var(--purple); } 
+        .zone.white  { --theme-color: var(--white); } 
+
+        /* === LOCKED ZONES === */
+        .zone.locked {
+            --theme-color: #444; 
+            background: #222;
+            border-style: dashed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+        }
+
+        .zone.locked:hover {
+            --theme-color: #ffffff; 
+        }
+
+        /* 中身は見えているが準備中（LOCKED）のゾーン */
+        .zone.locked-visible {
+            background: #1a1a1a;
+            border-style: dashed;
+            opacity: 0.7; 
+        }
+
+        .zone.locked-visible:hover {
+            opacity: 1; 
+        }
+
+        .locked-badge {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            background: #ff0000; 
+            color: #000;
+            font-weight: 900;
+            padding: 5px 10px;
+            border: 3px solid #000;
+            transform: rotate(15deg);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            z-index: 25;
+        }
+
+        .zone-huge-question {
+            font-family: var(--font-stencil);
+            font-size: 7.5rem;
+            color: #ffffff;
+            line-height: 1;
+            margin-top: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .zone.locked:hover .zone-huge-question {
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+
+        /* === YOU ARE HERE MARKER === */
+        .you-are-here {
+            position: absolute;
+            transform: translate(-50%, -70px); 
+            z-index: 25;
+            text-align: center;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .yah-text {
+            background: var(--lime);
+            color: #000;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            border: 1px solid #000;
+            box-shadow: 0 3px 5px rgba(0,0,0,0.5);
+        }
+
+        /* === PLAYER CAR === */
+        .player-car {
+            position: absolute;
+            /* 車のスタート位置は固定 */
+            left: 42%; 
+            top: 38%;
+            transform: translate(-50%, -50%) scaleX(1) rotate(0deg); 
+            z-index: 100; 
+            pointer-events: none; 
+        }
+
+        .car-sprite {
+            width: 150px; 
+            filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.9));
+            animation: idleBounce 0.4s infinite alternate ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .car-sprite img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @keyframes idleBounce {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-5px); }
+        }
+
+        /* =========================================================
+           激辛ジャンプスケア用：光に飲み込まれるホワイトフラッシュ
+        ========================================================= */
+        
+        .zoom-attack {
+            z-index: 9999 !important;
+            transform-origin: 50% 50% !important;
+            animation: whiteFlashAttack 0.3s cubic-bezier(0.7, 0, 1, 1) forwards !important;
+            box-shadow: 0 0 200px var(--theme-color), inset 0 0 100px var(--theme-color) !important;
+        }
+
+        @keyframes whiteFlashAttack {
+            0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); filter: brightness(1) blur(0px); }
+            20%  { transform: translate(-52%, -48%) scale(3) rotate(3deg); filter: brightness(2) blur(1px); }
+            40%  { transform: translate(-47%, -53%) scale(8) rotate(-4deg); filter: brightness(5) blur(2px); }
+            60%  { transform: translate(-54%, -46%) scale(15) rotate(6deg); filter: brightness(10) blur(4px); }
+            80%  { transform: translate(-46%, -54%) scale(30) rotate(-8deg); filter: brightness(50) blur(8px); }
+            100% { transform: translate(-50%, -50%) scale(60) rotate(12deg); filter: brightness(100) blur(12px); background: #fff; }
+        }
+
+        .whiteflash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #ffffff;
+            z-index: 10000; 
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.1s ease-out;
+        }
+
+        .whiteflash-overlay.active {
+            opacity: 1;
+            pointer-events: auto; 
+        }
+
+        /* === MODAL STYLES === */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-box {
+            /* 変数を使って動的に色を変えられるように設定 */
+            --modal-color: var(--cyan);
+            background: #111;
+            border: 4px solid var(--modal-color);
+            padding: 40px;
+            text-align: center;
+            transform: scale(1);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .modal-overlay.hidden .modal-box {
+            transform: scale(0.9);
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .modal-box h3 {
+            font-family: var(--font-stencil);
+            color: var(--modal-color);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-style: italic;
+            transition: color 0.2s ease;
+        }
+
+        .modal-box p {
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 1rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .modal-btn {
+            font-family: var(--font-stencil);
+            background: var(--modal-color);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn:hover {
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- フラッシュ用の真っ白なレイヤー -->
+    <div id="whiteflash-overlay" class="whiteflash-overlay"></div>
+
+    <div class="viewport" id="viewport">
+        <div class="map-canvas">
+            
+            <!-- Center Title -->
+            <div class="center-title">
+                <h1 class="title-wrapper">
+                    <span class="word-fhw">
+                        <span class="char-box"><span class="char-neon">F</span><span class="char-black" style="--i:0">F</span></span><span class="char-box"><span class="char-neon">H</span><span class="char-black" style="--i:1">H</span></span><span class="char-box"><span class="char-neon">W</span><span class="char-black" style="--i:2">W</span></span>
+                    </span>
+                    <span class="space">&nbsp;</span>
+                    <span class="word-world">
+                        <span class="char-box"><span class="char-neon">W</span><span class="char-black" style="--i:3">W</span></span><span class="char-box"><span class="char-neon">O</span><span class="char-black" style="--i:4">O</span></span><span class="char-box"><span class="char-neon">R</span><span class="char-black" style="--i:5">R</span></span><span class="char-box"><span class="char-neon">L</span><span class="char-black" style="--i:6">L</span></span><span class="char-box"><span class="char-neon">D</span><span class="char-black" style="--i:7">D</span></span>
+                    </span>
+                    <span class="space">&nbsp;</span>
+                    <span class="word-map">
+                        <span class="char-box"><span class="char-neon">M</span><span class="char-black" style="--i:8">M</span></span><span class="char-box"><span class="char-neon">A</span><span class="char-black" style="--i:9">A</span></span><span class="char-box"><span class="char-neon">P</span><span class="char-black" style="--i:10">P</span></span>
+                    </span>
+                </h1>
+                <h2>Too fast.&nbsp;&nbsp;&nbsp;Too stupid.&nbsp;&nbsp;&nbsp;Too Funky.</h2>
+            </div>
+
+            <!-- === YOU ARE HERE MARKER === -->
+            <div id="you-are-here-marker" class="you-are-here" style="left: 42%; top: 38%;">
+                <div class="yah-text">YOU ARE HERE</div>
+            </div>
+
+            <!-- === PLAYER CAR === -->
+            <div id="player-car" class="player-car">
+                <div class="car-sprite">
+                    <img src="track.PNG?v=17" onerror="this.onerror=null; this.src='track.png?v=17';" alt="Player Car">
+                </div>
+            </div>
+
+            <!-- ========================================================
+                 ★ 12個のUI
+                 （初期位置は隠してあります。JSで時計の12箇所にランダム配置されます）
+            ========================================================= -->
+
+            <div class="zone lime" onclick="handleZoneClick(this, 'https://p-one-star.github.io/GARAGE-01/', false)">
+                <div class="zone-icon">🌭</div>
+                <div class="zone-title">HOTDOG MAFIA</div>
+                <div class="zone-desc">Secret Base<br>Sleeping souls</div>
+            </div>
+
+            <div class="zone red" onclick="handleZoneClick(this, 'https://p-one-star.github.io/WILD-ZONE/', false)">
+                <div class="zone-icon">🍅</div>
+                <div class="zone-title">WILD TOMATO</div>
+                <div class="zone-desc">Mysteries Farm<br>How many made it?</div>
+            </div>
+
+            <div class="zone yellow locked-visible" onclick="handleZoneClick(this, '', 'construction')">
+                <div class="locked-badge">LOCKED</div>
+                <div class="zone-icon">🍭</div>
+                <div class="zone-title">STUPID STORAGE</div>
+                <div class="zone-desc">Too many machines<br>63 Underground</div>
+            </div>
+
+            <div class="zone cyan" onclick="handleZoneClick(this, 'https://p-one-star.github.io/FUNKY-COMIC/', false)">
+                <div class="zone-icon">🍩</div>
+                <div class="zone-title">DONUT GANG</div>
+                <div class="zone-desc">Strange stories<br>Inside the hole</div>
+            </div>
+
+            <div class="zone purple locked-visible" onclick="handleZoneClick(this, '', 'construction')">
+                <div class="locked-badge">LOCKED</div>
+                <div class="zone-icon">🍥</div>
+                <div class="zone-title">GLITCH LAB</div>
+                <div class="zone-desc">AI accidents<br>Desert parking</div>
+            </div>
+
+            <div class="zone orange locked-visible" onclick="handleZoneClick(this, '', 'construction')">
+                <div class="locked-badge">LOCKED</div>
+                <div class="zone-icon">🍺</div>
+                <div class="zone-title">CRAFT BEER</div>
+                <div class="zone-desc">Labyrinth Brewery<br>Wait and see.</div>
+            </div>
+
+            <div class="zone pink" onclick="handleZoneClick(this, 'https://p-one-star.github.io/RIOT-CARNIVAL/', false)">
+                <div class="zone-icon">🌶</div>
+                <div class="zone-title">VOLCANO 300%</div>
+                <div class="zone-desc">Too hot?<br>Too sweet?</div>
+            </div>
+
+            <div class="zone cyan" onclick="handleZoneClick(this, 'https://p-one-star.github.io/FUNKY-STORAGE/', false)">
+                <div class="zone-icon">🍔</div>
+                <div class="zone-title">BURGER STADIUM</div>
+                <div class="zone-desc">Official Weapon<br>Street Gear</div>
+            </div>
+
+            <div class="zone white" onclick="handleZoneClick(this, 'https://p-one-star.github.io/FHW-WORLD-MAP/', false)">
+                <div class="zone-icon">🍙</div>
+                <div class="zone-title">O N I G I R I</div>
+                <div class="zone-desc">Japan Origin<br>Don't touch</div>
+            </div>
+
+            <!-- ★ 完全な「？」ゾーン (開くたびに色と絵文字がランダムになります) -->
+            <div class="zone locked" onclick="handleZoneClick(this, '', 'alien')">
+                <div class="locked-badge">LOCKED</div>
+                <div class="zone-huge-question">?</div>
+            </div>
+
+            <div class="zone locked" onclick="handleZoneClick(this, '', 'ghost')">
+                <div class="locked-badge">LOCKED</div>
+                <div class="zone-huge-question">?</div>
+            </div>
+
+            <div class="zone locked" onclick="handleZoneClick(this, '', 'skull')">
+                <div class="locked-badge">LOCKED</div>
+                <div class="zone-huge-question">?</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- === CUSTOM MODAL (各種LOCKED用) === -->
+    <div id="construction-modal" class="modal-overlay hidden" style="background: rgba(0,0,0,0.8);">
+        <div class="modal-box" id="modal-box">
+            <div class="modal-icon" id="modal-icon">🚧</div>
+            <h3 id="modal-title">AREA UNDER CONSTRUCTION</h3>
+            <p id="modal-desc">This zone is currently sealed off by the FHW crew. Check back later for the grand opening!</p>
+            <button class="modal-btn" onclick="closeModal()">GOT IT</button>
+        </div>
+    </div>
+
+    <!-- === JAVASCRIPT === -->
+    <script>
+        // ==========================================
+        // ★ ゾーンを時計の12箇所にランダム配置する関数
+        // ==========================================
+        function randomizeZones() {
+            const clockPositions = [
+                { left: 50, top: 10 },     // 12時
+                { left: 70, top: 15.4 },   // 1時
+                { left: 84.6, top: 30 },   // 2時
+                { left: 90, top: 50 },     // 3時
+                { left: 84.6, top: 70 },   // 4時
+                { left: 70, top: 84.6 },   // 5時
+                { left: 50, top: 90 },     // 6時
+                { left: 30, top: 84.6 },   // 7時
+                { left: 15.4, top: 70 },   // 8時
+                { left: 10, top: 50 },     // 9時
+                { left: 15.4, top: 30 },   // 10時
+                { left: 30, top: 15.4 }    // 11時
+            ];
+
+            // 座標リストをシャッフル (Fisher-Yates)
+            for (let i = clockPositions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [clockPositions[i], clockPositions[j]] = [clockPositions[j], clockPositions[i]];
+            }
+
+            const zones = document.querySelectorAll('.zone');
+            zones.forEach((zone, index) => {
+                if(clockPositions[index]) {
+                    zone.style.left = `${clockPositions[index].left}%`;
+                    zone.style.top = `${clockPositions[index].top}%`;
+                }
+            });
+        }
+
+
+        // ==========================================
+        // 車の移動と演出のロジック
+        // ==========================================
+        const car = document.getElementById('player-car');
+        let currentX = 42; 
+        let currentY = 38;
+        let isDriving = false; 
+        let carDirection = 1; 
+
+        function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function moveSegment(x, y) {
+            if (currentX === x && currentY === y) return;
+
+            const dx = x - currentX;
+            const dy = y - currentY;
+            
+            if (dx > 0) {
+                carDirection = 1; 
+            } else if (dx < 0) {
+                carDirection = -1; 
+            }
+
+            let angle = 0;
+            if (dx !== 0 || dy !== 0) {
+                let rawAngle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                if (carDirection === -1) {
+                    if (rawAngle > 0) {
+                        rawAngle = 180 - rawAngle;
+                    } else {
+                        rawAngle = -180 - rawAngle;
+                    }
+                }
+                
+                if (dx === 0) {
+                    if (dy > 0) angle = 25;  
+                    if (dy < 0) angle = -25; 
+                } else {
+                    angle = Math.max(-25, Math.min(25, rawAngle));
+                }
+            }
+
+            car.style.transition = 'transform 0.2s ease';
+            car.style.transform = `translate(-50%, -50%) scaleX(${carDirection}) rotate(${angle}deg)`;
+            await wait(200); 
+
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            const speedMs = Math.max(400, dist * 12); 
+
+            car.style.transition = `left ${speedMs}ms linear, top ${speedMs}ms linear, transform 0.2s ease`;
+            car.style.left = `${x}%`;
+            car.style.top = `${y}%`;
+
+            await wait(speedMs); 
+            
+            car.style.transition = 'transform 0.2s ease';
+            car.style.transform = `translate(-50%, -50%) scaleX(${carDirection}) rotate(0deg)`;
+            await wait(150);
+
+            currentX = x;
+            currentY = y;
+        }
+
+        async function driveTo(targetX, targetY) {
+            const centerX = 50;
+            const centerY = 50;
+
+            if ((currentX !== centerX || currentY !== centerY) && (targetX !== currentX || targetY !== currentY)) {
+                await moveSegment(centerX, centerY);
+            }
+            await moveSegment(targetX, targetY);
+        }
+
+        let activeZoomElement = null;
+
+        // ランダムに使用する絵文字とカラーの配列
+        const randomEmojis = ['😈', '🤡', '👻', '💀', '☠️', '👽', '👾', '🤖', '🎃'];
+        const randomColors = [
+            '#00ffff', // シアン
+            '#ccff00', // ライム
+            '#ff00ff', // ピンク
+            '#ff3333', // レッド
+            '#ff9900', // オレンジ
+            '#ffcc00', // イエロー
+            '#b026ff', // パープル
+            '#00ff00', // グリーン
+            '#0088ff', // ブルー
+            '#ff0088', // マゼンタ
+            '#ffd700', // ゴールド
+            '#ffffff'  // ホワイト
+        ];
+
+        async function handleZoneClick(element, url, lockedType) {
+            if (isDriving) return; 
+            isDriving = true;
+
+            const yahMarker = document.getElementById('you-are-here-marker');
+            if (yahMarker) yahMarker.style.opacity = '0';
+
+            const targetX = parseFloat(element.style.left);
+            const targetY = parseFloat(element.style.top);
+
+            await driveTo(targetX, targetY);
+
+            await wait(300);
+
+            activeZoomElement = element;
+            element.classList.add('zoom-attack');
+            
+            await wait(150);
+
+            const whiteflash = document.getElementById('whiteflash-overlay');
+            whiteflash.classList.add('active');
+
+            await wait(400);
+
+            if (lockedType) {
+                const modalBox = document.getElementById('modal-box');
+                const modalIcon = document.getElementById('modal-icon');
+                const modalTitle = document.getElementById('modal-title');
+                const modalDesc = document.getElementById('modal-desc');
+
+                // ★ 「？」ブロックの場合は色と絵文字をランダム抽選！
+                if (lockedType === 'alien' || lockedType === 'ghost' || lockedType === 'skull') {
+                    const randomEmoji = randomEmojis[Math.floor(Math.random() * randomEmojis.length)];
+                    const randomColor = randomColors[Math.floor(Math.random() * randomColors.length)];
+                    
+                    modalIcon.innerHTML = randomEmoji;
+                    modalTitle.innerHTML = 'LOCKED';
+                    modalBox.style.setProperty('--modal-color', randomColor);
+
+                    if (lockedType === 'alien') {
+                        modalDesc.innerHTML = 'UNKNOWN AREA<br>Maybe.';
+                    } else if (lockedType === 'ghost') {
+                        modalDesc.innerHTML = 'CLASSIFIED<br>Maybe…';
+                    } else if (lockedType === 'skull') {
+                        modalDesc.innerHTML = 'DON\'T TOUCH<br>Maybe not.';
+                    }
+                } 
+                // キャンディやビールなどの中身が見えている工事中ブロック
+                else if (lockedType === 'construction') {
+                    modalIcon.innerHTML = '🚧';
+                    modalTitle.innerHTML = 'AREA UNDER CONSTRUCTION';
+                    modalDesc.innerHTML = 'This zone is currently sealed off by the FHW crew. Check back later for the grand opening!';
+                    modalBox.style.setProperty('--modal-color', 'var(--cyan)');
+                }
+
+                const modal = document.getElementById('construction-modal');
+                modal.classList.remove('hidden');
+                
+                whiteflash.style.transition = "opacity 0.5s ease";
+                whiteflash.classList.remove('active');
+                
+                setTimeout(() => {
+                    whiteflash.style.transition = "opacity 0.1s ease-out";
+                }, 500);
+
+                isDriving = false;
+            } else if (url) {
+                window.location.href = url;
+                
+                setTimeout(() => {
+                    element.classList.remove('zoom-attack');
+                    whiteflash.classList.remove('active');
+                    isDriving = false;
+                }, 1000);
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('construction-modal');
+            modal.classList.add('hidden');
+            
+            if (activeZoomElement) {
+                activeZoomElement.classList.remove('zoom-attack');
+                activeZoomElement = null;
+            }
+        }
+
+        // ==========================================
+        // 初期化処理（ロード時）
+        // ==========================================
+        window.addEventListener('load', () => {
+            randomizeZones();
+
+            const viewport = document.getElementById('viewport');
+            const scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;
+            const scrollTop = (viewport.scrollHeight - viewport.clientHeight) / 2;
+            viewport.scrollTo({ left: scrollLeft, top: scrollTop, behavior: 'smooth' });
+        });
+
+        // ==========================================
+        // マップのドラッグ移動
+        // ==========================================
+        const viewport = document.getElementById('viewport');
+        let isDown = false, startX, startY, scrollLeft, scrollTop;
+
+        viewport.addEventListener('mousedown', (e) => {
+            isDown = true;
+            startX = e.pageX - viewport.offsetLeft;
+            startY = e.pageY - viewport.offsetTop;
+            scrollLeft = viewport.scrollLeft;
+            scrollTop = viewport.scrollTop;
+        });
+
+        viewport.addEventListener('mouseleave', () => isDown = false);
+        viewport.addEventListener('mouseup', () => isDown = false);
+        viewport.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - viewport.offsetLeft;
+            const y = e.pageY - viewport.offsetTop;
+            viewport.scrollLeft = scrollLeft - (x - startX) * 1.5;
+            viewport.scrollTop = scrollTop - (y - startY) * 1.5;
+        });
+    </script>
+</body>
+</html>
+
+
