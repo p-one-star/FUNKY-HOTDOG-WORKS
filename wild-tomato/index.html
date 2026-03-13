@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FHW WILD ZONE</title>
+<!-- Black Ops One フォントを読み込み -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+<style>
+    /* ==========================================
+       全体・ベース設定
+       ========================================== */
+    :root {
+        --c-black: #000000;
+        --c-cyan: #00ffff;
+        --c-lime: #ccff00;
+        --c-pink: #ff00ff;
+        --c-white: #ffffff;
+        --c-gray: #888888;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #222222; 
+        color: var(--c-white);
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    /* ==========================================
+       マップレイヤーの共通設定
+       ========================================== */
+    .map-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3000px;
+        height: 3000px;
+        transform-origin: 0 0;
+        will-change: transform;
+    }
+
+    /* ==========================================
+       層1：一番奥のマップ背景 (Z: 10)
+       ========================================== */
+    #map-bg {
+        z-index: 10;
+        pointer-events: auto; 
+    }
+
+    #border-wrapper {
+        position: absolute;
+        top: 50%; 
+        left: 50%;
+        width: 2000px; 
+        height: 2000px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        box-shadow: 0 0 80px rgba(0, 255, 255, 0.1), 0 0 80px rgba(255, 0, 255, 0.1);
+    }
+
+    .ring-gradient {
+        position: absolute;
+        top: 0; left: 0; 
+        width: 100%; height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(
+            var(--c-cyan), var(--c-lime), var(--c-pink),
+            var(--c-cyan), var(--c-lime), var(--c-pink),
+            var(--c-cyan)
+        );
+        animation: spinRing 60s linear infinite;
+    }
+
+    .ring-inner {
+        position: absolute;
+        top: 15px; left: 15px; right: 15px; bottom: 15px;
+        background-color: var(--c-black);
+        border-radius: 50%;
+    }
+
+    @keyframes spinRing {
+        100% { transform: rotate(360deg); }
+    }
+
+    /* ==========================================
+       層2：中間のタイトルUI (Z: 20)
+       ========================================== */
+    #ui-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none; 
+        z-index: 20; 
+    }
+
+    .neon-title-base {
+        position: absolute;
+        left: 50%;
+        font-family: 'Black Ops One', cursive; 
+        font-weight: normal; 
+        text-align: center;
+        line-height: 1.0;
+        letter-spacing: 2px;
+        color: var(--c-black); 
+        width: 100%;
+    }
+
+    .title-top {
+        top: 80px;
+        transform: translateX(-50%);
+    }
+    
+    .title-center {
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .c-cyan { text-shadow: 0 0 4px var(--c-cyan), 0 0 8px var(--c-cyan), 0 0 12px var(--c-cyan); }
+    .c-lime { text-shadow: 0 0 4px var(--c-lime), 0 0 8px var(--c-lime), 0 0 12px var(--c-lime); }
+    .c-pink { text-shadow: 0 0 4px var(--c-pink), 0 0 8px var(--c-pink), 0 0 12px var(--c-pink); }
+    .c-gray { text-shadow: 0 0 4px var(--c-gray), 0 0 8px var(--c-gray), 0 0 12px var(--c-gray); }
+
+    .title-top span { font-size: min(28vw, 150px); }
+
+    .title-center span {
+        display: block;
+        margin-top: 10px;
+        font-size: min(24vw, 130px);
+    }
+
+    /* ==========================================
+       層3：一番手前のメダル・絵文字・スパーク (Z: 30)
+       ========================================== */
+    #map-fg {
+        z-index: 30;
+        pointer-events: none; 
+    }
+
+    .spark {
+        position: absolute;
+        pointer-events: none;
+        z-index: 50; 
+    }
+
+    .spark-inner {
+        position: absolute;
+        transform: translate(-50%, -50%) rotate(20deg); 
+        animation: sparkAnim 0.3s ease-out forwards;
+    }
+
+    .spark-inner::before,
+    .spark-inner::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background-color: var(--c-white);
+        box-shadow: 0 0 5px var(--c-white), 0 0 10px var(--c-cyan);
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+    }
+
+    .spark-inner::before { width: 3px; height: 30px; }
+    .spark-inner::after { width: 30px; height: 3px; }
+
+    @keyframes sparkAnim {
+        0%   { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 1; }
+        30%  { transform: translate(-50%, -50%) rotate(20deg) scale(1.2); opacity: 1; }
+        100% { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 0; }
+    }
+
+    .emoji-item {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 80px; 
+        transform: translate(-50%, -50%);
+        pointer-events: none; 
+        will-change: left, top;
+        z-index: 25;
+    }
+
+    .medal {
+        position: absolute;
+        border-radius: 50%;
+        background-color: var(--c-black);
+        border: 3px solid var(--c-white);
+        box-shadow: 0 0 10px var(--c-white), inset 0 0 10px var(--c-white);
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        font-family: 'Black Ops One', cursive;
+        color: var(--c-black); 
+        
+        transform: translate(-50%, -50%) scale(1);
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        
+        animation: pulse 3s infinite alternate;
+        pointer-events: auto; 
+        will-change: left, top;
+    }
+
+    /* ★ 各サイズのスタイル定義 */
+    .medal.size-small  { width: 70px; height: 70px; font-size: 36px; }
+    .medal.size-normal { width: 100px; height: 100px; font-size: 54px; }
+    .medal.size-large  { width: 140px; height: 140px; font-size: 76px; }
+    .medal.size-huge   { width: 200px; height: 200px; font-size: 108px; }
+
+    .medal.color-cyan span { text-shadow: 0 0 2px var(--c-cyan), 0 0 4px var(--c-cyan), 0 0 6px var(--c-cyan), 0 0 8px var(--c-cyan); }
+    .medal.color-lime span { text-shadow: 0 0 2px var(--c-lime), 0 0 4px var(--c-lime), 0 0 6px var(--c-lime), 0 0 8px var(--c-lime); }
+    .medal.color-pink span { text-shadow: 0 0 2px var(--c-pink), 0 0 4px var(--c-pink), 0 0 6px var(--c-pink), 0 0 8px var(--c-pink); }
+
+    .medal.size-small span  { margin-top: 3px; margin-left: 1px; }
+    .medal.size-normal span { margin-top: 4px; margin-left: 2px; }
+    .medal.size-large span  { margin-top: 6px; margin-left: 3px; }
+    .medal.size-huge span   { margin-top: 10px; margin-left: 5px; }
+
+    @keyframes pulse {
+        0%   { box-shadow: 0 0 5px var(--c-white), inset 0 0 5px var(--c-white); opacity: 0.8; }
+        50%  { box-shadow: 0 0 15px var(--c-white), inset 0 0 12px var(--c-white); opacity: 1; }
+        100% { box-shadow: 0 0 5px var(--c-white), inset 0 0 5px var(--c-white); opacity: 0.8; }
+    }
+
+    /* ==========================================
+       もがく・暴れる時の色の変化 (シアン→ライム, ライム→ピンク, ピンク→シアン)
+       ========================================== */
+    .medal.color-cyan.shaking {
+        border-color: var(--c-lime) !important;
+        box-shadow: 0 0 25px var(--c-lime), inset 0 0 25px var(--c-lime) !important;
+        z-index: 40;
+    }
+    .medal.color-lime.shaking {
+        border-color: var(--c-pink) !important;
+        box-shadow: 0 0 25px var(--c-pink), inset 0 0 25px var(--c-pink) !important;
+        z-index: 40;
+    }
+    .medal.color-pink.shaking {
+        border-color: var(--c-cyan) !important;
+        box-shadow: 0 0 25px var(--c-cyan), inset 0 0 25px var(--c-cyan) !important;
+        z-index: 40;
+    }
+
+    /* ==========================================
+       もがく・暴れる時のアニメーション (3パターン)
+       ========================================== */
+    .medal.shake-pattern-1.shaking {
+        animation: shakeAnim1 0.1s infinite !important;
+    }
+    .medal.shake-pattern-2.shaking {
+        animation: shakeAnim2 0.15s infinite !important;
+    }
+    .medal.shake-pattern-3.shaking {
+        animation: shakeAnim3 0.2s infinite !important;
+    }
+
+    /* パターン1: 小刻みに激しくブルブル */
+    @keyframes shakeAnim1 {
+        0% { transform: translate(calc(-50% + 4px), calc(-50% + 4px)) scale(1.15); }
+        25% { transform: translate(calc(-50% - 4px), calc(-50% + 4px)) scale(1.15); }
+        50% { transform: translate(calc(-50% - 4px), calc(-50% - 4px)) scale(1.15); }
+        75% { transform: translate(calc(-50% + 4px), calc(-50% - 4px)) scale(1.15); }
+        100% { transform: translate(calc(-50% + 4px), calc(-50% + 4px)) scale(1.15); }
+    }
+
+    /* パターン2: 左右に大きくイヤイヤする */
+    @keyframes shakeAnim2 {
+        0% { transform: translate(calc(-50% - 15px), -50%) scale(1.15); }
+        50% { transform: translate(calc(-50% + 15px), -50%) scale(1.15); }
+        100% { transform: translate(calc(-50% - 15px), -50%) scale(1.15); }
+    }
+
+    /* パターン3: 伸び縮みしながら少し回転する（パニック） */
+    @keyframes shakeAnim3 {
+        0% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); }
+        50% { transform: translate(-50%, -50%) scale(0.9) rotate(15deg); }
+        100% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); }
+    }
+
+
+    /* ==========================================
+       層4：ポップアップ モーダル (Z: 100)
+       ========================================== */
+    #modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+
+    #modal-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    #modal-content {
+        background-color: var(--c-black);
+        border: 2px solid var(--c-white);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
+        padding: 50px 80px;
+        border-radius: 12px;
+        transform: scale(1);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #modal-overlay.hidden #modal-content { transform: scale(0.8); }
+
+    .modal-text {
+        font-family: 'Black Ops One', cursive; 
+        color: var(--c-black);
+        font-size: 48px;
+        letter-spacing: 8px;
+        text-align: center;
+    }
+    
+    .modal-text.color-cyan { text-shadow: 0 0 2px var(--c-cyan), 0 0 5px var(--c-cyan), 0 0 10px var(--c-cyan), 0 0 15px var(--c-cyan); }
+    .modal-text.color-lime { text-shadow: 0 0 2px var(--c-lime), 0 0 5px var(--c-lime), 0 0 10px var(--c-lime), 0 0 15px var(--c-lime); }
+    .modal-text.color-pink { text-shadow: 0 0 2px var(--c-pink), 0 0 5px var(--c-pink), 0 0 10px var(--c-pink), 0 0 15px var(--c-pink); }
+
+</style>
+</head>
+<body>
+
+    <div id="map-bg" class="map-layer">
+        <div id="border-wrapper">
+            <div class="ring-gradient"></div>
+            <div class="ring-inner"></div>
+        </div>
+    </div>
+
+    <div id="ui-layer">
+        <div class="neon-title-base title-top">
+            <span class="c-cyan">F</span><span class="c-lime">H</span><span class="c-pink">W</span>
+        </div>
+        <div class="neon-title-base title-center">
+            <span class="c-gray text-wild">WILD</span>
+            <span class="c-gray text-zone">ZONE</span>
+        </div>
+    </div>
+
+    <!-- ここにメダル、絵文字、スパークが描画される -->
+    <div id="map-fg" class="map-layer"></div>
+
+    <div id="modal-overlay" class="hidden">
+        <div id="modal-content">
+            <div id="modal-text" class="modal-text">???</div>
+        </div>
+    </div>
+
+<script>
+    /* ==========================================
+       1. 設定値とデータ構造
+       ========================================== */
+    const MAP_WIDTH = 3000;
+    const MAP_HEIGHT = 3000;
+    const CENTER_X = MAP_WIDTH / 2; // 1500
+    const CENTER_Y = MAP_HEIGHT / 2; // 1500
+    
+    const BORDER_RADIUS = 1000; 
+    
+    const TOTAL_MEDALS = 63;
+    const EMOJI_LIST = ['🍙', '🍅', '🧅', '🫑'];
+    const TOTAL_EMOJIS = 20; 
+    
+    let objectData = []; 
+
+    function generateMapData() {
+        const titleRect = {
+            minX: CENTER_X - 350,
+            maxX: CENTER_X + 350,
+            minY: CENTER_Y - 450, 
+            maxY: CENTER_Y + 150       
+        };
+
+        let colors = [];
+        for(let i=0; i<21; i++) colors.push('cyan');
+        for(let i=0; i<21; i++) colors.push('lime');
+        for(let i=0; i<21; i++) colors.push('pink');
+
+        // ★ サイズの構成を変更
+        let sizes = [];
+        for(let i=0; i<47; i++) sizes.push('normal');
+        for(let i=0; i<13; i++) sizes.push('large'); // 14から13に減らす
+        sizes.push('small'); // 1つだけ小さいのを追加
+        for(let i=0; i<2; i++)  sizes.push('huge');
+        sizes.sort(() => Math.random() - 0.5); 
+
+        let medalConfigs = [];
+        for(let i=0; i<63; i++) {
+            medalConfigs.push({ color: colors[i], size: sizes[i], isFast: false, isStrong: false });
+        }
+
+        function assignSpecial(startIndex) {
+            let fastIdx = startIndex + Math.floor(Math.random() * 21);
+            let strongIdx = startIndex + Math.floor(Math.random() * 21);
+            medalConfigs[fastIdx].isFast = true;
+            medalConfigs[strongIdx].isStrong = true;
+        }
+        assignSpecial(0); assignSpecial(21); assignSpecial(42);
+        medalConfigs.sort(() => Math.random() - 0.5);
+
+        // ★ 半径と重さに 'small' を追加
+        const radiusMap = { 'small': 35, 'normal': 50, 'large': 70, 'huge': 100 };
+        const massMap = { 'small': 0.5, 'normal': 1, 'large': 2.5, 'huge': 6 };
+
+        for (let i = 0; i < TOTAL_MEDALS; i++) {
+            let config = medalConfigs[i];
+            let radius = radiusMap[config.size];
+            let mass = massMap[config.size];
+            let baseSpeed = config.isFast ? (2.0 + Math.random() * 1.0) : (0.3 + Math.random() * 0.4);
+            
+            if (config.isStrong) { mass *= 15; }
+
+            let isEscaper = Math.random() < 0.2; 
+            let shakePattern = Math.floor(Math.random() * 3) + 1;
+
+            let pos = findValidSpawnPosition(radius, titleRect);
+            const initialAngle = Math.random() * 2 * Math.PI;
+
+            objectData.push({
+                type: 'medal',
+                id: i + 1,
+                x: pos.x, y: pos.y,
+                color: config.color,
+                sizeClass: config.size,
+                radius: radius,
+                mass: mass, invMass: 1 / mass,
+                baseSpeed: baseSpeed,
+                angle: initialAngle,
+                vx: Math.cos(initialAngle) * baseSpeed,
+                vy: Math.sin(initialAngle) * baseSpeed,
+                isFast: config.isFast,
+                isEscaper: isEscaper,
+                shakePattern: shakePattern,
+                isCaught: false,
+                element: null 
+            });
+        }
+
+        for (let i = 0; i < TOTAL_EMOJIS; i++) {
+            let char = EMOJI_LIST[i % EMOJI_LIST.length];
+            let radius = 45; 
+            let mass = 0.5;  
+            let baseSpeed = 0.4 + Math.random() * 0.5; 
+            
+            let pos = findValidSpawnPosition(radius, titleRect);
+            const initialAngle = Math.random() * 2 * Math.PI;
+
+            objectData.push({
+                type: 'emoji',
+                char: char,
+                x: pos.x, y: pos.y,
+                radius: radius,
+                mass: mass, invMass: 1 / mass,
+                baseSpeed: baseSpeed,
+                angle: initialAngle,
+                vx: Math.cos(initialAngle) * baseSpeed,
+                vy: Math.sin(initialAngle) * baseSpeed,
+                isCaught: false, 
+                element: null
+            });
+        }
+    }
+
+    function findValidSpawnPosition(radius, titleRect) {
+        let x, y;
+        let isValid = false;
+        let attempts = 0;
+        const spawnMaxRadius = BORDER_RADIUS - radius - 10;
+
+        while (!isValid && attempts < 3000) {
+            const spawnRadius = spawnMaxRadius * Math.pow(Math.random(), 0.8); 
+            const angle = Math.random() * 2 * Math.PI;
+            x = CENTER_X + spawnRadius * Math.cos(angle);
+            y = CENTER_Y + spawnRadius * Math.sin(angle);
+
+            if (x > titleRect.minX && x < titleRect.maxX && y > titleRect.minY && y < titleRect.maxY) {
+                attempts++; continue;
+            }
+
+            isValid = true;
+            for (const existingObj of objectData) {
+                const dx = x - existingObj.x;
+                const dy = y - existingObj.y;
+                const minDistance = radius + existingObj.radius + 10;
+                if (Math.sqrt(dx*dx + dy*dy) < minDistance) {
+                    isValid = false; break;
+                }
+            }
+            attempts++;
+        }
+        return { x: Math.round(x), y: Math.round(y) };
+    }
+
+    if (objectData.length === 0) {
+        generateMapData();
+    }
+
+    /* ==========================================
+       2. DOM生成と描画
+       ========================================== */
+    const mapFg = document.getElementById('map-fg');
+    const fragment = document.createDocumentFragment();
+
+    objectData.forEach(obj => {
+        const el = document.createElement('div');
+        
+        if (obj.type === 'medal') {
+            el.className = `medal color-${obj.color} size-${obj.sizeClass} shake-pattern-${obj.shakePattern}`;
+            el.innerHTML = '<span>?</span>';
+            el.style.animationDelay = `${Math.random() * 3}s`;
+            el.dataset.id = obj.id;
+        } else if (obj.type === 'emoji') {
+            el.className = 'emoji-item';
+            el.textContent = obj.char;
+        }
+        
+        el.style.left = `${obj.x}px`;
+        el.style.top = `${obj.y}px`;
+        
+        obj.element = el;
+        fragment.appendChild(el);
+    });
+
+    mapFg.appendChild(fragment);
+
+    /* ==========================================
+       3. 物理演算とアニメーション
+       ========================================== */
+    function animateObjects() {
+        for (let i = 0; i < objectData.length; i++) {
+            let m = objectData[i];
+            
+            if (m.isCaught) continue; 
+            
+            let angleWobble = m.isFast ? 0.15 : 0.08;
+            m.angle += (Math.random() - 0.5) * angleWobble;
+            
+            let targetVx = Math.cos(m.angle) * m.baseSpeed;
+            let targetVy = Math.sin(m.angle) * m.baseSpeed;
+            
+            m.vx += (targetVx - m.vx) * 0.05;
+            m.vy += (targetVy - m.vy) * 0.05;
+            
+            m.x += m.vx;
+            m.y += m.vy;
+
+            let dxToCenter = m.x - CENTER_X;
+            let dyToCenter = m.y - CENTER_Y;
+            let distFromCenter = Math.sqrt(dxToCenter * dxToCenter + dyToCenter * dyToCenter);
+            
+            if (distFromCenter + m.radius > BORDER_RADIUS) {
+                let overlap = (distFromCenter + m.radius) - BORDER_RADIUS;
+                let nx = dxToCenter / distFromCenter; 
+                let ny = dyToCenter / distFromCenter;
+                
+                m.x -= nx * overlap;
+                m.y -= ny * overlap;
+                
+                let dot = m.vx * nx + m.vy * ny;
+                m.vx = m.vx - 2 * dot * nx;
+                m.vy = m.vy - 2 * dot * ny;
+                
+                m.angle = Math.atan2(m.vy, m.vx);
+
+                createSpark(nx, ny);
+            }
+        }
+
+        for (let i = 0; i < objectData.length; i++) {
+            for (let j = i + 1; j < objectData.length; j++) {
+                let m1 = objectData[i];
+                let m2 = objectData[j];
+                
+                if (m1.isCaught || m2.isCaught) continue;
+
+                let dx = m2.x - m1.x;
+                let dy = m2.y - m1.y;
+                let distSq = dx * dx + dy * dy;
+                let collisionDist = m1.radius + m2.radius + 2; 
+
+                if (distSq < collisionDist * collisionDist) {
+                    let dist = Math.sqrt(distSq);
+                    if (dist === 0) { dx = 1; dy = 0; dist = 1; }
+                    
+                    let nx = dx / dist;
+                    let ny = dy / dist;
+                    let overlap = collisionDist - dist;
+                    let sumInvMass = m1.invMass + m2.invMass;
+                    let push1 = overlap * (m1.invMass / sumInvMass);
+                    let push2 = overlap * (m2.invMass / sumInvMass);
+                    
+                    m1.x -= nx * push1;
+                    m1.y -= ny * push1;
+                    m2.x += nx * push2;
+                    m2.y += ny * push2;
+                    
+                    let dvx = m2.vx - m1.vx;
+                    let dvy = m2.vy - m1.vx;
+                    let dotProduct = nx * dvx + ny * dvy;
+                    
+                    if (dotProduct < 0) {
+                        let restitution = 0.8; 
+                        let impulse = -(1 + restitution) * dotProduct / sumInvMass;
+                        let impulseX = nx * impulse;
+                        let impulseY = ny * impulse;
+                        
+                        m1.vx -= impulseX * m1.invMass;
+                        m1.vy -= impulseY * m1.invMass;
+                        m2.vx += impulseX * m2.invMass;
+                        m2.vy += impulseY * m2.invMass;
+                        
+                        m1.angle = Math.atan2(m1.vy, m1.vx);
+                        m2.angle = Math.atan2(m2.vy, m2.vx);
+                    }
+                }
+            }
+        }
+
+        for (let i = 0; i < objectData.length; i++) {
+            let m = objectData[i];
+            m.element.style.left = `${m.x}px`;
+            m.element.style.top = `${m.y}px`;
+        }
+
+        requestAnimationFrame(animateObjects);
+    }
+
+    function createSpark(nx, ny) {
+        const sparkX = CENTER_X + nx * BORDER_RADIUS;
+        const sparkY = CENTER_Y + ny * BORDER_RADIUS;
+
+        const spark = document.createElement('div');
+        spark.className = 'spark';
+        spark.style.left = `${sparkX}px`;
+        spark.style.top = `${sparkY}px`;
+        
+        const inner = document.createElement('div');
+        inner.className = 'spark-inner';
+        spark.appendChild(inner);
+
+        mapFg.appendChild(spark);
+
+        inner.addEventListener('animationend', () => {
+            spark.remove();
+        });
+    }
+
+    requestAnimationFrame(animateObjects);
+
+
+    /* ==========================================
+       4. パン（ドラッグ・スワイプ）操作
+       ========================================== */
+    const mapBg = document.getElementById('map-bg');
+    
+    let isDragging = false;
+    let hasMoved = false;
+    let startX = 0, startY = 0;
+    let initialTx = 0, initialTy = 0;
+    let currentTx = 0, currentTy = 0;
+
+    function initPosition() {
+        currentTx = (window.innerWidth / 2) - CENTER_X;
+        currentTy = (window.innerHeight / 2) - CENTER_Y;
+        updateTransform();
+    }
+
+    function updateTransform() {
+        mapBg.style.transform = `translate3d(${currentTx}px, ${currentTy}px, 0)`;
+        mapFg.style.transform = `translate3d(${currentTx}px, ${currentTy}px, 0)`;
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+        if (!modalOverlay.classList.contains('hidden')) return;
+        isDragging = true;
+        hasMoved = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialTx = currentTx;
+        initialTy = currentTy;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+            hasMoved = true;
+        }
+
+        let tempTx = initialTx + dx;
+        let tempTy = initialTy + dy;
+
+        let viewX = (window.innerWidth / 2) - tempTx;
+        let viewY = (window.innerHeight / 2) - tempTy;
+
+        let distFromCenterX = viewX - CENTER_X;
+        let distFromCenterY = viewY - CENTER_Y;
+        let dist = Math.sqrt(distFromCenterX * distFromCenterX + distFromCenterY * distFromCenterY);
+
+        let maxDist = BORDER_RADIUS - Math.min(window.innerWidth, window.innerHeight) / 2 + 50;
+        if (maxDist < 0) maxDist = 0;
+
+        if (dist > maxDist) {
+            let ratio = maxDist / dist;
+            distFromCenterX *= ratio;
+            distFromCenterY *= ratio;
+            viewX = CENTER_X + distFromCenterX;
+            viewY = CENTER_Y + distFromCenterY;
+            tempTx = (window.innerWidth / 2) - viewX;
+            tempTy = (window.innerHeight / 2) - viewY;
+        }
+
+        currentTx = tempTx;
+        currentTy = tempTy;
+        updateTransform();
+    });
+
+    window.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        if (!hasMoved) {
+            const targetMedal = e.target.closest('.medal');
+            if (targetMedal) {
+                handleMedalTap(targetMedal);
+            }
+        }
+    });
+
+    /* ==========================================
+       5. モーダル表示＆もがく・逃げる制御
+       ========================================== */
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalText = document.getElementById('modal-text');
+
+    function handleMedalTap(medalEl) {
+        const id = parseInt(medalEl.dataset.id);
+        const m = objectData.find(item => item.id === id);
+        
+        if (!m || m.isCaught) return;
+
+        m.isCaught = true;
+        medalEl.classList.add('shaking');
+
+        setTimeout(() => {
+            medalEl.classList.remove('shaking');
+            
+            if (m.isEscaper) {
+                m.isCaught = false; 
+                m.baseSpeed = 15; 
+                m.angle = Math.random() * 2 * Math.PI; 
+                m.vx = Math.cos(m.angle) * m.baseSpeed;
+                m.vy = Math.sin(m.angle) * m.baseSpeed;
+
+                setTimeout(() => {
+                    m.baseSpeed = m.isFast ? (2.0 + Math.random() * 1.0) : (0.3 + Math.random() * 0.4);
+                }, 3000);
+
+            } else {
+                m.isCaught = false; 
+                
+                modalText.className = 'modal-text'; 
+                if (medalEl.classList.contains('color-cyan')) modalText.classList.add('color-cyan');
+                if (medalEl.classList.contains('color-lime')) modalText.classList.add('color-lime');
+                if (medalEl.classList.contains('color-pink')) modalText.classList.add('color-pink');
+
+                modalOverlay.classList.remove('hidden');
+            }
+        }, 800); 
+    }
+
+    modalOverlay.addEventListener('pointerdown', (e) => {
+        if (e.target === modalOverlay) {
+            modalOverlay.classList.add('hidden');
+        }
+    });
+
+    initPosition();
+
+</script>
+</body>
+</html>
+
+
