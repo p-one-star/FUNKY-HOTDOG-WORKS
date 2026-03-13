@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FACTORY GARAGE - SHUTTER FINAL SYNC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 基本設定 --- */
+        :root {
+            --neon-cyan: #00f0ff;
+            --neon-pink: #ff0055;
+            --dark-red: #8a0000;
+            --blood-red: #cc0000;
+        }
+
+        /* 背景画像設定 */
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: transparent; 
+            background-image: url('image1.PNG');
+            background-size: cover; background-position: center;
+            background-repeat: no-repeat; background-attachment: fixed;
+            font-family: 'Black Ops One', cursive; overflow: hidden;
+            color: var(--neon-cyan); -webkit-font-smoothing: antialiased; 
+            -webkit-touch-callout: none; user-select: none;
+        }
+
+        /* PCでの強制ズーム設定 */
+        @media (min-width: 768px) {
+            html, body { background-size: auto 130vh; }
+        }
+
+        /* --- 演出用アニメーション --- */
+        .weak-noise { animation: weak-shake 0.04s infinite; }
+        @keyframes weak-shake {
+            0% { transform: translate(0, 0); opacity: 1; } 25% { transform: translate(1px, 1px); opacity: 0.95; }
+            50% { transform: translate(-1px, 0); opacity: 1; } 75% { transform: translate(0, -1px); opacity: 0.95; }
+            100% { transform: translate(0, 0); opacity: 1; }
+        }
+
+        .explosion-effect {
+            animation: violent-glitch 0.05s infinite;
+            filter: contrast(2.0) brightness(0.6) sepia(1) hue-rotate(-50deg);
+        }
+        @keyframes violent-glitch {
+            0% { transform: translate(2px, 2px) skewX(0deg); } 20% { transform: translate(-4px, 0px) skewX(-10deg); }
+            40% { transform: translate(2px, -2px) skewX(10deg); } 60% { transform: translate(-4px, 2px) skewX(-10deg); }
+            80% { transform: translate(-2px, -2px) skewX(10deg); } 100% { transform: translate(2px, 4px) skewX(0deg); }
+        }
+
+        .violent-shake { animation: big-kick 0.3s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes big-kick {
+            10%, 90% { transform: translate3d(-3px, 0, 0) rotate(-1deg); } 20%, 80% { transform: translate3d(5px, 0, 0) rotate(1deg); }
+            30%, 50%, 70% { transform: translate3d(-8px, 0, 0) scale(1.02); } 40%, 60% { transform: translate3d(8px, 0, 0) scale(1.02); }
+        }
+
+        .screen-glitch.active { animation: glitch-skew 0.2s cubic-bezier(0.1, 0.9, 0.2, 1) both; }
+        @keyframes glitch-skew {
+            0% { transform: skewX(0deg); } 20% { transform: skewX(-2deg); } 40% { transform: skewX(2deg); }
+            60% { transform: skewX(-1deg); filter: hue-rotate(10deg); } 80% { transform: skewX(0.5deg); } 100% { transform: skewX(0deg); filter: none; }
+        }
+
+        /* --- シャッター演出 (漆黒Ver) --- */
+        #shutter-door {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #000000; 
+            z-index: 9999;
+            transform: translateY(-100%); 
+            
+            /* 修正: 2.3秒に変更 */
+            transition: transform 2.3s cubic-bezier(0.6, -0.05, 0.7, 0.5);
+            
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            
+            background-image: repeating-linear-gradient(
+                180deg,
+                #000000 0px,
+                #000000 40px,
+                #111111 41px,
+                #000000 42px
+            );
+            box-shadow: 0 10px 50px rgba(0,0,0,1); 
+            pointer-events: none;
+        }
+        #shutter-door.closed { transform: translateY(0%); pointer-events: auto; }
+        
+        /* 下部バー */
+        .shutter-bottom-bar {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 20px;
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 1);
+        }
+
+        /* 警告テキストコンテナ */
+        .shutter-content {
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.2s 1.2s; 
+            transform: rotate(-3deg);
+            position: relative;
+        }
+        #shutter-door.closed .shutter-content { opacity: 1; }
+
+        /* グラフィティ風警告文字 */
+        .graffiti-text {
+            font-family: 'Rubik Wet Paint', cursive;
+            font-size: 14vw;
+            color: var(--blood-red);
+            line-height: 0.85;
+            text-shadow: 
+                0 0 10px rgba(138, 0, 0, 0.8),
+                2px 2px 0px #000,
+                4px 10px 20px rgba(0,0,0,0.9);
+            -webkit-mask-image: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="3"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.95"/%3E%3C/svg%3E');
+            position: relative;
+        }
+
+        /* --- ノイズオーバーレイ --- */
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 90; opacity: 0.1;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)"/%3E%3C/svg%3E');
+            animation: noise-shift 0.5s infinite steps(2);
+        }
+        @keyframes noise-shift { 0% { background-position: 0 0; } 100% { background-position: 50px 50px; } }
+
+        /* --- UIパーツ --- */
+        #error-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: transparent; z-index: 100;
+            display: none; align-items: center; justify-content: center; pointer-events: none;
+        }
+        .error-msg {
+            font-size: 5rem; color: var(--neon-pink);
+            border: 4px solid var(--neon-pink); padding: 20px;
+            background: transparent; text-shadow: 2px 2px 0 #000;
+            transform: rotate(-5deg);
+        }
+
+        .garage-container {
+            display: flex; width: 100vw; height: 100vh;
+            overflow-x: auto; overflow-y: hidden;
+            scroll-snap-type: x mandatory; scrollbar-width: none;
+        }
+        .garage-container::-webkit-scrollbar { display: none; }
+        
+        .panel {
+            flex: 0 0 100vw; height: 100vh;
+            scroll-snap-align: start; scroll-snap-stop: always;
+            position: relative; background: transparent; border: none;
+        }
+
+        /* --- IGNITIONボタン & RPMゲージ (マスク方式) --- */
+        .neon-btn {
+            position: relative;
+            background: transparent;
+            border: 2px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px black;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .neon-btn:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .neon-btn span {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* マスク（窓） */
+        #rpm-gauge-mask {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 0%; /* 可変 */
+            overflow: hidden; 
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        /* グラデーション本体 */
+        #rpm-gauge-body {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 100%; 
+            background: linear-gradient(
+                90deg, 
+                rgba(0, 240, 255, 0.7) 0%, 
+                rgba(0, 240, 255, 0.7) 70%, 
+                rgba(255, 0, 85, 0.9) 90%, 
+                rgba(255, 0, 85, 1.0) 100%
+            );
+        }
+
+        /* アイドリング中の微振動 */
+        .idle-vibration #rpm-gauge-mask {
+            transition: width 0.1s ease-in-out; 
+        }
+
+        /* ロック後のボタン */
+        .neon-btn.locked { opacity: 0.3; cursor: default; }
+        
+        /* 稼働中(アイドリング)のボタン全体 */
+        .neon-btn.active-engine {
+            border-color: #fff;
+            box-shadow: 0 0 15px var(--neon-cyan);
+            color: #fff;
+        }
+        
+        /* WARNING (空ぶかしピーク時) の赤発光 */
+        .neon-btn.rev-glow {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 50px var(--neon-pink), inset 0 0 30px var(--neon-pink);
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .hud-box {
+            border: 2px solid rgba(0, 240, 255, 0.5); background: transparent; padding: 24px;
+            clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+            text-shadow: 1px 1px 2px #000; box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.05);
+        }
+        
+        .nav-arrow {
+            position: fixed; top: 50%; transform: translateY(-50%);
+            font-size: 3rem; color: var(--neon-cyan); background: transparent; border: none; z-index: 50;
+            opacity: 0.6; transition: 0.2s; text-shadow: 2px 2px 4px #000;
+        }
+        .nav-arrow:hover { opacity: 1; transform: translateY(-50%) scale(1.1); }
+        .nav-arrow.left { left: 10px; }
+        .nav-arrow.right { right: 10px; }
+        @media (max-width: 768px) { .nav-arrow { display: none; } }
+
+        #main-wrapper { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+    <div id="error-overlay"><div class="error-msg">SYSTEM ERROR</div></div>
+
+    <!-- シャッター -->
+    <div id="shutter-door">
+        <!-- 警告テキスト -->
+        <div class="shutter-content">
+            <div class="graffiti-text">
+                RESTRICTED<br>AREA
+            </div>
+        </div>
+        
+        <!-- シンプルな下部バー -->
+        <div class="shutter-bottom-bar"></div>
+    </div>
+
+    <!-- EXIT -->
+    <a href="#" class="fixed top-6 left-6 z-[100] neon-btn px-6 py-2" onclick="closeShutterAndExit(); return false;">
+        <span class="relative z-10">EXIT</span>
+    </a>
+
+    <button class="nav-arrow left" id="btn-prev">&lt;</button>
+    <button class="nav-arrow right" id="btn-next">&gt;</button>
+
+    <!-- ラッパー -->
+    <div id="main-wrapper" class="screen-glitch">
+        <div class="garage-container" id="scroller">
+            
+            <!-- LEFT PANEL -->
+            <section id="panel-left" class="panel flex items-center justify-center">
+                <div class="relative z-10 hud-box transform -translate-x-5 md:-translate-x-16">
+                    <h2 class="text-3xl mb-2 glitch-text" data-text="SEC: A-01">SEC: A-01</h2>
+                    <p class="text-xs text-cyan-700 mb-6 tracking-widest">STORAGE UNIT</p>
+                    <div class="space-y-2 text-cyan-500 text-xl font-mono">
+                        <p>TOOL: <span class="text-gray-400">NONE</span></p>
+                        <p>FUEL: <span class="text-red-600">EMPTY</span></p>
+                        <p>VISION: <span class="animate-pulse">LOADING...</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTER PANEL -->
+            <section id="panel-center" class="panel flex items-center justify-center">
+                <div class="relative z-10 text-center w-full">
+                    <div class="mb-12 inline-block relative">
+                        <h1 class="text-7xl md:text-9xl text-white glitch-text" style="text-shadow: 4px 4px 8px #000;" data-text="GARAGE" id="main-title">
+                            GARAGE
+                        </h1>
+                        <p class="mt-2 text-lg tracking-[0.5em] text-cyan-600 opacity-80" style="text-shadow: 1px 1px 2px #000;">
+                            AUTHORIZED PERSONNEL ONLY
+                        </p>
+                    </div>
+                    <div>
+                        <!-- IGNITION Button -->
+                        <button id="ignition-btn" class="neon-btn px-16 py-5 text-4xl tracking-widest" data-text="IGNITION">
+                            <!-- マスク用コンテナ -->
+                            <div id="rpm-gauge-mask">
+                                <!-- グラデーション本体 (幅固定) -->
+                                <div id="rpm-gauge-body"></div>
+                            </div>
+                            <span class="relative z-10">IGNITION</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- RIGHT PANEL -->
+            <section id="panel-right" class="panel flex items-center justify-center">
+                <div class="relative z-10 hud-box transform translate-x-5 md:translate-x-16 text-right">
+                    <h2 class="text-3xl mb-2 glitch-text" data-text="STATUS">STATUS</h2>
+                    <div class="flex flex-col gap-3 text-right text-sm font-mono text-cyan-400">
+                        <div class="border-b border-cyan-900 pb-1">
+                            NET: <span class="text-cyan-200">ONLINE</span>
+                        </div>
+                        <div class="border-b border-cyan-900 pb-1">
+                            SYNC: <span class="text-cyan-200">STABLE</span>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-2" id="random-code">
+                            0x4F92...OK
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        const scroller = document.getElementById('scroller');
+        const wrapper = document.getElementById('main-wrapper'); 
+        const titleText = document.getElementById('main-title');
+        const errorOverlay = document.getElementById('error-overlay');
+        const randomCode = document.getElementById('random-code');
+        const ignitionBtn = document.getElementById('ignition-btn');
+        const rpmGaugeMask = document.getElementById('rpm-gauge-mask');
+
+        // --- AUDIO ENGINE ---
+        const mainEngineAudio = new Audio('ON.m4a');
+        mainEngineAudio.loop = false;
+        
+        const finalRevAudio = new Audio('BUN.m4a');
+        finalRevAudio.preload = 'auto'; 
+
+        const exitAudio = new Audio('EXIT.m4a');
+        exitAudio.preload = 'auto';
+        
+        let engineState = 'ready'; 
+        let effectTimers = [];
+        let idleInterval = null; 
+
+        // --- BUTTON INTERACTION ---
+        let pressStartTime = 0;
+        const LONG_PRESS_THRESHOLD = 300; 
+
+        const handlePressStart = (e) => { pressStartTime = Date.now(); };
+        const handlePressEnd = (e) => {
+            if (e.type === 'touchend') e.preventDefault(); 
+            const pressDuration = Date.now() - pressStartTime;
+            if (pressDuration > LONG_PRESS_THRESHOLD) return;
+            handleTapAction();
+        };
+
+        ignitionBtn.addEventListener('mousedown', handlePressStart);
+        ignitionBtn.addEventListener('touchstart', handlePressStart);
+        ignitionBtn.addEventListener('mouseup', handlePressEnd);
+        ignitionBtn.addEventListener('touchend', handlePressEnd);
+
+
+        // --- ACTION HANDLER ---
+        function handleTapAction() {
+            if (engineState === 'ready') {
+                startEngineSequence();
+            } else if (engineState === 'running') {
+                triggerRevving();
+            }
+        }
+
+        // 1. エンジン始動
+        function startEngineSequence() {
+            engineState = 'running';
+            
+            // プリロード処理
+            [finalRevAudio, exitAudio].forEach(audio => {
+                audio.volume = 0; 
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.volume = 1.0; 
+                }).catch(e => console.log("Preload error:", e));
+            });
+
+            mainEngineAudio.volume = 1.0; 
+            mainEngineAudio.currentTime = 0;
+            mainEngineAudio.play().then(() => {
+                ignitionBtn.classList.add('active-engine'); 
+                scheduleStartEffects(); 
+                setTimeout(startIdleVibration, 1500);
+            }).catch(e => {
+                console.log("Play error:", e);
+                engineState = 'ready'; 
+            });
+        }
+
+        // --- RPM GAUGE LOGIC ---
+
+        function startIdleVibration() {
+            if (engineState !== 'running') return;
+            if (idleInterval) clearInterval(idleInterval);
+
+            ignitionBtn.classList.add('idle-vibration');
+            
+            idleInterval = setInterval(() => {
+                const jitter = 8 + Math.random() * 7;
+                rpmGaugeMask.style.width = jitter + '%';
+            }, 100); 
+        }
+
+        function stopIdleVibration() {
+            if (idleInterval) {
+                clearInterval(idleInterval);
+                idleInterval = null;
+            }
+            ignitionBtn.classList.remove('idle-vibration');
+        }
+
+        // 2. 空ぶかし (Revving) - 通常時
+        function triggerRevving() {
+            const revAudio = new Audio('BUN.m4a');
+            revAudio.volume = 1.0;
+            revAudio.currentTime = 0; 
+            revAudio.play().catch(e => console.log(e));
+
+            stopIdleVibration();
+
+            wrapper.classList.remove('violent-shake'); 
+            void wrapper.offsetWidth; 
+            wrapper.classList.add('violent-shake');
+            setTimeout(() => wrapper.classList.remove('violent-shake'), 300);
+
+            setTimeout(() => {
+                rpmGaugeMask.style.transition = 'width 0.2s cubic-bezier(0.1, 0.7, 1.0, 0.1)'; 
+                rpmGaugeMask.style.width = '90%'; 
+
+                setTimeout(() => {
+                    ignitionBtn.classList.add('rev-glow');
+                }, 150);
+
+                setTimeout(() => {
+                    rpmGaugeMask.style.transition = 'width 0.6s ease-out';
+                    rpmGaugeMask.style.width = '12%'; 
+                    
+                    ignitionBtn.classList.remove('rev-glow');
+
+                    setTimeout(() => {
+                        rpmGaugeMask.style.transition = ''; 
+                        if(engineState === 'running') startIdleVibration();
+                    }, 600);
+
+                }, 300); 
+
+            }, 200); 
+        }
+
+        // 3. 終了専用の強制空ぶかし
+        function triggerFinalShutdownRev() {
+            engineState = 'stopping';
+            
+            stopIdleVibration();
+            ignitionBtn.classList.remove('active-engine');
+
+            mainEngineAudio.pause();
+            mainEngineAudio.currentTime = 0; 
+            
+            finalRevAudio.play().catch(e => console.log("Final rev error:", e));
+
+            wrapper.classList.remove('violent-shake');
+            void wrapper.offsetWidth;
+            wrapper.classList.add('violent-shake');
+            setTimeout(() => wrapper.classList.remove('violent-shake'), 300);
+
+            setTimeout(() => {
+                rpmGaugeMask.style.transition = 'width 0.2s cubic-bezier(0.1, 0.7, 1.0, 0.1)';
+                rpmGaugeMask.style.width = '90%';
+
+                setTimeout(() => {
+                    ignitionBtn.classList.add('rev-glow');
+                }, 150);
+
+                setTimeout(() => {
+                    rpmGaugeMask.style.transition = 'width 1.5s ease-out';
+                    rpmGaugeMask.style.width = '0%';
+
+                    ignitionBtn.classList.remove('rev-glow');
+                    ignitionBtn.classList.add('locked');
+                    engineState = 'locked';
+
+                    setTimeout(() => {
+                        rpmGaugeMask.style.transition = '';
+                        document.body.classList.remove('weak-noise');
+                        document.body.classList.remove('explosion-effect');
+                    }, 1500);
+
+                }, 300);
+
+            }, 200);
+        }
+
+        // 始動演出スケジュール
+        function scheduleStartEffects() {
+            document.body.classList.add('weak-noise');
+            
+            const t1 = setTimeout(() => {
+                document.body.classList.remove('weak-noise');
+                document.body.classList.add('explosion-effect');
+                wrapper.classList.add('violent-shake');
+                
+                rpmGaugeMask.style.transition = 'width 0.1s ease-out';
+                rpmGaugeMask.style.width = '60%'; 
+            }, 1000);
+
+            const t2 = setTimeout(() => {
+                document.body.classList.remove('explosion-effect');
+                wrapper.classList.remove('violent-shake');
+                
+                rpmGaugeMask.style.transition = 'width 0.5s ease-out';
+                rpmGaugeMask.style.width = '10%';
+            }, 1500);
+
+            const t3 = setTimeout(() => {
+                triggerFinalShutdownRev();
+            }, 54000);
+
+            effectTimers.push(t1, t2, t3);
+        }
+
+        // 強制停止
+        function stopEngineCompletely() {
+            engineState = 'locked';
+            
+            stopIdleVibration();
+            rpmGaugeMask.style.transition = 'width 1s ease-out';
+            rpmGaugeMask.style.width = '0%'; 
+
+            ignitionBtn.classList.remove('active-engine');
+            ignitionBtn.classList.remove('rev-glow');
+            ignitionBtn.classList.add('locked'); 
+
+            effectTimers.forEach(id => clearTimeout(id));
+            effectTimers = [];
+            
+            document.body.classList.remove('weak-noise');
+            document.body.classList.remove('explosion-effect');
+            wrapper.classList.remove('violent-shake');
+            
+            mainEngineAudio.pause();
+            finalRevAudio.pause();
+        }
+
+        mainEngineAudio.addEventListener('ended', () => {
+            if (engineState !== 'locked') stopEngineCompletely();
+        });
+
+
+        // --- UI Logic ---
+        window.addEventListener('load', () => {
+            scroller.scrollTo(window.innerWidth, 0);
+        });
+
+        document.getElementById('btn-prev').addEventListener('click', () => 
+            scroller.scrollBy({ left: -window.innerWidth, behavior: 'smooth' }));
+        document.getElementById('btn-next').addEventListener('click', () => 
+            scroller.scrollBy({ left: window.innerWidth, behavior: 'smooth' }));
+
+        function closeShutterAndExit() {
+            stopEngineCompletely();
+            
+            exitAudio.currentTime = 0;
+            exitAudio.volume = 1.0;
+            exitAudio.play().catch(e => console.log("Exit sound error:", e));
+
+            const shutter = document.getElementById('shutter-door');
+            shutter.classList.add('closed');
+            
+            setTimeout(() => {
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else {
+                    console.log("No history.");
+                }
+            }, 3300); // 2.3s + 1.0s余韻
+        }
+
+        const mildDistortion = () => {
+            if (engineState !== 'running') { 
+                wrapper.classList.add('active');
+                setTimeout(() => { wrapper.classList.remove('active'); }, 200);
+            }
+            const nextTime = Math.random() * 10000 + 5000; 
+            setTimeout(mildDistortion, nextTime);
+        };
+
+        const titleGlitch = () => {
+            titleText.classList.add('active');
+            setTimeout(() => { titleText.classList.remove('active'); }, 150);
+            const nextTime = Math.random() * 5000 + 3000;
+            setTimeout(titleGlitch, nextTime);
+        };
+
+        setInterval(() => {
+            const val = Math.floor(Math.random() * 9999);
+            randomCode.innerText = `0x${val}...OK`;
+        }, 2000);
+
+        const rareError = () => {
+            if (Math.random() > 0.8) {
+                errorOverlay.style.display = 'flex';
+                setTimeout(() => { errorOverlay.style.display = 'none'; }, 100);
+            }
+            const nextTime = Math.random() * 40000 + 20000;
+            setTimeout(rareError, nextTime);
+        };
+
+        setTimeout(mildDistortion, 3000);
+        setTimeout(titleGlitch, 2000);
+        setTimeout(rareError, 10000);
+    </script>
+</body>
+</html>
+
+
