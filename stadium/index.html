@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<!-- 初期状態を英語(en)に設定 -->
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUNKY STORAGE | FUNKY HOTDOG WORKS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 極秘格納庫感を出すステンシルフォント(Black Ops One)と日本語フォント -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        blackops: ['"Black Ops One"', 'sans-serif'], // 英語フォントを統一
+                        sans: ['"Noto Sans JP"', 'sans-serif'],      // 日本語フォント
+                    },
+                    colors: {
+                        fhw: {
+                            cyan: '#00f0ff',
+                            lime: '#ccff00',
+                            pink: '#ff0055',
+                            dark: '#0a0a0c',
+                            gray: '#1a1a1d',
+                        }
+                    },
+                    backgroundImage: {
+                        'metal-texture': 'linear-gradient(to bottom, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.2) 100%)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* カスタムスタイル・エフェクト */
+        body {
+            /* 背景は完全なツルッとした無地のダークカラー */
+            background-color: #0a0a0c;
+            color: #e4e4e7;
+            overflow-x: hidden;
+        }
+
+        /* --- ヒーロータイトル用（光と文字の分離） --- */
+        /* 強く発光する text-shadow スタイル */
+        .glow-fixed {
+            color: transparent; /* 文字本体は透明にして、影（光）だけを残す */
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.9),
+                         0 0 20px rgba(0, 240, 255, 0.7),
+                         0 0 35px rgba(0, 240, 255, 0.5),
+                         0 0 50px rgba(0, 240, 255, 0.3);
+        }
+        
+        /* 前面の動くマットブラック文字 */
+        .text-front {
+            color: #0a0a0c;
+            /* 背景に溶け込まないようにごく薄いフチ取りだけ残す */
+            -webkit-text-stroke: 1px rgba(0, 240, 255, 0.1);
+        }
+        
+        /* ライトモード時の調整 */
+        html.light body {
+            background-color: #f4f4f5;
+            color: #18181b;
+        }
+        html.light .fhw-card-bg {
+            background-color: #ffffff;
+        }
+        html.light .glow-fixed {
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.9),
+                         0 0 20px rgba(0, 240, 255, 0.7),
+                         0 0 35px rgba(0, 240, 255, 0.5),
+                         0 0 50px rgba(0, 240, 255, 0.3);
+        }
+        html.light .text-front {
+            color: #f4f4f5;
+            -webkit-text-stroke: 1px rgba(0, 240, 255, 0.2);
+        }
+
+        /* --- ヒーロータイトルの微妙な浮遊＆偏りアニメーション --- */
+        /* 文字だけが動き、背後の光は動かないことで「光が漏れる方向が変わる」演出 */
+        @keyframes slow-move {
+            0% { transform: translate(0px, 0px) scale(1); }
+            25% { transform: translate(3px, -2px) scale(1.004); }
+            50% { transform: translate(-2px, 3px) scale(1.008); }
+            75% { transform: translate(-3px, -1px) scale(1.004); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
+        .animate-slow-move {
+            animation: slow-move 10s ease-in-out infinite;
+        }
+
+        /* 近未来風カード装飾 */
+        .cyber-card {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+        }
+        
+        .cyber-button {
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+        }
+
+        /* --- 言語切り替え用CSS --- */
+        :lang(en) .lang-ja { display: none !important; }
+        :lang(ja) .lang-en { display: none !important; }
+        
+        :lang(en) .lang-en.is-inline { display: inline-block !important; }
+        :lang(ja) .lang-ja.is-inline { display: inline-block !important; }
+        
+        :lang(en) .lang-en.is-block { display: block !important; }
+        :lang(ja) .lang-ja.is-block { display: block !important; }
+        
+        /* 1枚目のカードを丸ごと切り替えるためのflex設定を追加 */
+        :lang(en) .lang-en.is-flex { display: flex !important; }
+        :lang(ja) .lang-ja.is-flex { display: flex !important; }
+
+        /* --- ページ遷移（吸い込まれる）アニメーション --- */
+        .suck-in {
+            transform: scale(0.7) translateY(5vh);
+            opacity: 0;
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        /* --- 言語切り替え時のスキャンエフェクト --- */
+        .scan-effect {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+            display: none;
+        }
+        .scan-effect.active {
+            display: block;
+        }
+        .scan-line {
+            position: absolute;
+            top: -10%; left: 0;
+            width: 100%; height: 10px;
+            background: linear-gradient(to bottom, transparent, #00f0ff, transparent);
+            box-shadow: 0 0 15px #00f0ff;
+            opacity: 0.8;
+            animation: scan-move 0.3s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+        }
+        .scan-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 5, 5, 0.2);
+            opacity: 0;
+            animation: scan-flash 0.3s ease forwards;
+        }
+        @keyframes scan-move {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
+        @keyframes scan-flash {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased transition-colors duration-300 min-h-screen relative selection:bg-fhw-lime selection:text-fhw-dark">
+
+    <!-- 言語切り替え時のスキャンエフェクト -->
+    <div class="scan-effect" id="scanEffect">
+        <div class="scan-overlay"></div>
+        <div class="scan-line"></div>
+    </div>
+
+    <!-- ページ遷移時の真っ暗になるオーバーレイ -->
+    <div id="transition-overlay" class="fixed inset-0 bg-black z-[100] pointer-events-none opacity-0 transition-opacity duration-700 ease-in-out"></div>
+
+    <!-- ヘッダー（吸い込まれるコンテンツの外に配置、スクロールで残る） -->
+    <header class="fixed top-0 w-full z-50 bg-fhw-dark/60 dark:bg-fhw-dark/60 light:bg-white/60 backdrop-blur-lg border-b border-fhw-cyan/30 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            
+            <!-- 左：ロゴ（GitHubの画像 + ギミック） -->
+            <div class="flex-shrink-0 flex items-center cursor-pointer group">
+                <img src="icon.PNG" alt="FHW LOGO" class="w-[100px] object-contain translate-y-[10px] -rotate-[5deg] group-hover:scale-110 group-hover:-rotate-[12deg] group-active:scale-110 group-active:-rotate-[12deg] transition-transform duration-300 ease-out origin-center">
+            </div>
+
+            <!-- 右：コントロール群 -->
+            <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                <!-- 言語切り替えカプセル -->
+                <div class="flex items-center space-x-1 bg-black/50 border border-fhw-cyan/30 rounded-full px-2 py-1 text-xs sm:text-sm font-blackops transition-all duration-300 hover:border-fhw-cyan hover:shadow-[0_0_15px_rgba(0,240,255,0.5)]">
+                    <button id="lang-en" class="opacity-100 hover:opacity-80 transition-opacity w-5 sm:w-6 text-center" onclick="setLang('en')">🇺🇸</button>
+                    <span class="text-fhw-cyan/50 text-[10px] sm:text-xs">|</span>
+                    <button id="lang-ja" class="opacity-40 hover:opacity-100 transition-opacity w-5 sm:w-6 text-center grayscale" onclick="setLang('ja')">🇯🇵</button>
+                </div>
+
+                <!-- ダーク/ライトモード切り替えカプセル -->
+                <div class="flex items-center space-x-1 bg-black/50 border border-fhw-cyan/30 rounded-full px-2 py-1 text-xs sm:text-sm transition-all duration-300 hover:border-fhw-cyan hover:shadow-[0_0_15px_rgba(0,240,255,0.5)]">
+                    <button id="theme-dark" class="opacity-100 hover:opacity-80 transition-opacity w-5 sm:w-6 text-center" onclick="setTheme('dark')">🌙</button>
+                    <span class="text-fhw-cyan/50 text-[10px] sm:text-xs">|</span>
+                    <button id="theme-light" class="opacity-40 hover:opacity-100 transition-opacity w-5 sm:w-6 text-center grayscale" onclick="setTheme('light')">☀️</button>
+                </div>
+
+                <!-- メニューボタン -->
+                <button class="text-xl sm:text-2xl hover:scale-110 transition-transform focus:outline-none flex-shrink-0 ml-1" aria-label="Menu">
+                    🌭
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- コンテンツ全体（吸い込まれる対象） -->
+    <div id="page-content" class="min-h-screen relative transition-all duration-700 ease-[cubic-bezier(0.7,0,0.3,1)] transform-gpu">
+
+        <!-- メインコンテンツ -->
+        <main class="pt-24 pb-16">
+            
+            <!-- ヒーローセクション -->
+            <section class="relative pt-8 md:pt-12 pb-6 md:pb-8 px-4 text-center">
+                
+                <div class="inline-block relative w-full">
+                    <!-- 【背面】固定された発光 -->
+                    <h1 class="absolute inset-0 font-blackops uppercase text-7xl sm:text-8xl md:text-[8rem] lg:text-[10rem] tracking-tighter glow-fixed mb-2 z-0 leading-[1] py-2 pointer-events-none">
+                        FUNKY<br class="md:hidden"> STORAGE
+                    </h1>
+                    
+                    <!-- 【前面】動くマットブラックの文字 -->
+                    <h1 class="font-blackops uppercase text-7xl sm:text-8xl md:text-[8rem] lg:text-[10rem] tracking-tighter text-front mb-2 relative z-10 leading-[1] py-2 animate-slow-move origin-center">
+                        FUNKY<br class="md:hidden"> STORAGE
+                    </h1>
+                </div>
+                
+                <!-- サブタイトル -->
+                <p class="text-fhw-cyan text-base md:text-xl mt-2 md:mt-4 leading-relaxed relative z-20">
+                    <span class="lang-en is-block font-blackops tracking-[0.05em]">
+                        STACKED AND READY.<br>
+                        YOUR MOVE.
+                    </span>
+                    <span class="lang-ja is-block font-sans font-bold tracking-[0.05em]">
+                        並べてあるだけです。<br>
+                        あとは、あなた次第。
+                    </span>
+                </p>
+            </section>
+
+            <!-- 商品カードエリア -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+                    
+                    <!-- ★★★ Card 1 (言語によって中身が完全に切り替わる) ★★★ -->
+                    <article class="group relative cyber-card bg-fhw-gray fhw-card-bg border border-fhw-cyan/40 p-1 transition-all duration-300 hover:border-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.2)] hover:-translate-y-1 cursor-pointer" ontouchstart="">
+                        <div class="h-full bg-fhw-dark dark:bg-fhw-dark light:bg-zinc-100 p-5 cyber-card relative overflow-hidden">
+                            
+                            <!-- 走査線エフェクト -->
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-fhw-lime/5 to-transparent -translate-y-full group-hover:animate-[scan_4s_ease-in-out_infinite] z-0 pointer-events-none"></div>
+
+                            <!-- ========================================== -->
+                            <!-- 【英語モード用コンテンツ】 (Gumroadリンク) -->
+                            <!-- ========================================== -->
+                            <div class="lang-en is-flex flex-col h-full relative z-10">
+                                <div class="flex justify-between items-start mb-6 border-b border-fhw-cyan/20 pb-2">
+                                    <span class="font-blackops text-fhw-cyan tracking-widest text-sm group-hover:text-fhw-lime transition-colors">STORAGE 01</span>
+                                    <span class="text-xs font-blackops text-zinc-500">SYS.ON</span>
+                                </div>
+                                
+                                <div class="aspect-square bg-zinc-900 border border-zinc-800 mb-6 flex items-center justify-center overflow-hidden relative group/img">
+                                    <div class="absolute inset-0 bg-metal-texture opacity-30 z-10 pointer-events-none"></div>
+                                    <!-- 英語モード時は JUMP.jpg -->
+                                    <img src="JUMP.jpg" alt="MONSTER TRUCK BURGER" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-0">
+                                </div>
+
+                                <h2 class="font-blackops text-2xl text-white dark:text-white light:text-fhw-dark leading-tight mb-2">MONSTER TRUCK BURGER</h2>
+                                
+                                <div class="mb-1">
+                                    <p class="font-blackops text-fhw-cyan text-sm uppercase tracking-wider">DIGITAL DOWNLOAD</p>
+                                    <p class="hidden text-[10px] font-sans font-normal text-fhw-cyan/70 tracking-wider mt-0.5">（即時ダウンロード）</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <p class="text-zinc-400 font-blackops text-sm tracking-wider">HIGH RESOLUTION PRINT</p>
+                                    <p class="hidden text-[10px] font-sans font-normal text-zinc-500 tracking-wider mt-0.5">（印刷用ポスターデータ）</p>
+                                </div>
+
+                                <!-- Gumroadへのリンク -->
+                                <button onclick="goToProduct('https://funkyhotdogworks.gumroad.com/l/vqqop')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
+                                    <span class="relative z-10 flex items-center justify-center gap-2 group-active/btn:scale-105 transition-transform duration-100">
+                                        <span class="text-xs opacity-50 group-hover/btn:translate-x-1.5 group-hover/btn:opacity-100 transition-all duration-300">&gt;</span> 
+                                        <span>BUY NOW</span>
+                                    </span>
+                                </button>
+                            </div>
+
+                            <!-- ========================================== -->
+                            <!-- 【日本語モード用コンテンツ】 (SUZURIリンク) -->
+                            <!-- ========================================== -->
+                            <div class="lang-ja is-flex flex-col h-full relative z-10">
+                                <div class="flex justify-between items-start mb-6 border-b border-fhw-cyan/20 pb-2">
+                                    <span class="font-blackops text-fhw-cyan tracking-widest text-sm group-hover:text-fhw-lime transition-colors">STORAGE 01</span>
+                                    <span class="text-xs font-blackops text-zinc-500">SYS.ON</span>
+                                </div>
+                                
+                                <div class="aspect-square bg-zinc-900 border border-zinc-800 mb-6 flex items-center justify-center overflow-hidden relative group/img">
+                                    <div class="absolute inset-0 bg-metal-texture opacity-30 z-10 pointer-events-none"></div>
+                                    <!-- ★日本語モード時は START.png -->
+                                    <img src="START.png" alt="FHW FIRST LINE" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-0">
+                                </div>
+
+                                <!-- タイトル・テキストの変更 -->
+                                <h2 class="font-blackops text-2xl text-white dark:text-white light:text-fhw-dark leading-tight mb-2">FHW FIRST LINE</h2>
+                                
+                                <div class="mb-1">
+                                    <p class="font-blackops text-fhw-cyan text-sm uppercase tracking-wider">OFFICIAL LOGO HOODIE</p>
+                                </div>
+                                
+                                <!-- STREET STYLE の右端に *HOODIE ONLY を追加 -->
+                                <div class="mb-6 flex justify-between items-end gap-2">
+                                    <p class="text-zinc-400 font-blackops text-sm tracking-wider">STREET STYLE</p>
+                                    <p class="text-zinc-600 font-blackops text-[10px] tracking-wider">*HOODIE ONLY</p>
+                                </div>
+
+                                <!-- SUZURIへのリンク -->
+                                <button onclick="goToProduct('https://suzuri.jp/FHW/19493913/hoodie/s/white')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
+                                    <span class="relative z-10 flex items-center justify-center gap-2 group-active/btn:scale-105 transition-transform duration-100">
+                                        <span class="text-xs opacity-50 group-hover/btn:translate-x-1.5 group-hover/btn:opacity-100 transition-all duration-300">&gt;</span> 
+                                        <span>BUY NOW</span>
+                                    </span>
+                                </button>
+                            </div>
+
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="group relative cyber-card bg-fhw-gray fhw-card-bg border border-fhw-cyan/40 p-1 transition-all duration-300 hover:border-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.2)] hover:-translate-y-1 cursor-pointer" ontouchstart="">
+                        <div class="h-full bg-fhw-dark dark:bg-fhw-dark light:bg-zinc-100 p-5 flex flex-col justify-between cyber-card relative overflow-hidden">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-fhw-lime/5 to-transparent -translate-y-full group-hover:animate-[scan_4s_ease-in-out_infinite] z-0 pointer-events-none"></div>
+
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-start mb-6 border-b border-fhw-cyan/20 pb-2">
+                                    <span class="font-blackops text-fhw-cyan tracking-widest text-sm group-hover:text-fhw-lime transition-colors">STORAGE 02</span>
+                                    <span class="text-xs font-blackops text-zinc-500">SYS.ON</span>
+                                </div>
+                                
+                                <div class="aspect-square bg-zinc-900 border border-zinc-800 mb-6 flex items-center justify-center overflow-hidden relative group/img">
+                                    <div class="absolute inset-0 bg-metal-texture opacity-50"></div>
+                                    <span class="text-6xl group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] relative z-10">🌭🛹</span>
+                                    <div class="absolute top-2 right-2 bg-fhw-pink text-white text-[10px] font-blackops px-2 py-1 uppercase tracking-wider transform rotate-3 shadow-[0_0_10px_rgba(255,0,85,0.5)] z-20 group-hover:scale-110 transition-transform">HOT!</div>
+                                </div>
+
+                                <h2 class="font-blackops text-2xl text-white dark:text-white light:text-fhw-dark leading-tight mb-2">SKATER DOG POSTER</h2>
+                                
+                                <div class="mb-1">
+                                    <p class="font-blackops text-fhw-cyan text-sm uppercase tracking-wider">DIGITAL DOWNLOAD</p>
+                                    <p class="lang-ja text-[10px] font-sans font-normal text-fhw-cyan/70 tracking-wider mt-0.5">（即時ダウンロード）</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <p class="text-zinc-400 font-blackops text-sm tracking-wider">HIGH RESOLUTION PRINT</p>
+                                    <p class="lang-ja text-[10px] font-sans font-normal text-zinc-500 tracking-wider mt-0.5">（印刷用ポスターデータ）</p>
+                                </div>
+                            </div>
+
+                            <button onclick="goToProduct('#')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
+                                <span class="relative z-10 flex items-center justify-center gap-2 group-active/btn:scale-105 transition-transform duration-100">
+                                    <span class="text-xs opacity-50 group-hover/btn:translate-x-1.5 group-hover/btn:opacity-100 transition-all duration-300">&gt;</span> 
+                                    <span class="lang-en is-inline">BUY NOW</span>
+                                    <span class="lang-ja is-inline font-sans font-bold">今すぐ購入</span>
+                                </span>
+                            </button>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="group relative cyber-card bg-fhw-gray fhw-card-bg border border-fhw-cyan/40 p-1 transition-all duration-300 hover:border-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.2)] hover:-translate-y-1 cursor-pointer" ontouchstart="">
+                        <div class="h-full bg-fhw-dark dark:bg-fhw-dark light:bg-zinc-100 p-5 flex flex-col justify-between cyber-card relative overflow-hidden">
+                            
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-fhw-lime/5 to-transparent -translate-y-full group-hover:animate-[scan_4s_ease-in-out_infinite] z-0 pointer-events-none"></div>
+
+                            <div class="relative z-10">
+                                <div class="flex justify-between items-start mb-6 border-b border-fhw-cyan/20 pb-2">
+                                    <span class="font-blackops text-fhw-cyan tracking-widest text-sm group-hover:text-fhw-lime transition-colors">STORAGE 03</span>
+                                    <span class="text-xs font-blackops text-zinc-500">SYS.ON</span>
+                                </div>
+                                
+                                <div class="aspect-square bg-zinc-900 border border-zinc-800 mb-6 flex items-center justify-center overflow-hidden relative group/img">
+                                    <div class="absolute inset-0 bg-metal-texture opacity-50"></div>
+                                    <span class="text-6xl group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] relative z-10">🍟🚀</span>
+                                </div>
+
+                                <h2 class="font-blackops text-2xl text-white dark:text-white light:text-fhw-dark leading-tight mb-2">SPACE FRIES APPAREL</h2>
+                                
+                                <div class="mb-1">
+                                    <p class="font-blackops text-fhw-cyan text-sm uppercase tracking-wider">T-SHIRT / HOODIE</p>
+                                    <p class="lang-ja text-[10px] font-sans font-normal text-fhw-cyan/70 tracking-wider mt-0.5">（Tシャツ / パーカー）</p>
+                                </div>
+                                
+                                <div class="mb-6">
+                                    <p class="text-zinc-400 font-blackops text-sm tracking-wider">PHYSICAL ITEM</p>
+                                    <p class="lang-ja text-[10px] font-sans font-normal text-zinc-500 tracking-wider mt-0.5">（配送アイテム）</p>
+                                </div>
+                            </div>
+
+                            <button onclick="goToProduct('#')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
+                                <span class="relative z-10 flex items-center justify-center gap-2 group-active/btn:scale-105 transition-transform duration-100">
+                                    <span class="text-xs opacity-50 group-hover/btn:translate-x-1.5 group-hover/btn:opacity-100 transition-all duration-300">&gt;</span> 
+                                    <span class="lang-en is-inline">BUY NOW</span>
+                                    <span class="lang-ja is-inline font-sans font-bold">今すぐ購入</span>
+                                </span>
+                            </button>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- 世界観テキスト -->
+            <section class="mt-24 text-center px-4 relative">
+                <div class="flex justify-center gap-1 mb-6 opacity-30">
+                    <div class="w-1 h-1 bg-fhw-cyan"></div>
+                    <div class="w-4 h-1 bg-fhw-cyan"></div>
+                    <div class="w-1 h-1 bg-fhw-cyan"></div>
+                </div>
+                
+                <p class="font-blackops text-zinc-500 text-sm md:text-base tracking-[0.4em] leading-loose">
+                    STORE THE MADNESS.<br>
+                    <span class="text-fhw-cyan">HANDLE WITH FLAVOR.</span>
+                </p>
+            </section>
+
+        </main>
+
+        <!-- フッター -->
+        <footer class="border-t border-fhw-cyan/20 bg-fhw-dark relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- ロゴ・コピー -->
+                    <div class="text-center md:text-left">
+                        <div class="font-blackops text-2xl text-white mb-2">FUNKY HOTDOG WORKS</div>
+                        <p class="text-zinc-500 font-blackops text-sm tracking-wider">© 2026 FUNKY HOTDOG WORKS. ALL RIGHTS RESERVED.</p>
+                    </div>
+                    
+                    <!-- SNS / Shop Links -->
+                    <div class="flex flex-wrap justify-center md:justify-end gap-6 font-blackops tracking-widest text-sm">
+                        <a href="#" class="text-zinc-400 hover:text-fhw-cyan transition-colors flex items-center gap-2">
+                            INSTAGRAM <span class="text-xs opacity-50 font-sans">↗</span>
+                        </a>
+                        <a href="#" class="text-zinc-400 hover:text-fhw-cyan transition-colors flex items-center gap-2">
+                            YOUTUBE <span class="text-xs opacity-50 font-sans">↗</span>
+                        </a>
+                        
+                        <div class="flex items-center gap-4 border-l border-zinc-800 pl-6">
+                            <a href="#" class="text-zinc-600 cursor-not-allowed flex items-center gap-2 group relative">
+                                ETSY
+                                <span class="absolute -top-3 -right-6 bg-zinc-800 text-[9px] px-1.5 py-0.5 text-zinc-400 group-hover:bg-fhw-pink group-hover:text-white transition-colors border border-zinc-700">SOON</span>
+                            </a>
+                            <a href="#" class="text-zinc-600 cursor-not-allowed flex items-center gap-2 group relative">
+                                AMAZON
+                                <span class="absolute -top-3 -right-6 bg-zinc-800 text-[9px] px-1.5 py-0.5 text-zinc-400 group-hover:bg-fhw-pink group-hover:text-white transition-colors border border-zinc-700">SOON</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div> <!-- /#page-content -->
+
+    <!-- インタラクション用スクリプト -->
+    <script>
+        // ダークモード・ライトモード切り替え
+        function setTheme(theme) {
+            const html = document.documentElement;
+            const darkBtn = document.getElementById('theme-dark');
+            const lightBtn = document.getElementById('theme-light');
+
+            if (theme === 'dark') {
+                html.classList.add('dark');
+                html.classList.remove('light');
+                darkBtn.classList.replace('opacity-40', 'opacity-100');
+                darkBtn.classList.remove('grayscale');
+                lightBtn.classList.replace('opacity-100', 'opacity-40');
+                lightBtn.classList.add('grayscale');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                lightBtn.classList.replace('opacity-40', 'opacity-100');
+                lightBtn.remove('grayscale');
+                darkBtn.classList.replace('opacity-100', 'opacity-40');
+                darkBtn.classList.add('grayscale');
+            }
+        }
+
+        // 言語切り替え (スキャンエフェクト付き)
+        function setLang(lang) {
+            const html = document.documentElement;
+            if (html.lang === lang) return;
+
+            const scanEffect = document.getElementById('scanEffect');
+            
+            scanEffect.classList.remove('active');
+            void scanEffect.offsetWidth;
+            scanEffect.classList.add('active');
+
+            setTimeout(() => {
+                html.lang = lang;
+
+                const enBtn = document.getElementById('lang-en');
+                const jaBtn = document.getElementById('lang-ja');
+
+                if (lang === 'en') {
+                    enBtn.classList.replace('opacity-40', 'opacity-100');
+                    enBtn.classList.remove('grayscale');
+                    jaBtn.classList.replace('opacity-100', 'opacity-40');
+                    jaBtn.classList.add('grayscale');
+                } else {
+                    jaBtn.classList.replace('opacity-40', 'opacity-100');
+                    jaBtn.classList.remove('grayscale');
+                    enBtn.classList.replace('opacity-100', 'opacity-40');
+                    enBtn.classList.add('grayscale');
+                }
+            }, 150);
+
+            setTimeout(() => {
+                scanEffect.classList.remove('active');
+            }, 400);
+        }
+
+        // 商品ページへ吸い込まれる遷移アニメーション
+        function goToProduct(url) {
+            if (url === '#') return;
+
+            const pageContent = document.getElementById('page-content');
+            const overlay = document.getElementById('transition-overlay');
+
+            pageContent.classList.add('suck-in');
+            overlay.classList.remove('pointer-events-none', 'opacity-0');
+            overlay.classList.add('opacity-100');
+
+            setTimeout(() => {
+                window.location.href = url;
+            }, 700);
+        }
+    </script>
+</body>
+</html>
+
+
