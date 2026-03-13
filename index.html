@@ -104,7 +104,6 @@
            ブラックホール演出専用 CSS（改：猛突進バージョン）
            ========================================= */
         .blackhole-effect-layer {
-            /* 座標はJSでクリック位置を中心にセットされる */
             position: absolute; 
             z-index: 9999999; /* 最前面 */
             pointer-events: none;
@@ -117,7 +116,6 @@
             visibility: visible;
         }
         
-        /* 中が真っ黒で、細いシアンの光を放つリング */
         .bh-ring {
             position: absolute;
             top: 50%;
@@ -132,7 +130,6 @@
             transform: translate(-50%, -50%) scale(0);
         }
         .blackhole-effect-layer.active .bh-ring {
-            /* 猛スピードで手前に向かって画面を覆い尽くす！(回転は排除) */
             animation: rush-ring 1.2s cubic-bezier(0.9, 0, 0.1, 1) forwards;
         }
 
@@ -142,7 +139,6 @@
             100% { transform: translate(-50%, -50%) scale(150); opacity: 1; } /* 画面を覆い尽くすまで巨大化 */
         }
 
-        /* リングが迫ってくる間、サイト全体（背景）は少し奥に逃げるようにボヤける */
         body.sucked {
             overflow: hidden !important; /* スクロール禁止 */
             animation: suck-into-blackhole 1.2s cubic-bezier(0.5, 0, 1, 0.5) forwards;
@@ -154,7 +150,6 @@
                 filter: blur(0) brightness(1);
             }
             100% {
-                /* 回転せずに少し奥へ引き、絶望感を出す */
                 transform: scale(0.95);
                 filter: blur(10px) brightness(0.3);
                 opacity: 0.5;
@@ -365,7 +360,6 @@
             pointer-events: auto;
         }
 
-        /* リンク化されたテキストエリアのラッパー */
         .world-map-link-wrapper {
             display: inline-block;
             text-decoration: none;
@@ -376,7 +370,6 @@
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s;
         }
 
-        /* ホバーで少しだけ大きく＆明るく！ */
         .world-map-link-wrapper:hover {
             transform: scale(1.03);
             filter: brightness(1.2);
@@ -420,7 +413,6 @@
             letter-spacing: 3px;
         }
         
-        /* 戻れない警告テキスト */
         .world-map-warning {
             display: block;
             color: var(--accent-red);
@@ -445,7 +437,6 @@
             z-index: 100; 
         }
 
-        /* SVGコンテナ (画面幅全体) */
         .wave-svg {
             position: absolute;
             top: 0;
@@ -455,19 +446,16 @@
             overflow: visible;
         }
 
-        /* 軌跡（残像）と闇のクリップマスク用グループ */
         .trail-group {
             clip-path: inset(0 0 0 0%);
         }
 
-        /* 波形の共通設定 */
         .wave-trail, .wave-head {
             fill: none;
             stroke-linejoin: round;
             vector-effect: non-scaling-stroke; 
         }
 
-        /* 軌跡（残像） */
         .wave-trail {
             stroke: var(--accent-lime);
             stroke-width: 1.5px;
@@ -477,7 +465,6 @@
             opacity: 0; 
         }
 
-        /* 走る光の玉（先頭） */
         .wave-head {
             stroke: var(--accent-lime);
             stroke-width: 8px; 
@@ -488,14 +475,6 @@
             opacity: 0; 
         }
 
-        /* === 15秒周期の完璧な数学的タイムライン === 
-           [0.0s〜5.0s]  (0%〜33.33%) : 完全待機（闇）
-           [5.0s〜6.5s]  (33.33%〜43.33%) : 光の玉が1.5秒で左から右へダッシュ！
-           [5.3s〜7.0s]  (35.33%〜46.66%) : 闇が1.7秒で左から右へ追いかけ、軌跡を消す！
-           [7.0s〜15.0s] (46.66%〜100%) : 完全待機（闇）
-        */
-        
-        /* 1. 光の玉 (1.5秒で走る) */
         .world-map-dropdown.active .wave-head {
             animation: run-head 15s infinite linear;
         }
@@ -506,7 +485,6 @@
             43.34%, 100% { stroke-dashoffset: -500; opacity: 0; } 
         }
 
-        /* 2. 軌跡の描画 (光と一緒に伸びて、闇に消されるまで維持) */
         .world-map-dropdown.active .wave-trail {
             animation: draw-trail 15s infinite linear;
         }
@@ -518,7 +496,6 @@
             46.67%, 100% { stroke-dashoffset: 0; opacity: 0; }  
         }
 
-        /* 3. 闇の追いかけ (クリップマスクで左から右へ喰い殺す) */
         .world-map-dropdown.active .trail-group {
             animation: wipe-darkness 15s infinite linear;
         }
@@ -699,7 +676,7 @@
         .effect-gura { transform: translateY(6px) rotate(3deg) !important; }
         .effect-blink { animation: blink-anim 0.1s steps(2) infinite !important; }
         @keyframes blink-anim { 0% { opacity: 1; } 100% { opacity: 0.3; } }
-        .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform 0.3s ease-out !important; }
+        .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform transform 0.3s ease-out !important; }
         .effect-kaku { transform: rotate(-8deg) !important; }
 
 
@@ -759,14 +736,14 @@
 
         /* --- 通常のカードスタイル --- */
         .work-card {
-            background: var(--card-bg);
-            border: 2px solid var(--card-border);
+            background: #000000; /* カードの背景を真っ黒に */
+            border: 2px solid var(--accent-cyan); /* ホバー前からシアンのボーダー */
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px var(--shadow-color);
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.1); /* 初期から少しシアンの影 */
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
             cursor: pointer;
             text-decoration: none;
@@ -776,18 +753,12 @@
 
         .work-card:hover,
         .work-card.force-hover {
-            border-color: var(--accent-cyan);
             transform: translateY(-6px);
-            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.2);
-        }
-        
-        [data-theme="light"] .work-card:hover,
-        [data-theme="light"] .work-card.force-hover {
-            box-shadow: 0 15px 30px rgba(0, 204, 204, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.4); /* ホバーで光を強く */
         }
 
         .work-icon {
-            font-size: 4rem;
+            font-size: 6rem; /* アイコンを大きく（1.5倍） */
             margin-bottom: 20px;
             display: inline-block;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -800,16 +771,14 @@
 
         .work-title {
             font-family: var(--font-display);
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 15px;
-            color: var(--accent-yellow);
-            text-shadow: 2px 2px 0px #000;
-        }
-        
-        [data-theme="light"] .work-title {
-            color: var(--accent-pink);
-            text-shadow: none;
-            font-weight: bold;
+            color: #000000 !important; /* 黒文字 */
+            /* 後ろから強く狭く白く発光させる */
+            text-shadow: 
+                0 0 2px #ffffff,
+                0 0 5px #ffffff,
+                0 0 10px #ffffff !important;
         }
 
         .work-desc {
@@ -818,12 +787,13 @@
             opacity: 0.9;
         }
 
+        /* --- フッター --- */
         footer {
-            background: var(--card-bg);
+            background: #000000; /* フッター背景を真っ黒に */
             padding: 80px 0;
             text-align: center;
             margin-top: 50px;
-            border-top: 1px solid var(--card-border);
+            border-top: none; /* ボーダーを消して宇宙と一体化 */
             overflow: hidden; 
         }
 
@@ -944,12 +914,13 @@
 
         /* --- フッター画像 --- */
         .footer-logo-img {
-            max-width: 80%;
-            width: 300px;
+            max-width: 95%; /* 見切れないように最大幅を拡張 */
+            width: 450px; /* 300pxから1.5倍の450pxに巨大化 */
             height: auto;
             margin: 20px auto 0;
             display: block;
-            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+            /* 背景が黒なので、少しだけ白い影を落として浮かせる */
+            filter: drop-shadow(0 2px 5px rgba(255,255,255,0.1));
         }
 
         @keyframes float {
@@ -1393,20 +1364,20 @@
                 </p>
             </a>
 
-            <!-- 2. 🍔 FUNKY BURGER -->
+            <!-- 2. 🍔 BURGER STADIUM -->
             <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card js-page-transition" data-type="burger">
                 <div class="work-icon">🍔</div>
-                <div class="work-title">FUNKY BURGER</div>
+                <div class="work-title">BURGER STADIUM</div>
                 <p class="work-desc">
                     <span class="lang-ja">ホットドッグ屋なのにバーガー？<br>黙って食え。<br>脳が肉汁でバグるぞ。</span>
                     <span class="lang-en">A burger in a hot dog shop?<br>Just eat it.<br>Your brain might glitch in meat juice.</span>
                 </p>
             </a>
             
-            <!-- 3. 🍩 GRAFFITI DONUT -->
+            <!-- 3. 🍩 DONUT GANG -->
             <a href="https://p-one-star.github.io/FUNKY-COMIC/" class="work-card js-page-transition" data-type="donut">
                 <div class="work-icon">🍩</div>
-                <div class="work-title">GRAFFITI DONUT</div>
+                <div class="work-title">DONUT GANG</div>
                 <p class="work-desc">
                     <span class="lang-ja">カラフルなアイシングで描く<br>食用アート。<br>食べるのが惜しい（嘘、食べて）。</span>
                     <span class="lang-en">Edible art drawn with<br>colorful icing.<br>Too good to eat (Just kidding, please eat it).</span>
@@ -1429,6 +1400,7 @@
         </div>
     </section>
 
+    <!-- フッター -->
     <footer>
         <div class="social-scroller">
             <div class="social-track">
@@ -1437,7 +1409,7 @@
                     <!-- Instagram SVG Icon -->
                     <a href="https://www.instagram.com/funky_hotdog?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="social-btn" title="Instagram">
                         <svg class="social-icon" viewBox="0 0 448 512" fill="currentColor">
-                            <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5 9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                            <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
                         </svg>
                     </a>
                     
@@ -1477,7 +1449,7 @@
             </div>
         </div>
         
-        <!-- 追加: フッター画像 -->
+        <!-- フッター画像 -->
         <img src="header.jpg" alt="FUNKY HOTDOG WORKS" class="footer-logo-img">
         
     </footer>
