@@ -9,7 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Mochiy+Pop+One&family=Rubik+Bubbles&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@900&family=Mochiy+Pop+One&family=Rubik+Bubbles&display=swap" rel="stylesheet">
 
     <style>
         /* --- 変数定義 (Dark Mode Default) --- */
@@ -101,15 +101,15 @@
         }
 
         /* =========================================
-           ブラックホール演出専用 CSS（改：猛突進バージョン）
+           ブラックホール演出専用 CSS
            ========================================= */
         .blackhole-effect-layer {
             position: absolute; 
-            z-index: 9999999; /* 最前面 */
+            z-index: 9999999; 
             pointer-events: none;
             opacity: 0;
             visibility: hidden;
-            transform: translate(-50%, -50%); /* 起点を中心に */
+            transform: translate(-50%, -50%); 
         }
         .blackhole-effect-layer.active {
             opacity: 1;
@@ -122,9 +122,9 @@
             left: 50%;
             width: 50px;
             height: 50px;
-            background-color: #000000; /* 中は完全なる闇 */
+            background-color: #000000; 
             border-radius: 50%;
-            border: 2px solid var(--accent-cyan); /* 細いシアンの輪っか */
+            border: 2px solid var(--accent-cyan); 
             box-shadow: 0 0 15px var(--accent-cyan), inset 0 0 15px var(--accent-cyan);
             transform: translate(-50%, -50%) scale(0);
         }
@@ -581,18 +581,13 @@
             margin: 0 auto;
         }
 
-        h2 {
-            font-family: var(--font-display);
-            font-size: 3.5rem;
-            text-align: center;
-            margin-bottom: 60px;
-            color: var(--text-color);
-            text-shadow: 4px 4px 0px var(--accent-pink);
-            letter-spacing: 2px;
+        /* 上下の隙間を減らすための調整 */
+        #about {
+            padding-bottom: 0px; 
         }
         
-        [data-theme="light"] h2 {
-             text-shadow: 3px 3px 0px rgba(255, 0, 204, 0.4);
+        #works {
+            padding-top: 10px; 
         }
 
         .about-text {
@@ -675,7 +670,7 @@
         .effect-gura { transform: translateY(6px) rotate(3deg) !important; }
         .effect-blink { animation: blink-anim 0.1s steps(2) infinite !important; }
         @keyframes blink-anim { 0% { opacity: 1; } 100% { opacity: 0.3; } }
-        .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform 0.3s ease-out !important; }
+        .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform transform 0.3s ease-out !important; }
         .effect-kaku { transform: rotate(-8deg) !important; }
 
 
@@ -686,13 +681,14 @@
             font-weight: bold;
             color: var(--text-color);
             margin-top: 20px;
+            margin-bottom: 0px; 
         }
 
         /* --- 遊べ！もっと・・・ (3D複合回転) --- */
         .play-more-container {
             perspective: 800px; /* 奥行き感 */
             display: inline-block;
-            margin-top: 30px;
+            margin-top: 0px; 
         }
 
         .play-more-outer {
@@ -725,6 +721,99 @@
             100% { transform: rotateZ(-5deg); }
         }
 
+        /* =========================================
+           ★ CRAFTED IN JAPAN セクション仕様 ★
+           ========================================= */
+        .crafted-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 85vw;
+            max-width: 320px;
+            margin: 0 auto 60px; 
+            padding: 10px 0 30px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #ffffff; /* Dark Mode Default */
+        }
+
+        /* ライトモード時のテキストカラー */
+        [data-theme="light"] .crafted-wrapper {
+            color: #0f172a;
+        }
+
+        @media (min-width: 640px) {
+            .crafted-wrapper {
+                max-width: 420px;
+            }
+        }
+
+        .crafted-row {
+            width: 100%;
+            display: flex;
+            justify-content: space-between; /* 均等割付 */
+            line-height: 1;
+        }
+
+        /* C R A F T E D */
+        .crafted-top {
+            font-size: clamp(1.6rem, 5vw, 3rem); /* 少し小さくシャープに */
+        }
+
+        /* I N */
+        .crafted-mid {
+            position: relative;
+            justify-content: center; /* 中央配置 */
+            align-items: center;
+            margin: 15px 0; 
+            font-size: clamp(1.6rem, 5vw, 2.2rem); /* 少し大きく存在感を */
+            letter-spacing: 0.1em;
+        }
+
+        /* ★呼吸する日の丸（少し小さく調整版）★ */
+        .hinomaru {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            /* 10秒かけて変化、10秒かけて戻る（全体で20sのループ） */
+            animation: hinomaru-pulse 20s ease-in-out infinite;
+            
+            /* ベースサイズをこれまでの25%ほど縮小 */
+            width: 48px;
+            height: 48px;
+            background-color: #ff0033;
+            border-radius: 50%;
+            z-index: 0;
+        }
+        @media (min-width: 640px) {
+            .hinomaru {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        /* 日の丸の脈動アニメーション (スケール変化の比率と質感はキープ) */
+        @keyframes hinomaru-pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.7;
+                filter: blur(6px);
+                box-shadow: none;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.15);
+                opacity: 0.9;
+                filter: blur(8px);
+                box-shadow: 0 0 15px rgba(255, 0, 51, 0.4);
+            }
+        }
+
+        /* J A P A N */
+        .crafted-bottom {
+            font-size: clamp(3.5rem, 12vw, 6.5rem); /* ドカンと大きく */
+        }
 
         /* --- Works Grid --- */
         .works-grid {
@@ -769,8 +858,9 @@
         }
 
         .work-title {
-            font-family: var(--font-display);
-            font-size: 2.2rem;
+            font-family: Impact, Charcoal, sans-serif;
+            font-size: 2.5rem; 
+            letter-spacing: 2px; 
             margin-bottom: 15px;
             color: #000000 !important; 
             text-shadow: 
@@ -787,7 +877,7 @@
 
         /* --- Contact Section --- */
         #contact {
-            padding-bottom: 0 !important; /* 下余白を極限まで消す */
+            padding-bottom: 0 !important; 
         }
         
         .contact-email {
@@ -797,7 +887,7 @@
             text-decoration: underline;
             display: block;
             margin-top: 10px;
-            margin-bottom: 15px; /* アイコンを近づけるために下余白を詰める */
+            margin-bottom: 15px; 
         }
 
         /* --- Social Links Scroller --- */
@@ -806,7 +896,7 @@
             overflow-x: auto;
             overflow-y: hidden;
             width: 100%;
-            padding: 10px 0 30px; /* アドレスのすぐ下に配置するために上余白を削る */
+            padding: 10px 0 30px; 
             margin-bottom: 0;
             scrollbar-width: none;
             -ms-overflow-style: none;
@@ -877,7 +967,6 @@
             transform: translateY(-3px);
         }
         
-        /* SNSアイコンのサイズ調整 */
         .social-icon {
             width: 24px;
             height: 24px;
@@ -917,25 +1006,24 @@
 
         /* --- フッター --- */
         footer {
-            background: #000000; /* フッター背景を完全な黒に */
-            padding: 0; /* 余白を完全に無くす */
+            background: #000000; 
+            padding: 0; 
             text-align: center;
             margin-top: 0;
             border-top: none; 
             overflow: hidden; 
             display: flex;
             justify-content: center;
-            align-items: flex-end; /* 画像を下端にピッタリつける */
+            align-items: flex-end; 
         }
 
         /* --- フッター画像 --- */
         .footer-logo-img {
             max-width: 95%; 
-            width: 450px; /* 1.5倍に巨大化 */
+            width: 450px; 
             height: auto;
             margin: 0 auto; 
             display: block;
-            /* 画像が見つからない時のダサい枠とテキストを強制的に消す */
             border: none !important;
             outline: none !important;
             color: transparent !important;
@@ -1369,7 +1457,20 @@
 
     <!-- Works/Menu Section -->
     <section id="works">
-        <h2>OUR WORKS</h2>
+        <!-- ★ CRAFTED IN JAPAN アニメーション（少し小さく調整版） ★ -->
+        <div class="crafted-wrapper">
+            <div class="crafted-row crafted-top">
+                <span>C</span><span>R</span><span>A</span><span>F</span><span>T</span><span>E</span><span>D</span>
+            </div>
+            <div class="crafted-row crafted-mid">
+                <div class="hinomaru"></div>
+                <span style="position: relative; z-index: 1;">IN</span>
+            </div>
+            <div class="crafted-row crafted-bottom">
+                <span>J</span><span>A</span><span>P</span><span>A</span><span>N</span>
+            </div>
+        </div>
+
         <div class="works-grid">
             
             <!-- 1. 🍙 ONIGIRI -->
@@ -1382,20 +1483,20 @@
                 </p>
             </a>
 
-            <!-- 2. 🍔 BURGER STADIUM -->
+            <!-- 2. 🍔 BURGER -->
             <a href="https://p-one-star.github.io/FUNKY-STORAGE/" class="work-card js-page-transition" data-type="burger">
                 <div class="work-icon">🍔</div>
-                <div class="work-title">BURGER STADIUM</div>
+                <div class="work-title">BURGER</div>
                 <p class="work-desc">
                     <span class="lang-ja">ホットドッグ屋なのにバーガー？<br>黙って食え。<br>脳が肉汁でバグるぞ。</span>
                     <span class="lang-en">A burger in a hot dog shop?<br>Just eat it.<br>Your brain might glitch in meat juice.</span>
                 </p>
             </a>
             
-            <!-- 3. 🍩 DONUT GANG -->
+            <!-- 3. 🍩 DONUT -->
             <a href="https://p-one-star.github.io/FUNKY-COMIC/" class="work-card js-page-transition" data-type="donut">
                 <div class="work-icon">🍩</div>
-                <div class="work-title">DONUT GANG</div>
+                <div class="work-title">DONUT</div>
                 <p class="work-desc">
                     <span class="lang-ja">カラフルなアイシングで描く<br>食用アート。<br>食べるのが惜しい（嘘、食べて）。</span>
                     <span class="lang-en">Edible art drawn with<br>colorful icing.<br>Too good to eat (Just kidding, please eat it).</span>
