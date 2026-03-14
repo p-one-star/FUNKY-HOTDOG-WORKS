@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIOT CARNIVAL - EXTRA SPICY v47</title>
+    <title>RIOT CARNIVAL - EXTRA SPICY v48</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@700;900&family=Zen+Old+Mincho:wght@700;900&family=Mochiy+Pop+P+One&family=Outfit:wght@800&family=Reenie+Beanie&display=swap" rel="stylesheet">
     <style>
@@ -167,7 +167,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            text-decoration: none; /* For <a> tag */
+            text-decoration: none;
             animation: onigiri-breathe 40s ease-in-out infinite; 
         }
 
@@ -364,7 +364,6 @@
             <button id="langBtn" class="header-btn" title="Switch Language">🇺🇸</button>
             <button id="themeBtn" class="header-btn" title="Toggle Theme">☀️</button>
             <div class="relative flex items-center">
-                <!-- ONIGIRI LINK BUTTON -->
                 <a href="https://funkyhotdog.com/world" target="_blank" class="onigiri-btn" title="Go to World">🍙</a>
             </div>
         </div>
@@ -396,9 +395,9 @@
                 </div>
             </div>
 
-            <!-- Scroll Container -->
-            <div id="scrollContainer" class="flex gap-6 overflow-x-auto no-scrollbar px-6 pb-12 w-full snap-x snap-mandatory" style="-webkit-overflow-scrolling: touch;">
-                <!-- CARDS -->
+            <!-- Scroll Container (Auto-scroll removed, infinite manual scroll added) -->
+            <div id="scrollContainer" class="flex gap-6 overflow-x-auto no-scrollbar px-6 pb-12 w-full snap-x snap-mandatory scroll-smooth" style="-webkit-overflow-scrolling: touch;">
+                <!-- CARDS (Original Set) -->
                 <div class="flex-shrink-0 w-[280px] md:w-[320px] menu-card snap-center">
                     <div class="spicy-border p-4 h-full relative group">
                         <div class="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-cyan-400"></div>
@@ -498,17 +497,22 @@
     </main>
 
     <script>
-        // Init logic for theme
-        let isDarkMode = true; // Body already has dark-mode class
+        let isDarkMode = true; 
         let isEnglish = false;
 
         const themeBtn = document.getElementById('themeBtn');
         const langBtn = document.getElementById('langBtn');
         const backBtn = document.getElementById('backBtn');
         const shutter = document.getElementById('shutter');
+        const logoBtn = document.getElementById('logoBtn');
         
         const textElements = { jpCopy: document.getElementById('japaneseCopy'), enCopy: document.getElementById('englishCopy') };
         const texts = { jp: { copy: "常識は置いてきた。それがプロってもんだ。", btn: "🇺🇸" }, en: { copy: "Leave common sense behind. That's what pros do.", btn: "🇯🇵" } };
+
+        // Logo click reloads page
+        logoBtn.addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
 
         themeBtn.addEventListener('click', () => {
             isDarkMode = !isDarkMode;
@@ -533,62 +537,24 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('scrollContainer');
-            let scrollInterval;
-            let isUserInteracting = false;
-            let interactionTimeout;
+            
+            // --- MANUAL INFINITE SCROLL LOGIC ---
+            // Store original 5 cards
+            const originalCards = Array.from(container.querySelectorAll('.menu-card'));
+            
+            // Initial buffer load (adds 4 sets so there's plenty to scroll initially)
+            for (let i = 0; i < 4; i++) {
+                originalCards.forEach(card => container.appendChild(card.cloneNode(true)));
+            }
 
-            // --- SEAMLESS INFINITE LOOP LOGIC ---
-            const setupInfiniteScroll = () => {
-                const originalCards = Array.from(container.querySelectorAll('.menu-card'));
-                // Clone multiple sets for smoother buffer
-                originalCards.forEach(card => container.appendChild(card.cloneNode(true))); // Set 2
-                originalCards.forEach(card => container.appendChild(card.cloneNode(true))); // Set 3
-            };
-            setupInfiniteScroll();
-
-            // JS-CONTROLLED SCROLL
-            const startAutoScroll = () => {
-                if (scrollInterval) clearInterval(scrollInterval);
-                scrollInterval = setInterval(() => {
-                    if (isUserInteracting) return;
-                    
-                    const card = container.querySelector('.menu-card');
-                    if (!card) return;
-                    
-                    const itemWidth = card.offsetWidth + 24; 
-                    const currentScroll = container.scrollLeft;
-                    const totalOriginalWidth = itemWidth * 5; 
-                    
-                    // Seamless Warp Logic
-                    if (currentScroll >= totalOriginalWidth) {
-                        // WARP: Instant jump back
-                        container.scrollLeft = currentScroll - totalOriginalWidth;
-                        // Scroll to next
-                        const nextPos = container.scrollLeft + itemWidth;
-                        container.scrollTo({ left: nextPos, behavior: 'smooth' });
-                    } else {
-                        // Normal scroll
-                        const nextPos = currentScroll + itemWidth;
-                        container.scrollTo({ left: nextPos, behavior: 'smooth' });
-                    }
-                    
-                }, 4500); 
-            };
-
-            container.addEventListener('mouseenter', () => { isUserInteracting = true; if(interactionTimeout) clearTimeout(interactionTimeout); });
-            container.addEventListener('mouseleave', () => { isUserInteracting = false; });
-
-            const handleTouchInteraction = () => {
-                isUserInteracting = true;
-                if(interactionTimeout) clearTimeout(interactionTimeout);
-                interactionTimeout = setTimeout(() => { isUserInteracting = false; }, 3000);
-            };
-
-            container.addEventListener('touchstart', handleTouchInteraction, {passive: true});
-            container.addEventListener('mousedown', handleTouchInteraction);
-            container.addEventListener('wheel', handleTouchInteraction, {passive: true});
-
-            startAutoScroll();
+            // Append more cards as user scrolls near the right edge
+            container.addEventListener('scroll', () => {
+                const maxScroll = container.scrollWidth - container.clientWidth;
+                // If within ~1000px of the end, add another set of 5 cards
+                if (container.scrollLeft >= maxScroll - 1000) {
+                    originalCards.forEach(card => container.appendChild(card.cloneNode(true)));
+                }
+            });
 
             window.makePlayful = (elementId) => {
                 const element = document.getElementById(elementId);
