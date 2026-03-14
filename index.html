@@ -578,7 +578,7 @@
             text-align: center;
         }
 
-        /* ★ 中心を揃えるための完璧な階段配置（文字サイズem基準） ★ */
+        /* ★ 中心を揃えるための完璧な階段配置 ★ */
         .phrase-pos-1 { transform: translateX(-2.5em); }
         .phrase-pos-2 { transform: translateX(0); }
         .phrase-pos-3 { transform: translateX(2.5em); }
@@ -589,40 +589,40 @@
             transform-origin: center center;
         }
         
-        /* 全体で15秒のサイクル。初回のみ3秒のディレイ。
-           0.7秒で「ボワン！」と出現、間隔は0.5秒。
-           13.1s(87.33%) までキープし、そこから弾け飛ぶ！
+        /* 全体で30秒のサイクル。初回のみ3秒のディレイ。
+           0.7秒で出現、間隔は0.5秒。
+           そこから25秒間キープし、弾け飛ぶ。
         */
-        .phrase-1 { animation: bowan-in-1 15s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
-        .phrase-2 { animation: bowan-in-2 15s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
-        .phrase-3 { animation: bowan-in-3 15s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
+        .phrase-1 { animation: bowan-in-1 30s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
+        .phrase-2 { animation: bowan-in-2 30s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
+        .phrase-3 { animation: bowan-in-3 30s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
 
         @keyframes bowan-in-1 {
             0%     { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
-            4.66%  { opacity: 1; transform: scale(1); filter: blur(0); }
-            87.33% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; }
-            89.33% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
-            92.66% { opacity: 0; transform: translate(-30px, -30px) scale(3) rotate(-15deg); filter: blur(15px); } 
+            2.33%  { opacity: 1; transform: scale(1); filter: blur(0); } /* 0.7秒で表示 */
+            85.66% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } /* 約25.7秒までキープ */
+            86.66% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
+            88.33% { opacity: 0; transform: translate(-30px, -30px) scale(3) rotate(-15deg); filter: blur(15px); } 
             100%   { opacity: 0; transform: translate(-30px, -30px) scale(3) rotate(-15deg); filter: blur(15px); }
         }
         
         @keyframes bowan-in-2 {
-            0%, 7.99% { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
-            8.00%  { opacity: 1; transform: scale(2); filter: blur(8px); }
-            12.66% { opacity: 1; transform: scale(1); filter: blur(0); } 
-            87.33% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } 
-            89.33% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
-            92.66% { opacity: 0; transform: translate(0, -40px) scale(3.5); filter: blur(15px); } 
+            0%, 3.99% { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+            4.00%  { opacity: 1; transform: scale(2); filter: blur(8px); } /* 1.2秒で待機完了 */
+            6.33%  { opacity: 1; transform: scale(1); filter: blur(0); } /* 1.9秒で表示完了 */
+            85.66% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } 
+            86.66% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
+            88.33% { opacity: 0; transform: translate(0, -40px) scale(3.5); filter: blur(15px); } 
             100%   { opacity: 0; transform: translate(0, -40px) scale(3.5); filter: blur(15px); }
         }
         
         @keyframes bowan-in-3 {
-            0%, 15.99% { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
-            16.00% { opacity: 1; transform: scale(2); filter: blur(8px); }
-            20.66% { opacity: 1; transform: scale(1); filter: blur(0); } 
-            87.33% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } 
-            89.33% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
-            92.66% { opacity: 0; transform: translate(30px, -30px) scale(3) rotate(15deg); filter: blur(15px); } 
+            0%, 7.99% { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+            8.00%  { opacity: 1; transform: scale(2); filter: blur(8px); } /* 2.4秒で待機完了 */
+            10.33% { opacity: 1; transform: scale(1); filter: blur(0); } /* 3.1秒で表示完了 */
+            85.66% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } 
+            86.66% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
+            88.33% { opacity: 0; transform: translate(30px, -30px) scale(3) rotate(15deg); filter: blur(15px); } 
             100%   { opacity: 0; transform: translate(30px, -30px) scale(3) rotate(15deg); filter: blur(15px); }
         }
 
@@ -712,40 +712,42 @@
             transition: transform 0.3s;
         }
 
-        /* --- バグらせる見出し --- */
+        /* --- ★ バグらせる見出し（黒文字＋強い発光） ★ --- */
         .bug-headline {
             font-family: var(--font-ja);
             font-size: clamp(2rem, 5vw, 4rem);
             font-weight: 900;
             line-height: 1.2;
             margin: 30px 0;
-            color: var(--accent-yellow);
-            text-shadow: 4px 4px 0 var(--accent-red);
+            color: #000000 !important; /* 文字は真っ黒 */
+            /* 裏に白の強い発光（縁取りなし） */
+            text-shadow: 0 0 5px #ffffff, 0 0 15px #ffffff, 0 0 20px #ffffff !important; 
             transform: rotate(-2deg);
             display: block;
         }
 
         .glitch-text {
             display: inline-block;
-            color: var(--accent-cyan);
-            text-shadow: 3px 3px 0 var(--accent-pink);
+            color: #000000 !important; /* 文字は真っ黒 */
+            /* 裏にシアンの強い発光（縁取りなし） */
+            text-shadow: 0 0 5px var(--accent-cyan), 0 0 15px var(--accent-cyan), 0 0 20px var(--accent-cyan) !important;
             position: relative;
             transition: transform 0.05s;
         }
 
-        /* --- 各種バグエフェクト --- */
-        .effect-jit { transform: skewX(-20deg) translateX(-3px) !important; text-shadow: -2px 0 red, 2px 0 blue !important; }
+        /* 各種バグエフェクト (色上書きを抑制) */
+        .effect-jit { transform: skewX(-20deg) translateX(-3px) !important; }
         .effect-jijit { animation: jijit-anim 0.2s linear infinite !important; }
         @keyframes jijit-anim {
-            0% { transform: translate(2px, -2px); opacity: 1; }
-            50% { transform: translate(1px, 1px); opacity: 1; }
-            100% { transform: translate(0, 0); opacity: 1; }
+            0% { transform: translate(2px, -2px); }
+            50% { transform: translate(1px, 1px); }
+            100% { transform: translate(0, 0); }
         }
-        .effect-flash { color: #fff !important; text-shadow: 0 0 10px #fff, 0 0 20px #fff !important; filter: brightness(3) !important; }
-        .effect-vanish { opacity: 0.05 !important; }
+        .effect-flash { filter: brightness(2) !important; }
+        .effect-vanish { opacity: 0.1 !important; }
         .effect-gura { transform: translateY(6px) rotate(3deg) !important; }
         .effect-blink { animation: blink-anim 0.1s steps(2) infinite !important; }
-        @keyframes blink-anim { 0% { opacity: 1; } 100% { opacity: 0.3; } }
+        @keyframes blink-anim { 0% { opacity: 1; } 100% { opacity: 0.5; } }
         .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform 0.3s ease-out !important; }
         .effect-kaku { transform: rotate(-8deg) !important; }
 
@@ -760,41 +762,45 @@
             margin-bottom: 0px; 
         }
 
-        /* --- 遊べ！もっと・・・ (3D複合回転) --- */
+        /* --- ★ 遊べ！もっと・・・ (黒文字＋グレー発光＆ゆっくり動く) ★ --- */
         .play-more-container {
-            perspective: 800px; /* 奥行き感 */
+            perspective: 800px; 
             display: inline-block;
             margin-top: 0px; 
         }
 
         .play-more-outer {
             display: inline-block;
-            animation: rotate-y-axis 5s ease-in-out infinite;
+            /* 2.5倍遅くする (5s -> 12.5s) */
+            animation: rotate-y-axis 12.5s ease-in-out infinite;
             transform-origin: center center;
         }
         
         .play-more-inner {
             display: block;
-            animation: rotate-z-axis 7.5s ease-in-out infinite;
+            /* 2.5倍遅くする (7.5s -> 18.75s) */
+            animation: rotate-z-axis 18.75s ease-in-out infinite;
             transform-origin: center center;
             
             font-size: 1.8rem;
-            color: var(--accent-pink);
+            color: #000000 !important; /* 漆黒 */
             font-family: var(--font-ja);
             letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(255, 0, 204, 0.5);
+            /* グレーの怪しい発光 */
+            text-shadow: 0 0 2px #aaaaaa, 0 0 5px #888888, 0 0 12px #666666 !important; 
         }
 
+        /* 動きの幅は半減のまま */
         @keyframes rotate-y-axis {
-            0% { transform: rotateY(15deg); }   
-            50% { transform: rotateY(-15deg); } 
-            100% { transform: rotateY(15deg); }
+            0% { transform: rotateY(7.5deg); }   
+            50% { transform: rotateY(-7.5deg); } 
+            100% { transform: rotateY(7.5deg); }
         }
 
         @keyframes rotate-z-axis {
-            0% { transform: rotateZ(-5deg); }   
-            50% { transform: rotateZ(5deg); }   
-            100% { transform: rotateZ(-5deg); }
+            0% { transform: rotateZ(-2.5deg); }   
+            50% { transform: rotateZ(2.5deg); }   
+            100% { transform: rotateZ(-2.5deg); }
         }
 
         /* =========================================
@@ -1503,6 +1509,7 @@
                     <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
                 </div>
                 
+                <!-- ★ 黒文字＋光のシルエット仕様（日本語） ★ -->
                 <h3 class="bug-headline">
                     ホットドッグが<br>
                     <span class="glitch-text">世界をバグらせる！</span>
@@ -1526,10 +1533,13 @@
                  <div class="logo-stack">
                     <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
                 </div>
+                
+                <!-- ★ 黒文字＋光のシルエット仕様（英語） ★ -->
                 <h3 class="bug-headline">
                     Hot Dogs Will<br>
                     <span class="glitch-text">Bug The World!</span>
                 </h3>
+
                 <p class="funky-message">
                     No Rules. No Calories.<br>
                     Break the Common Sense!<br>
@@ -1831,10 +1841,9 @@
         });
 
         // --- GLITCH EFFECT (Random Timing) ---
-        const glitchText = document.querySelector('.glitch-text');
-
         function triggerGlitch() {
-            if (!glitchText) return;
+            const glitchTexts = document.querySelectorAll('.glitch-text');
+            if (glitchTexts.length === 0) return;
 
             const nextTime = Math.random() * 3000 + 3000;
 
@@ -1842,22 +1851,29 @@
                 const pattern = Math.floor(Math.random() * 10);
                 
                 const reset = () => {
-                    glitchText.className = 'glitch-text'; 
-                    glitchText.style = ''; 
+                    glitchTexts.forEach(el => {
+                        el.className = 'glitch-text'; 
+                        el.style = '';
+                    });
                     triggerGlitch(); 
                 };
 
-                switch(pattern) {
-                    case 0: glitchText.classList.add('effect-jit'); setTimeout(reset, 50); break;
-                    case 1: glitchText.classList.add('effect-jijit'); setTimeout(reset, 200); break;
-                    case 2: glitchText.classList.add('effect-flash'); setTimeout(reset, 100); break;
-                    case 3: glitchText.classList.add('effect-vanish'); setTimeout(reset, 150); break;
-                    case 4: glitchText.classList.add('effect-gura'); setTimeout(reset, 150); break;
-                    case 5: glitchText.classList.add('effect-blink'); setTimeout(reset, 300); break;
-                    case 6: glitchText.classList.add('effect-fuwa'); setTimeout(reset, 400); break;
-                    case 7: glitchText.classList.add('effect-kaku'); setTimeout(reset, 100); break;
-                    default: setTimeout(reset, 100); break;
-                }
+                let delay = 100;
+                glitchTexts.forEach(el => {
+                    switch(pattern) {
+                        case 0: el.classList.add('effect-jit'); delay = 50; break;
+                        case 1: el.classList.add('effect-jijit'); delay = 200; break;
+                        case 2: el.classList.add('effect-flash'); delay = 100; break;
+                        case 3: el.classList.add('effect-vanish'); delay = 150; break;
+                        case 4: el.classList.add('effect-gura'); delay = 150; break;
+                        case 5: el.classList.add('effect-blink'); delay = 300; break;
+                        case 6: el.classList.add('effect-fuwa'); delay = 400; break;
+                        case 7: el.classList.add('effect-kaku'); delay = 100; break;
+                        default: delay = 100; break;
+                    }
+                });
+                
+                setTimeout(reset, delay);
 
             }, nextTime);
         }
