@@ -284,7 +284,7 @@
 
 
         /* =========================================
-           🍙 奇妙なおにぎりアニメーション (心拍バージョン)
+           🍙 おにぎり (日の丸と同期した呼吸アニメーション)
            ========================================= */
         .onigiri-wrapper {
             display: block; 
@@ -295,40 +295,30 @@
             z-index: 102; 
         }
 
-        .onigiri-translate {
-            animation: move-onigiri 10s linear infinite;
-        }
-
-        .onigiri-scale {
-            animation: scale-onigiri 12s ease-in-out infinite;
-        }
-
-        .onigiri-rotate {
-            font-size: 1.8rem;
+        .onigiri-static {
+            font-size: 2.3rem; /* 少し大きく (最小時) */
             line-height: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            animation: rotate-onigiri 8s linear infinite;
+            /* 日の丸(hinomaru-pulse)と完全に同じ周期・イージング */
+            animation: onigiri-pulse 20s ease-in-out infinite; 
+            transform-origin: center center;
         }
 
-        @keyframes move-onigiri {
-            0%   { transform: translate(6px, 0); }     
-            25%  { transform: translate(0, -6px); }    
-            50%  { transform: translate(-6px, 0); }    
-            75%  { transform: translate(0, 6px); }     
-            100% { transform: translate(6px, 0); }     
+        /* 日の丸(1.0 -> 1.15)と拡大比率・タイミングを完全同期 */
+        @keyframes onigiri-pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.85;
+            }
+            50% {
+                transform: scale(1.15); /* 日の丸と同期 */
+                opacity: 1;
+                filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3)); /* 呼吸っぽく少し発光 */
+            }
         }
 
-        @keyframes scale-onigiri {
-            0%, 100% { transform: scale(1); }
-            50%      { transform: scale(1.2); }
-        }
-
-        @keyframes rotate-onigiri {
-            0%   { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
 
         /* =========================================
            🌎 WILD MAP ドロップダウン
@@ -804,17 +794,18 @@
         }
 
         /* =========================================
-           ★ CRAFTED IN JAPAN セクション仕様 ★
+           ★ CRAFTED IN JAPAN セクション仕様 (完全な70%縮小版) ★
            ========================================= */
         .crafted-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 85vw;
-            max-width: 320px;
-            margin: 0 auto 60px; 
-            padding: 10px 0 30px;
+            /* ★コンテナの幅も含めて全て70%に縮小★ */
+            width: 60vw; /* 85vw -> 60vw */
+            max-width: 224px; /* 320px -> 224px */
+            margin: 0 auto 40px; 
+            padding: 7px 0 21px; /* 10px -> 7px, 30px -> 21px */
             font-family: 'Inter', sans-serif;
             font-weight: 900;
             text-transform: uppercase;
@@ -828,7 +819,7 @@
 
         @media (min-width: 640px) {
             .crafted-wrapper {
-                max-width: 420px;
+                max-width: 294px; /* 420px -> 294px */
             }
         }
 
@@ -839,68 +830,68 @@
             line-height: 1;
         }
 
-        /* C R A F T E D */
+        /* C R A F T E D (36px -> 25px) */
         .crafted-top {
-            font-size: 36px;
+            font-size: 25px;
         }
         @media (min-width: 640px) {
-            .crafted-top { font-size: 48px; }
+            .crafted-top { font-size: 34px; } /* 48px -> 34px */
         }
 
-        /* I N */
+        /* I N (20px -> 14px) */
         .crafted-mid {
             position: relative;
             justify-content: center; /* 中央配置 */
             align-items: center;
-            margin: 20px 0; 
-            font-size: 20px;
+            margin: 14px 0; /* 20px -> 14px */
+            font-size: 14px;
             letter-spacing: 0.1em;
         }
         @media (min-width: 640px) {
-            .crafted-mid { font-size: 24px; }
+            .crafted-mid { font-size: 17px; } /* 24px -> 17px */
         }
 
-        /* ★呼吸する日の丸（完全再現版）★ */
+        /* ★呼吸する日の丸（完全再現 70%版）★ */
         .hinomaru {
             position: absolute;
             top: 50%;
             left: 50%;
             animation: hinomaru-pulse 20s ease-in-out infinite;
-            width: 64px;
-            height: 64px;
+            width: 45px; /* 64px -> 45px */
+            height: 45px; /* 64px -> 45px */
             background-color: #ff0033;
             border-radius: 50%;
             z-index: 0;
         }
         @media (min-width: 640px) {
             .hinomaru {
-                width: 80px;
-                height: 80px;
+                width: 56px; /* 80px -> 56px */
+                height: 56px; /* 80px -> 56px */
             }
         }
 
-        /* 日の丸の脈動アニメーション */
+        /* 日の丸の脈動アニメーション (ぼかしや影も70%に調整) */
         @keyframes hinomaru-pulse {
             0%, 100% {
                 transform: translate(-50%, -50%) scale(1);
                 opacity: 0.7;
-                filter: blur(6px);
+                filter: blur(4px); /* 6px -> 4px */
                 box-shadow: none;
             }
             50% {
-                transform: translate(-50%, -50%) scale(1.15);
+                transform: translate(-50%, -50%) scale(1.15); /* 最大スケールは維持 */
                 opacity: 0.9;
-                filter: blur(8px);
-                box-shadow: 0 0 15px rgba(255, 0, 51, 0.4);
+                filter: blur(6px); /* 8px -> 6px */
+                box-shadow: 0 0 10px rgba(255, 0, 51, 0.4); /* 15px -> 10px */
             }
         }
 
-        /* J A P A N */
+        /* J A P A N (60px -> 42px) */
         .crafted-bottom {
-            font-size: 60px;
+            font-size: 42px;
         }
         @media (min-width: 640px) {
-            .crafted-bottom { font-size: 72px; }
+            .crafted-bottom { font-size: 50px; } /* 72px -> 50px */
         }
 
         /* --- Works Grid --- */
@@ -1361,6 +1352,10 @@
                 gap: 6px;
             }
 
+            .onigiri-static {
+                font-size: 1.8rem; /* スマホ時は少し小さめに調整 */
+            }
+
             .hero-img-container {
                 height: 50vh;
             }
@@ -1406,6 +1401,7 @@
 
     <header>
         <div class="header-logo-container" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <!-- 指定された画像（本番環境用） -->
             <img src="icon.PNG" alt="FHW" class="header-logo">
         </div>
         
@@ -1432,13 +1428,9 @@
                 <span class="light-icon">☀️</span>
             </button>
             
-            <!-- 🍙 奇妙な動きをするおにぎり -->
+            <!-- 🍙 おにぎり（日の丸と同期した呼吸アニメーション） -->
             <div class="onigiri-wrapper" id="onigiriToggle">
-                <div class="onigiri-translate">
-                    <div class="onigiri-scale">
-                        <div class="onigiri-rotate">🍙</div>
-                    </div>
-                </div>
+                <div class="onigiri-static">🍙</div>
             </div>
         </div>
     </header>
@@ -1474,6 +1466,7 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-img-container">
+             <!-- 指定された画像（本番環境用） -->
             <img src="image.PNG" alt="FUNKY HOTDOG WORKS Logo" class="hero-img">
         </div>
 
@@ -1506,6 +1499,7 @@
         <div class="about-text">
             <span class="lang-ja">
                 <div class="logo-stack">
+                    <!-- 指定された画像（本番環境用） -->
                     <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
                 </div>
                 
@@ -1531,6 +1525,7 @@
             
             <span class="lang-en">
                  <div class="logo-stack">
+                    <!-- 指定された画像（本番環境用） -->
                     <img src="FHW.PNG" alt="FUNKY HOTDOG WORKS" class="about-logo-img">
                 </div>
                 
@@ -1558,7 +1553,7 @@
 
     <!-- Works/Menu Section -->
     <section id="works">
-        <!-- ★ CRAFTED IN JAPAN アニメーション（仕様書完全準拠） ★ -->
+        <!-- ★ CRAFTED IN JAPAN アニメーション（70%縮小版） ★ -->
         <div class="crafted-wrapper">
             <div class="crafted-row crafted-top">
                 <span>C</span><span>R</span><span>A</span><span>F</span><span>T</span><span>E</span><span>D</span>
@@ -1611,8 +1606,9 @@
     <section id="contact">
         <div class="about-text">
             <p>
-                <span class="lang-ja">コラボレーション、イベント出店、ファンレター、人生相談。<br>なんでも送ってくれ。</span>
-                <span class="lang-en">Collaborations, event pop-ups, fan letters, life counseling.<br>Send us anything.</span>
+                <!-- 指定通り、ファンレターから2行目になるように改行を調整 -->
+                <span class="lang-ja">コラボレーション、イベント出店、<br>ファンレター、人生相談。<br>なんでも送ってくれ。</span>
+                <span class="lang-en">Collaborations, event pop-ups,<br>fan letters, life counseling.<br>Send us anything.</span>
             </p>
             
             <!-- アドレス -->
