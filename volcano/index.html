@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIOT CARNIVAL - EXTRA SPICY v45</title>
+    <title>RIOT CARNIVAL - EXTRA SPICY v47</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@700;900&family=Zen+Old+Mincho:wght@700;900&family=Mochiy+Pop+P+One&family=Outfit:wght@800&family=Reenie+Beanie&display=swap" rel="stylesheet">
     <style>
@@ -125,14 +125,20 @@
         }
         body.dark-mode header { box-shadow: 0 0 10px var(--header-border); }
 
-        .fhw-logo {
-            font-family: 'Anton', sans-serif;
-            font-style: italic;
-            color: var(--festival-yellow);
-            text-shadow: 2px 2px 0px var(--spicy-red), 4px 4px 0px rgba(0,0,0,0.5);
-            font-size: 1.8rem; line-height: 1; pointer-events: none; user-select: none; transition: all 0.5s;
+        .header-icon-img {
+            width: 100px;
+            height: auto;
+            position: relative;
+            top: 10px;
+            transform: rotate(-5deg);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            z-index: 60;
         }
-        body.dark-mode .fhw-logo { text-shadow: 0 0 10px var(--festival-yellow), 0 0 20px var(--spicy-red); }
+        .header-icon-img:hover, 
+        .header-icon-img:active {
+            transform: rotate(-12deg) scale(1.1);
+        }
 
         .header-btn {
             width: 40px; height: 40px;
@@ -146,25 +152,24 @@
         }
         body.dark-mode .header-btn { box-shadow: 0 0 8px var(--header-icon-border); text-shadow: 0 0 5px #fff; }
         .header-btn:active { transform: scale(0.95); }
-        .header-btn-icon-only {
-            border: none; background: transparent; font-size: 2rem;
-            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2)); box-shadow: none !important;
-        }
 
-        /* --- SHORTCUT MENU --- */
-        .shortcut-dropdown {
-            position: absolute; top: 100%; right: 0; margin-top: 10px;
-            background: var(--card-bg); border: 2px solid var(--spicy-red);
-            padding: 10px; display: flex; flex-direction: column; gap: 10px;
-            box-shadow: 4px 4px 0px var(--spicy-red);
-            transform-origin: top right; transform: scale(0); opacity: 0;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
-            z-index: 100;
+        @keyframes onigiri-breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
-        body.dark-mode .shortcut-dropdown { box-shadow: 0 0 15px var(--spicy-red); }
-        .shortcut-dropdown.open { transform: scale(1); opacity: 1; }
-        .shortcut-item { font-size: 1.8rem; cursor: pointer; transition: transform 0.2s; text-align: center; }
-        .shortcut-item:hover { transform: scale(1.2) rotate(10deg); }
+        .onigiri-btn {
+            border: none; 
+            background: transparent; 
+            font-size: 2.2rem; 
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.2)); 
+            box-shadow: none !important;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none; /* For <a> tag */
+            animation: onigiri-breathe 40s ease-in-out infinite; 
+        }
 
         /* --- ANIMATIONS --- */
         @keyframes shiver {
@@ -316,6 +321,7 @@
             color: var(--text-color);
             opacity: 0.7;
             transition: all 0.3s;
+            display: inline-block;
         }
         .footer-icon:hover {
             opacity: 1;
@@ -323,7 +329,6 @@
             color: var(--spicy-red);
         }
         
-        /* SCROLL OR DIE TEXT STYLE - MAXIMIZED */
         .scroll-die-text {
             color: var(--spicy-red);
             text-shadow: 3px 3px 0 #000;
@@ -335,7 +340,7 @@
         }
     </style>
 </head>
-<body class="pb-20">
+<body class="pb-20 dark-mode">
 
     <div class="bg-real-concrete"></div>
     <div class="heat-haze"></div>
@@ -351,19 +356,16 @@
 
     <!-- HEADER -->
     <header class="fixed top-0 left-0 w-full p-4 md:p-6 flex justify-between items-center z-50">
-        <div class="fhw-logo">FHW</div>
+        <div>
+            <img src="icon.PNG" alt="FHW" class="header-icon-img" id="logoBtn">
+        </div>
+        
         <div class="flex gap-3 items-center">
             <button id="langBtn" class="header-btn" title="Switch Language">🇺🇸</button>
-            <button id="themeBtn" class="header-btn" title="Toggle Theme">🌙</button>
-            <div class="relative">
-                <button id="menuBtn" class="header-btn header-btn-icon-only transform hover:rotate-12 transition-transform" title="Menu Shortcuts">🌶</button>
-                <div id="shortcutMenu" class="shortcut-dropdown">
-                    <div class="shortcut-item" onclick="scrollToCard(0)">🍔</div>
-                    <div class="shortcut-item" onclick="scrollToCard(1)">🍩</div>
-                    <div class="shortcut-item" onclick="scrollToCard(2)">🥞</div>
-                    <div class="shortcut-item" onclick="scrollToCard(3)">🌮</div>
-                    <div class="shortcut-item" onclick="scrollToCard(4)">🐙</div>
-                </div>
+            <button id="themeBtn" class="header-btn" title="Toggle Theme">☀️</button>
+            <div class="relative flex items-center">
+                <!-- ONIGIRI LINK BUTTON -->
+                <a href="https://funkyhotdog.com/world" target="_blank" class="onigiri-btn" title="Go to World">🍙</a>
             </div>
         </div>
     </header>
@@ -435,7 +437,6 @@
                         <div class="flex justify-between items-end mt-4 border-t-4 border-current pt-2"><span class="font-bold text-xs bg-red-600 text-white px-1">PRICE</span><span class="font-anton text-3xl text-red-600 transform -rotate-2">¥ASK</span></div>
                     </div>
                 </div>
-                <!-- CARD 5: TAKO (UNIFIED) -->
                 <div class="flex-shrink-0 w-[280px] md:w-[320px] menu-card snap-center">
                     <div class="spicy-border warning-card p-4 h-full relative group">
                         <div class="absolute top-0 left-0 w-full caution-tape z-20"></div>
@@ -448,7 +449,6 @@
                 </div>
             </div>
             
-            <!-- SCROLL OR DIE MESSAGE (MAXIMIZED & CLOSER) -->
             <div class="text-center mt-2 mb-0 pointer-events-none select-none relative z-10 -mt-10 w-full overflow-hidden">
                 <p class="scroll-die-text font-anton leading-none tracking-widest animate-slot-spin transform skew-x-[-12deg] w-full" style="font-size: 13vw; white-space: nowrap;">
                     SCROLL OR DIE
@@ -456,7 +456,7 @@
             </div>
         </section>
 
-        <!-- FOOTER (REDUCED MARGIN) -->
+        <!-- FOOTER -->
         <footer class="mt-10 text-center pb-20 relative overflow-hidden">
             <div class="cyan-line w-full mb-12"></div>
             <div class="relative w-full">
@@ -466,10 +466,27 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                         <span>BACK TO FHW</span>
                     </button>
-                    <div class="flex gap-8">
-                        <a href="#" class="footer-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a>
-                        <a href="#" class="footer-icon"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg></a>
+                    
+                    <!-- SNS ICONS -->
+                    <div class="flex gap-6 md:gap-8 items-center">
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com/fhw_funky_hotdog_works?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" class="footer-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+                        </a>
+                        <!-- X (Twitter) -->
+                        <a href="https://x.com/fhwofficia?s=21&t=feVsQoFo79c8YtZLcf7rtw" target="_blank" class="footer-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <!-- Pinterest -->
+                        <a href="https://pin.it/RPOoOORJs" target="_blank" class="footer-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.182 0 7.433 2.981 7.433 6.953 0 4.156-2.623 7.502-6.273 7.502-1.221 0-2.372-.635-2.766-1.385l-.753 2.875c-.272 1.042-1.01 2.342-1.5 3.136 1.12.343 2.308.528 3.535.528 6.621 0 11.988-5.368 11.988-11.987C24.005 5.367 18.638 0 12.017 0z"/></svg>
+                        </a>
+                        <!-- YouTube (No Target, Does nothing) -->
+                        <a href="javascript:void(0)" class="footer-icon cursor-not-allowed opacity-30" title="準備中">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+                        </a>
                     </div>
+                    
                     <div class="bg-black text-white px-4 py-1 transform -rotate-1 mt-4 border border-gray-700">
                         <p class="font-bebas tracking-widest text-lg">RIOT CARNIVAL © 202X</p>
                     </div>
@@ -481,14 +498,12 @@
     </main>
 
     <script>
-        let isDarkMode = false;
+        // Init logic for theme
+        let isDarkMode = true; // Body already has dark-mode class
         let isEnglish = false;
-        let isMenuOpen = false;
 
         const themeBtn = document.getElementById('themeBtn');
         const langBtn = document.getElementById('langBtn');
-        const menuBtn = document.getElementById('menuBtn');
-        const shortcutMenu = document.getElementById('shortcutMenu');
         const backBtn = document.getElementById('backBtn');
         const shutter = document.getElementById('shutter');
         
@@ -509,10 +524,6 @@
             makePlayful('japaneseCopy');
         });
 
-        menuBtn.addEventListener('click', (e) => { e.stopPropagation(); isMenuOpen = !isMenuOpen; isMenuOpen ? shortcutMenu.classList.add('open') : shortcutMenu.classList.remove('open'); });
-        document.addEventListener('click', () => { if(isMenuOpen) { isMenuOpen = false; shortcutMenu.classList.remove('open'); } });
-        window.scrollToCard = (index) => { const container = document.getElementById('scrollContainer'); const cards = document.querySelectorAll('.menu-card'); if(cards[index]) { const cardWidth = cards[index].offsetWidth + 24; container.scrollTo({ left: cardWidth * index, behavior: 'smooth' }); } };
-
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
             shutter.classList.remove('-translate-y-full');
@@ -526,13 +537,16 @@
             let isUserInteracting = false;
             let interactionTimeout;
 
+            // --- SEAMLESS INFINITE LOOP LOGIC ---
             const setupInfiniteScroll = () => {
                 const originalCards = Array.from(container.querySelectorAll('.menu-card'));
-                originalCards.forEach(card => container.appendChild(card.cloneNode(true)));
-                originalCards.forEach(card => container.appendChild(card.cloneNode(true)));
+                // Clone multiple sets for smoother buffer
+                originalCards.forEach(card => container.appendChild(card.cloneNode(true))); // Set 2
+                originalCards.forEach(card => container.appendChild(card.cloneNode(true))); // Set 3
             };
             setupInfiniteScroll();
 
+            // JS-CONTROLLED SCROLL
             const startAutoScroll = () => {
                 if (scrollInterval) clearInterval(scrollInterval);
                 scrollInterval = setInterval(() => {
@@ -545,15 +559,15 @@
                     const currentScroll = container.scrollLeft;
                     const totalOriginalWidth = itemWidth * 5; 
                     
+                    // Seamless Warp Logic
                     if (currentScroll >= totalOriginalWidth) {
-                        container.style.scrollBehavior = 'auto'; 
+                        // WARP: Instant jump back
                         container.scrollLeft = currentScroll - totalOriginalWidth;
-                        container.offsetHeight; 
-                        container.style.scrollBehavior = 'smooth'; 
-                        
+                        // Scroll to next
                         const nextPos = container.scrollLeft + itemWidth;
                         container.scrollTo({ left: nextPos, behavior: 'smooth' });
                     } else {
+                        // Normal scroll
                         const nextPos = currentScroll + itemWidth;
                         container.scrollTo({ left: nextPos, behavior: 'smooth' });
                     }
