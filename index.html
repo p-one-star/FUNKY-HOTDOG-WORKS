@@ -544,7 +544,7 @@
         }
 
         .hero-tagline {
-            font-family: var(--font-ja);
+            font-family: var(--font-ja); 
             font-size: clamp(1rem, 4vw, 1.5rem);
             margin-bottom: 20px;
             font-weight: bold;
@@ -554,10 +554,49 @@
             z-index: 10;
         }
         
-        html[lang="en"] .hero-tagline {
-            font-family: var(--font-display); 
-            letter-spacing: 1px;
-            font-weight: normal;
+        /* ★ ボワン！と現れて弾け飛ぶ文字のアニメーション仕様 ★ */
+        .anim-phrase {
+            display: inline-block;
+            opacity: 0; /* 最初は完全に見えない */
+            margin: 0 2px;
+            transform-origin: center center;
+        }
+        
+        /* 全体で15秒のサイクル。初回のみ3秒のディレイで開始し、その後は無限ループ */
+        .phrase-1 { animation: bowan-in-1 15s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
+        .phrase-2 { animation: bowan-in-2 15s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
+        .phrase-3 { animation: bowan-in-3 15s linear infinite; animation-delay: 3s; animation-fill-mode: backwards; }
+
+        /*
+           0.5秒 = 3.33%
+           11.5秒までキープ（全体の76.66%）
+           その後、一瞬縮んで（タメ）、一気に弾け飛ぶ（爆発）
+        */
+        @keyframes bowan-in-1 {
+            0% { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+            3.33% { opacity: 1; transform: scale(1); filter: blur(0); } /* 0.5秒で表示 */
+            76.66% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } /* 約11.5秒までキープ */
+            78.66% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } /* グッと縮んでタメ */
+            82% { opacity: 0; transform: translate(-30px, -30px) scale(3) rotate(-15deg); filter: blur(15px); } /* ドカン！と左上へ弾け飛ぶ */
+            100% { opacity: 0; transform: translate(-30px, -30px) scale(3) rotate(-15deg); filter: blur(15px); }
+        }
+        
+        @keyframes bowan-in-2 {
+            0%, 3.32% { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+            6.66% { opacity: 1; transform: scale(1); filter: blur(0); } /* 1.0秒で表示 */
+            76.66% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } 
+            78.66% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
+            82% { opacity: 0; transform: translate(0, -40px) scale(3.5); filter: blur(15px); } /* 真上へ大きく弾け飛ぶ */
+            100% { opacity: 0; transform: translate(0, -40px) scale(3.5); filter: blur(15px); }
+        }
+        
+        @keyframes bowan-in-3 {
+            0%, 6.65% { opacity: 0; transform: scale(2); filter: blur(8px); animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1); }
+            10% { opacity: 1; transform: scale(1); filter: blur(0); } /* 1.5秒で表示 */
+            76.66% { opacity: 1; transform: scale(1); filter: blur(0); animation-timing-function: ease-in-out; } 
+            78.66% { opacity: 1; transform: scale(0.9); filter: blur(0); animation-timing-function: ease-in; } 
+            82% { opacity: 0; transform: translate(30px, -30px) scale(3) rotate(15deg); filter: blur(15px); } /* 右上へ弾け飛ぶ */
+            100% { opacity: 0; transform: translate(30px, -30px) scale(3) rotate(15deg); filter: blur(15px); }
         }
 
         .scroll-down {
@@ -581,8 +620,8 @@
             margin: 0 auto;
         }
 
-        /* 上下の隙間を減らすための調整 */
         #about {
+            padding-top: 50px; 
             padding-bottom: 0px; 
         }
         
@@ -608,7 +647,7 @@
             display: block;
             text-align: center;
             width: 100%;
-            margin: 20px auto 50px;
+            margin: 0px auto 50px;
             perspective: 1000px;
         }
 
@@ -670,7 +709,7 @@
         .effect-gura { transform: translateY(6px) rotate(3deg) !important; }
         .effect-blink { animation: blink-anim 0.1s steps(2) infinite !important; }
         @keyframes blink-anim { 0% { opacity: 1; } 100% { opacity: 0.3; } }
-        .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform transform 0.3s ease-out !important; }
+        .effect-fuwa { transform: translateY(-8px) scale(1.05) !important; transition: transform 0.3s ease-out !important; }
         .effect-kaku { transform: rotate(-8deg) !important; }
 
 
@@ -759,7 +798,10 @@
 
         /* C R A F T E D */
         .crafted-top {
-            font-size: clamp(1.6rem, 5vw, 3rem); /* 少し小さくシャープに */
+            font-size: 36px;
+        }
+        @media (min-width: 640px) {
+            .crafted-top { font-size: 48px; }
         }
 
         /* I N */
@@ -767,34 +809,34 @@
             position: relative;
             justify-content: center; /* 中央配置 */
             align-items: center;
-            margin: 15px 0; 
-            font-size: clamp(1.6rem, 5vw, 2.2rem); /* 少し大きく存在感を */
+            margin: 20px 0; 
+            font-size: 20px;
             letter-spacing: 0.1em;
         }
+        @media (min-width: 640px) {
+            .crafted-mid { font-size: 24px; }
+        }
 
-        /* ★呼吸する日の丸（少し小さく調整版）★ */
+        /* ★呼吸する日の丸（完全再現版）★ */
         .hinomaru {
             position: absolute;
             top: 50%;
             left: 50%;
-            /* 10秒かけて変化、10秒かけて戻る（全体で20sのループ） */
             animation: hinomaru-pulse 20s ease-in-out infinite;
-            
-            /* ベースサイズをこれまでの25%ほど縮小 */
-            width: 48px;
-            height: 48px;
+            width: 64px;
+            height: 64px;
             background-color: #ff0033;
             border-radius: 50%;
             z-index: 0;
         }
         @media (min-width: 640px) {
             .hinomaru {
-                width: 60px;
-                height: 60px;
+                width: 80px;
+                height: 80px;
             }
         }
 
-        /* 日の丸の脈動アニメーション (スケール変化の比率と質感はキープ) */
+        /* 日の丸の脈動アニメーション */
         @keyframes hinomaru-pulse {
             0%, 100% {
                 transform: translate(-50%, -50%) scale(1);
@@ -812,7 +854,10 @@
 
         /* J A P A N */
         .crafted-bottom {
-            font-size: clamp(3.5rem, 12vw, 6.5rem); /* ドカンと大きく */
+            font-size: 60px;
+        }
+        @media (min-width: 640px) {
+            .crafted-bottom { font-size: 72px; }
         }
 
         /* --- Works Grid --- */
@@ -858,7 +903,7 @@
         }
 
         .work-title {
-            font-family: Impact, Charcoal, sans-serif;
+            font-family: Impact, Charcoal, sans-serif; 
             font-size: 2.5rem; 
             letter-spacing: 2px; 
             margin-bottom: 15px;
@@ -1391,12 +1436,16 @@
 
         <p class="hero-tagline">
             <span class="lang-ja">
-                Too fast. Too stupid. Too Funky.<br>
-                最高にクレイジーなホットドッグを世界へ。
+                <span class="anim-phrase phrase-1">Too fast.</span>
+                <span class="anim-phrase phrase-2">Too stupid.</span>
+                <span class="anim-phrase phrase-3">Too Funky.</span>
+                <span style="display: block; margin-top: 0.5em;">最高にクレイジーなホットドッグを世界へ。</span>
             </span>
             <span class="lang-en">
-                Too fast. Too stupid. Too Funky.<br>
-                Bringing the craziest, funkiest hot dogs to the world.
+                <span class="anim-phrase phrase-1">Too fast.</span>
+                <span class="anim-phrase phrase-2">Too stupid.</span>
+                <span class="anim-phrase phrase-3">Too Funky.</span>
+                <span style="display: block; margin-top: 0.5em;">Bringing the craziest, funkiest<br>hot dogs to the world.</span>
             </span>
         </p>
 
@@ -1405,7 +1454,7 @@
 
     <!-- About Section -->
     <section id="about">
-        <h2>WHO WE ARE</h2>
+        <!-- 邪魔だった「WHO WE ARE」を完全削除！ -->
         <div class="about-text">
             <span class="lang-ja">
                 <div class="logo-stack">
@@ -1457,7 +1506,7 @@
 
     <!-- Works/Menu Section -->
     <section id="works">
-        <!-- ★ CRAFTED IN JAPAN アニメーション（少し小さく調整版） ★ -->
+        <!-- ★ CRAFTED IN JAPAN アニメーション（仕様書完全準拠） ★ -->
         <div class="crafted-wrapper">
             <div class="crafted-row crafted-top">
                 <span>C</span><span>R</span><span>A</span><span>F</span><span>T</span><span>E</span><span>D</span>
@@ -1508,7 +1557,6 @@
 
     <!-- Contact Section -->
     <section id="contact">
-        <h2>CONTACT</h2>
         <div class="about-text">
             <p>
                 <span class="lang-ja">コラボレーション、イベント出店、ファンレター、人生相談。<br>なんでも送ってくれ。</span>
