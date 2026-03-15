@@ -31,6 +31,8 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* 今回は「はみ出し」を活かすため、overflow-x: hidden は維持しつつ、
+           要素自体が枠外に飛び出すデザインとしています。 */
         body {
             background-color: var(--bg-base);
             color: var(--text-main);
@@ -52,6 +54,7 @@
             cursor: pointer;
             font-family: inherit;
             color: inherit;
+            outline: none;
         }
 
         /* Layout Utility */
@@ -404,6 +407,7 @@
             background: rgba(255,255,255,0.03); 
         }
 
+        /* 左側の画像を「はみ出し仕様」の超巨大サイズに！ */
         .img-left {
             position: absolute;
             top: 50%;
@@ -417,6 +421,7 @@
             pointer-events: none; 
         }
 
+        /* 右側の画像：サイズ190%のまま、少し左にズラして見切れすぎないように調整 */
         .img-right {
             position: absolute;
             top: 50%;
@@ -433,8 +438,9 @@
         /* --- 照準マーク（スナイパースコープ） --- */
         .target-mark {
             position: absolute;
-            top: 35%; 
-            left: 30%; 
+            /* ★名古屋城の位置調整：もっと左側に移動 */
+            top: 40%; 
+            left: 18%; 
             width: 18px; 
             height: 18px; 
             border: 1px solid var(--neon-red); 
@@ -489,7 +495,7 @@
             50% { opacity: 1; transform: translate(-50%, -50%) scale(1.02); }
         }
 
-        /* ★ ロケーティングテキスト */
+        /* ロケーティングテキスト */
         .target-mark .locating-text {
             position: absolute;
             top: -22px;
@@ -518,7 +524,8 @@
         /* --- マップ用のスタイリッシュなテキスト設定 --- */
         .map-top-text {
             position: absolute;
-            top: -20px; 
+            /* ★座標を少し右下に（topを下げてleftを調整） */
+            top: -25px; 
             left: 55%;  
             transform: translateX(-50%);
             text-align: center; 
@@ -527,17 +534,18 @@
             pointer-events: none;
         }
 
+        /* ★座標の文字を全体的に大きく */
         .map-top-text .coords {
             font-family: 'Impact', sans-serif;
             color: #7a7a85; 
-            font-size: 0.75rem; 
+            font-size: 0.95rem; /* 大きくしました */
             line-height: 1.1;
             letter-spacing: 1px;
             text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0,0,0,0.8);
         }
 
         .map-top-text .divider {
-            width: 50px; 
+            width: 70px; /* 文字に合わせて線も伸ばす */
             height: 2px;
             background-color: #7a7a85;
             margin: 4px auto; 
@@ -547,11 +555,12 @@
         .map-top-text .local-roots {
             font-family: 'Impact', sans-serif;
             color: #7a7a85;
-            font-size: 0.6rem; 
+            font-size: 0.75rem; /* 大きくしました */
             letter-spacing: 2px;
             text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
         }
 
+        /* 下部の AICHI.JAPAN テキスト */
         .map-bottom-text {
             position: absolute;
             bottom: -70px; 
@@ -662,36 +671,57 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-transform: uppercase;
+            outline: none; /* スマホでの青枠を消す */
         }
 
         .action-btn.btn-go {
             border-color: var(--neon-cyan);
             color: var(--neon-cyan);
         }
-        .action-btn.btn-go:hover, .action-btn.btn-go:active {
-            background: var(--neon-cyan);
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
-        }
-
         .action-btn.btn-tomato {
             border-color: var(--neon-red);
             color: var(--neon-red);
         }
-        .action-btn.btn-tomato:hover, .action-btn.btn-tomato:active {
-            background: var(--neon-red);
-            color: #000;
-            box-shadow: 0 0 20px rgba(255, 0, 34, 0.5);
-        }
-
         .action-btn.btn-buck {
             border-color: #666;
             color: #888;
         }
-        .action-btn.btn-buck:hover, .action-btn.btn-buck:active {
-            background: #333;
-            color: #fff;
-            border-color: #fff;
+
+        /* ★PC用（マウス操作時）のホバーエフェクト */
+        @media (hover: hover) {
+            .action-btn.btn-go:hover {
+                background: var(--neon-cyan);
+                color: #000;
+                box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            }
+            .action-btn.btn-tomato:hover {
+                background: var(--neon-red);
+                color: #000;
+                box-shadow: 0 0 20px rgba(255, 0, 34, 0.5);
+            }
+            .action-btn.btn-buck:hover {
+                background: #333;
+                color: #fff;
+                border-color: #fff;
+            }
+        }
+
+        /* ★スマホ用（タップした瞬間だけ）のエフェクト */
+        /* ※これで、モーダルを開いた瞬間にTOMATOが発光したままになるバグ（Sticky Hover）を防ぎます */
+        .action-btn.btn-go:active {
+            background: var(--neon-cyan) !important;
+            color: #000 !important;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5) !important;
+        }
+        .action-btn.btn-tomato:active {
+            background: var(--neon-red) !important;
+            color: #000 !important;
+            box-shadow: 0 0 20px rgba(255, 0, 34, 0.5) !important;
+        }
+        .action-btn.btn-buck:active {
+            background: #333 !important;
+            color: #fff !important;
+            border-color: #fff !important;
         }
 
         /* TOMATOボタンを押した時のメッセージ用スタイル */
@@ -1222,7 +1252,6 @@
                 <!-- 照準マーク -->
                 <div class="target-mark">
                     <div class="dot"></div>
-                    <!-- ★追加：LOCATINGテキスト -->
                     <div class="locating-text" id="locatingText">LOCATING...</div>
                 </div>
 
@@ -1293,11 +1322,8 @@
             <h2 class="action-modal-title">WARP TO AICHI?</h2>
             <p class="action-modal-desc">Maybe the real world opens.</p>
             <div class="action-modal-buttons">
-                <!-- GOボタン：Google Earthで座標を開く -->
                 <button class="action-btn btn-go" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">GO</button>
-                <!-- TOMATOボタン演出 -->
-                <button class="action-btn btn-tomato" onclick="jumpToTomato()">TOMATO</button>
-                <!-- BUCKボタン：ポップアップを閉じる -->
+                <button class="action-btn btn-tomato" onclick="jumpToTomato(this)">TOMATO</button>
                 <button class="action-btn btn-buck" onclick="closeActionModal('aichiModal')">BUCK</button>
             </div>
         </div>
@@ -1338,7 +1364,6 @@
             <h2 class="prev-overlay-title lang-en">BACK FOR<br>MORE<span class="question-mark">?</span></h2>
             <h2 class="prev-overlay-title lang-jp">前のヤツ<br>見るか<span class="question-mark">?</span></h2>
             
-            <!-- PREVボタンを押すと★02のページへ遷移 -->
             <button class="prev-overlay-btn" onclick="window.location.href='https://p-one-star.github.io/FUNKY-02/'">
                 <span class="lang-en">PREV FUNKY ★02</span>
                 <span class="lang-jp">PREV FUNKY ★02</span>
@@ -1350,18 +1375,15 @@
     </div>
 
     <script>
-        // SNSシェア用設定
         const SHARE_URL = "https://p-one-star.github.io/FUNKY-03/"; 
         const MEDIA_URL = "https://p-one-star.github.io/FUNKY-03/AICHI.jpeg"; 
 
-        // Language Toggle Function
         function toggleLang() {
             const currentLang = document.body.getAttribute('data-lang');
             const newLang = currentLang === 'en' ? 'jp' : 'en';
             document.body.setAttribute('data-lang', newLang);
         }
 
-        // --- Action Modal 制御 ---
         function openActionModal(id) {
             document.getElementById(id).classList.add('active');
             document.body.style.overflow = 'hidden'; 
@@ -1372,7 +1394,6 @@
             document.body.style.overflow = ''; 
         }
 
-        // 背景クリックでモーダルを閉じる処理
         document.querySelectorAll('.action-modal').forEach(modal => {
             modal.addEventListener('click', function(e) {
                 if(e.target === this) {
@@ -1382,30 +1403,27 @@
             });
         });
 
-        // --- ★修正：愛知県クリック時の「控えめなロケーティング演出」 ---
         let isLocating = false;
 
         function openAichiModalWithLocating() {
-            if (isLocating) return; // 実行中の連打防止
+            if (isLocating) return; 
             isLocating = true;
             
             const target = document.querySelector('.target-mark');
             const locatingText = document.getElementById('locatingText');
             
-            // LOCATING... テキストの点滅開始
             locatingText.classList.add('active'); 
             
-            // 動きを少しゆっくり（0.3s）に
             target.style.transition = 'top 0.3s ease, left 0.3s ease';
-            target.style.animation = 'targetPulse 0.15s infinite alternate'; // 探知中は少し激しく点滅
+            target.style.animation = 'targetPulse 0.15s infinite alternate'; 
             
             let count = 0;
-            const maxJumps = 6; // ジャンプ回数を減らして短く
-            const baseTop = 35; // 元のTop位置
-            const baseLeft = 30; // 元のLeft位置
+            const maxJumps = 6; 
+            // ★名古屋城の位置（ベース位置をさらに左に変更）
+            const baseTop = 42; 
+            const baseLeft = 18; 
             
             const interval = setInterval(() => {
-                // 移動範囲を元の位置の周辺（±10%）に限定し、ジリジリ探る感じに
                 const randomTop = baseTop + (Math.random() * 20 - 10); 
                 const randomLeft = baseLeft + (Math.random() * 20 - 10);
                 target.style.top = randomTop + '%';
@@ -1414,50 +1432,44 @@
                 count++;
                 if (count >= maxJumps) {
                     clearInterval(interval);
-                    // 最後に名古屋城の位置(元の位置)に戻す
                     setTimeout(() => {
                         target.style.top = baseTop + '%';
                         target.style.left = baseLeft + '%';
                         
-                        // ロックオン！の演出（大きく光る）
                         target.style.animation = 'none'; 
                         target.style.boxShadow = '0 0 20px var(--neon-red), inset 0 0 10px var(--neon-red)';
                         target.style.transform = 'translate(-50%, -50%) scale(1.5)';
                         target.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
                         
-                        // テキストを LOCKED に変更して表示
                         locatingText.classList.remove('active');
                         locatingText.innerText = 'LOCKED';
                         locatingText.style.opacity = '1';
                         
-                        // ロックオンの余韻を残してモーダルを開く
                         setTimeout(() => {
                             openActionModal('aichiModal');
                             isLocating = false;
                             
-                            // モーダルが開いた裏で、エフェクトを元の「渋い拍動」状態にこっそり戻しておく
                             setTimeout(() => {
                                 target.style.transform = 'translate(-50%, -50%) scale(1)';
                                 target.style.boxShadow = '0 0 5px var(--neon-red), inset 0 0 5px var(--neon-red)';
                                 target.style.animation = 'targetPulse 4s infinite ease-in-out';
                                 target.style.transition = '';
                                 locatingText.style.opacity = '0';
-                                locatingText.innerText = 'LOCATING...'; // 次回のためにテキストも戻す
+                                locatingText.innerText = 'LOCATING...'; 
                             }, 300);
                         }, 800); 
                     }, 300);
                 }
-            }, 300); // 0.3秒間隔でじっくり移動
+            }, 300); 
         }
 
-        // --- TOMATOボタンクリック時の「サイバー演出＆ジャンプ」 ---
-        function jumpToTomato() {
-            const modalContent = document.querySelector('#aichiModal .action-modal-content');
+        function jumpToTomato(btn) {
+            // ボタンのフォーカスを外して、スマホでの発光しっぱなしを防ぐ
+            btn.blur();
             
-            // 現在のコンテンツを保存しておく（戻ってきた時用）
+            const modalContent = document.querySelector('#aichiModal .action-modal-content');
             const originalHTML = modalContent.innerHTML;
             
-            // 警告メッセージに書き換え
             modalContent.innerHTML = `
                 <div class="tomato-message">
                     <div class="t-welcome">🍅 WELCOME 🍅</div>
@@ -1466,15 +1478,12 @@
                 </div>
             `;
             
-            // モーダルの枠色もライムグリーンに変更してヤバさを演出
             modalContent.style.borderColor = 'var(--neon-lime)';
             modalContent.style.boxShadow = '0 0 30px rgba(204, 255, 0, 0.2), inset 0 0 20px rgba(204, 255, 0, 0.1)';
             
-            // 2.5秒後に指定URLへジャンプ
             setTimeout(() => {
                 window.location.href = 'https://funkyhotdog.com/wild-tomato';
                 
-                // ユーザーがブラウザバックで戻ってきた時のためにリセット処理を入れておく
                 setTimeout(() => {
                     modalContent.innerHTML = originalHTML;
                     modalContent.style.borderColor = '';
@@ -1484,7 +1493,6 @@
             }, 2500);
         }
 
-        // --- Swipe Gesture Handling (Global) ---
         let pageTouchStartX = 0;
         let pageTouchStartY = 0;
         
@@ -1524,7 +1532,6 @@
             }
         });
 
-        // --- Next & Prev Comic Overlay Functions ---
         function openNextUI() { document.getElementById('nextOverlay').classList.add('active'); }
         function closeNextUI() { document.getElementById('nextOverlay').classList.remove('active'); }
         function openPrevUI() { document.getElementById('prevOverlay').classList.add('active'); }
@@ -1546,7 +1553,6 @@
             }, 2500);
         }
 
-        // --- Modal & Double Tap Zoom Handling ---
         const modalImg = document.querySelector('#comicModal img');
         let isZoomed = false;
         let lastTapTime = 0;
@@ -1607,7 +1613,6 @@
 
         modalImg.addEventListener('dblclick', function(e) { toggleZoom(e); });
 
-        // --- Lower Nav Training Message ---
         function showTrainingMessage(btn) {
             if (btn.classList.contains('is-tuning')) return;
             const originalTextEn = btn.querySelector('.lang-en').innerText;
@@ -1622,7 +1627,6 @@
             }, 2500);
         }
 
-        // --- Share Functions ---
         function getShareText() {
             const isJp = document.body.getAttribute('data-lang') === 'jp';
             if (isJp) {
