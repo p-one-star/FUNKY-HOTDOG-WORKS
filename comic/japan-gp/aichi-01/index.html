@@ -17,7 +17,7 @@
             --neon-cyan: #00f0ff;
             --neon-lime: #ccff00;
             --neon-pink: #ff0055;
-            --neon-red: #ff0022; /* 照準マーク用の赤 */
+            --neon-red: #ff0022; 
             --border-dim: rgba(255, 255, 255, 0.1);
             --font-main: 'Helvetica Neue', Arial, sans-serif;
             --font-mono: 'Courier New', Courier, monospace;
@@ -31,8 +31,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* 今回は「はみ出し」を活かすため、overflow-x: hidden は維持しつつ、
-           要素自体が枠外に飛び出すデザインとしています。 */
         body {
             background-color: var(--bg-base);
             color: var(--text-main);
@@ -186,10 +184,9 @@
 
         /* Title Area */
         .title-area {
-            /* ヘッダー(50px)との隙間を詰めるため、80pxから60pxに変更 */
             margin-top: 60px;
             text-align: center;
-            padding: 10px 0 10px; 
+            padding: 10px 0 20px; 
             opacity: 0;
             animation: fadeIn 1s forwards 0.2s;
         }
@@ -197,13 +194,13 @@
         /* タイトル全体の設定 */
         .main-title {
             font-family: 'Black Ops One', sans-serif;
-            font-size: clamp(2.2rem, 8vw, 3rem); 
+            font-size: clamp(2.8rem, 10vw, 4rem); 
             font-weight: normal;
             color: #9999a1; 
             text-shadow: 
                 0 0 3px rgba(255, 255, 255, 0.6),
                 0 0 8px rgba(255, 255, 255, 0.2);
-            margin-bottom: 5px;
+            margin-bottom: 0; 
             text-transform: uppercase;
             display: flex;
             flex-direction: column;
@@ -211,7 +208,6 @@
             line-height: 0.95; 
         }
 
-        /* 個別の行のサイズ設定 (倍率) */
         .title-origin {
             font-size: 1.4em; 
             letter-spacing: 1px; 
@@ -227,14 +223,6 @@
             font-size: 1.6em; 
             letter-spacing: 2px; 
             margin-top: -5px; 
-        }
-
-        .sub-title {
-            font-family: 'Impact', sans-serif;
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin-top: 10px;
         }
 
         /* Comic Display */
@@ -383,7 +371,7 @@
             justify-content: space-between;
             align-items: center; 
             gap: 15px;
-            margin-bottom: 90px; /* 下の文字と被らないように余白を確保 */
+            margin-bottom: 90px; 
             opacity: 0;
             animation: fadeIn 1s forwards 0.6s;
         }
@@ -399,6 +387,23 @@
             justify-content: center;
             position: relative;
             transition: transform 0.3s ease;
+            /* ★隠しボタン用の設定 */
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* ホバー時にうっすらハイライトして「押せる感」を演出 */
+        .extra-image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: -20px; /* 画像がはみ出してるのでクリック領域も少し広めに */
+            border-radius: 20px;
+            background: rgba(255,255,255,0);
+            transition: background 0.3s ease;
+            z-index: 20; /* 画像や文字より上 */
+        }
+        .extra-image-wrapper:hover::after {
+            background: rgba(255,255,255,0.03); /* PCでマウスを乗せた時だけうっすら光る */
         }
 
         /* 左側の画像を「はみ出し仕様」の超巨大サイズに！ */
@@ -415,7 +420,7 @@
             pointer-events: none; 
         }
 
-        /* ★右側の画像：サイズ190%のまま、少し左にズラして見切れすぎないように調整 */
+        /* 右側の画像：サイズ190%のまま、少し左にズラして見切れすぎないように調整 */
         .img-right {
             position: absolute;
             top: 50%;
@@ -424,9 +429,9 @@
             height: auto;
             max-width: none; 
             object-fit: contain; 
-            /* -40%から-45%に変更して、少し左に引き戻す */
             transform: translate(-45%, -30%); 
             z-index: 1;
+            pointer-events: none;
         }
 
         /* --- 照準マーク（スナイパースコープ） --- */
@@ -490,15 +495,15 @@
 
         /* --- マップ用のスタイリッシュなテキスト設定 --- */
         
-        /* ★座標テキスト：下に下げ、少し右に寄せる */
         .map-top-text {
             position: absolute;
-            top: -20px; /* -45pxから下に移動 */
-            left: 55%;  /* 50%から少し右に移動 */
+            top: -20px; 
+            left: 55%;  
             transform: translateX(-50%);
             text-align: center; 
             z-index: 10; 
             width: 100%;
+            pointer-events: none;
         }
 
         .map-top-text .coords {
@@ -542,12 +547,134 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            pointer-events: none;
         }
         
         .map-bottom-text .flag {
             font-size: 1.1em;
             transform: translateY(-2px);
         }
+
+
+        /* --- Custom Action Modals --- */
+        .action-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .action-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .action-modal-content {
+            background: var(--bg-panel);
+            border: 2px solid var(--neon-cyan); /* デフォルトはシアン */
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.2), inset 0 0 20px rgba(0, 240, 255, 0.1);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .action-modal.active .action-modal-content {
+            transform: translateY(0);
+        }
+
+        /* マシン用のモーダルはピンクベースに */
+        .action-modal.machine-type .action-modal-content {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.2), inset 0 0 20px rgba(255, 0, 85, 0.1);
+        }
+
+        .action-modal-title {
+            font-family: 'Impact', sans-serif;
+            font-size: 2.2rem;
+            color: #ffffff;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .action-modal.aichi-type .action-modal-title {
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+        .action-modal.machine-type .action-modal-title {
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .action-modal-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 35px;
+            line-height: 1.5;
+            font-family: var(--font-mono);
+            letter-spacing: 1px;
+        }
+
+        .action-modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: 2px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 15px;
+            font-family: 'Impact', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .action-btn.btn-go {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+        }
+        .action-btn.btn-go:hover, .action-btn.btn-go:active {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+
+        .action-btn.btn-tomato {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+        }
+        .action-btn.btn-tomato:hover, .action-btn.btn-tomato:active {
+            background: var(--neon-red);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255, 0, 34, 0.5);
+        }
+
+        .action-btn.btn-buck {
+            border-color: #666;
+            color: #888;
+        }
+        .action-btn.btn-buck:hover, .action-btn.btn-buck:active {
+            background: #333;
+            color: #fff;
+            border-color: #fff;
+        }
+
 
         /* Share Area */
         .share-area {
@@ -947,8 +1074,6 @@
                 <span class="title-of">OF</span>
                 <span class="title-fhw">FHW</span>
             </h1>
-            <p class="sub-title lang-en">Too wild. Too stupid. Too Funky.</p>
-            <p class="sub-title lang-jp">Too wild. Too stupid. Too Funky.</p>
         </div>
 
         <!-- Comic Area -->
@@ -1041,31 +1166,26 @@
             </div>
         </div>
 
-        <!-- Extra Images Area (左右に2つ並ぶ画像スペース) -->
+        <!-- Extra Images Area (左右に2つ並ぶ画像スペース・隠しボタン化) -->
         <div class="extra-images-area">
-            <div class="extra-image-wrapper">
-                <!-- 左側：aj.PNG を「はみ出し仕様」の超巨大サイズで配置 -->
+            <!-- 左側：愛知県（クリックで Aichi Modal を開く） -->
+            <div class="extra-image-wrapper" onclick="openActionModal('aichiModal')">
                 <img src="aj.PNG" alt="Aichi Map" class="img-left" onerror="this.onerror=null; this.src='aj.png';">
-                
-                <!-- 照準マーク（スナイパースコープ）を追加 -->
                 <div class="target-mark">
                     <div class="dot"></div>
                 </div>
-
-                <!-- 下部のテキスト（間に国旗を挟むスタイル） -->
                 <div class="map-bottom-text">
                     <span>AICHI</span><span class="flag">🇯🇵</span><span>JAPAN</span>
                 </div>
             </div>
-            <div class="extra-image-wrapper">
-                <!-- 右側：座標テキストを配置 -->
+            
+            <!-- 右側：マシン（クリックで Machine Modal を開く） -->
+            <div class="extra-image-wrapper" onclick="openActionModal('machineModal')">
                 <div class="map-top-text">
                     <div class="coords">35.1850°N<br>136.8997°E</div>
                     <div class="divider"></div>
                     <div class="local-roots">LOCAL ROOTS</div>
                 </div>
-
-                <!-- ★右側：maru.PNG を190%のサイズで、少し左(-45%)に戻して配置 -->
                 <img src="maru.PNG" alt="Maru" class="img-right" onerror="this.onerror=null; this.src='maru.png';">
             </div>
         </div>
@@ -1107,11 +1227,39 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Comic Modal -->
     <div class="modal" id="comicModal">
         <div class="modal-content">
             <div class="modal-close" onclick="closeModal(event)">×</div>
             <img src="AICHI.jpeg" alt="FHW Comic AICHI 01 Full" onerror="this.onerror=null; this.src='AICHI.jpg'; if(this.src==='AICHI.jpg') { this.style.display='none'; }">
+        </div>
+    </div>
+
+    <!-- ★追加：Aichi Warp Popup Modal -->
+    <div class="action-modal aichi-type" id="aichiModal">
+        <div class="action-modal-content">
+            <h2 class="action-modal-title">WARP TO AICHI?</h2>
+            <p class="action-modal-desc">Maybe the real world opens.</p>
+            <div class="action-modal-buttons">
+                <!-- GOボタン：Google Earthで座標を開く -->
+                <button class="action-btn btn-go" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">GO</button>
+                <!-- TOMATOボタン：指定URLを開く -->
+                <button class="action-btn btn-tomato" onclick="window.open('https://funkyhotdog.com/wild-tomato', '_blank')">TOMATO</button>
+                <!-- BUCKボタン：ポップアップを閉じる -->
+                <button class="action-btn btn-buck" onclick="closeActionModal('aichiModal')">BUCK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ★追加：Machine Buy Popup Modal -->
+    <div class="action-modal machine-type" id="machineModal">
+        <div class="action-modal-content">
+            <h2 class="action-modal-title">BUY THIS MADNESS?</h2>
+            <p class="action-modal-desc">STILL TUNING IN THE GARAGE...<br>COMING SOON.</p>
+            <div class="action-modal-buttons">
+                <!-- BUCKボタン：ポップアップを閉じる -->
+                <button class="action-btn btn-buck" onclick="closeActionModal('machineModal')">BUCK</button>
+            </div>
         </div>
     </div>
 
@@ -1161,6 +1309,27 @@
             const newLang = currentLang === 'en' ? 'jp' : 'en';
             document.body.setAttribute('data-lang', newLang);
         }
+
+        // --- ★追加：Action Modal 制御 ---
+        function openActionModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden'; // 背景のスクロールを止める
+        }
+
+        function closeActionModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = ''; // スクロールを戻す
+        }
+
+        // 背景クリックでモーダルを閉じる処理
+        document.querySelectorAll('.action-modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if(e.target === this) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
 
         // --- Swipe Gesture Handling (Global) ---
         let pageTouchStartX = 0;
