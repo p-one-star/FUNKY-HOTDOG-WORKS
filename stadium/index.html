@@ -163,6 +163,15 @@
             50% { opacity: 1; }
             100% { opacity: 0; }
         }
+
+        /* --- おにぎり（WORLD）の呼吸アニメーション --- */
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .animate-breathe {
+            animation: breathe 40s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="font-sans antialiased transition-colors duration-300 min-h-screen relative selection:bg-fhw-lime selection:text-fhw-dark">
@@ -186,7 +195,7 @@
             </div>
 
             <!-- 右：コントロール群 -->
-            <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
                 <!-- 言語切り替えカプセル -->
                 <div class="flex items-center space-x-1 bg-black/50 border border-fhw-cyan/30 rounded-full px-2 py-1 text-xs sm:text-sm font-blackops transition-all duration-300 hover:border-fhw-cyan hover:shadow-[0_0_15px_rgba(0,240,255,0.5)]">
                     <button id="lang-en" class="opacity-100 hover:opacity-80 transition-opacity w-5 sm:w-6 text-center" onclick="setLang('en')">🇺🇸</button>
@@ -201,10 +210,13 @@
                     <button id="theme-light" class="opacity-40 hover:opacity-100 transition-opacity w-5 sm:w-6 text-center grayscale" onclick="setTheme('light')">☀️</button>
                 </div>
 
-                <!-- メニューボタン -->
-                <button class="text-xl sm:text-2xl hover:scale-110 transition-transform focus:outline-none flex-shrink-0 ml-1" aria-label="Menu">
-                    🌭
-                </button>
+                <!-- ワールドリンク（おにぎり） -->
+                <a href="https://funkyhotdog.com/world" class="focus:outline-none flex-shrink-0 ml-1 sm:ml-2 flex items-center h-full group" aria-label="World">
+                    <!-- 40秒ループで1.15倍になる呼吸アニメーション -->
+                    <div class="text-[36px] sm:text-[44px] animate-breathe origin-center leading-none group-hover:drop-shadow-[0_0_10px_rgba(0,240,255,0.8)] transition-all duration-300">
+                        🍙
+                    </div>
+                </a>
             </div>
         </div>
     </header>
@@ -441,24 +453,49 @@
                     </div>
                     
                     <!-- SNS / Shop Links -->
-                    <div class="flex flex-wrap justify-center md:justify-end gap-6 font-blackops tracking-widest text-sm">
-                        <a href="#" class="text-zinc-400 hover:text-fhw-cyan transition-colors flex items-center gap-2">
-                            INSTAGRAM <span class="text-xs opacity-50 font-sans">↗</span>
-                        </a>
-                        <a href="#" class="text-zinc-400 hover:text-fhw-cyan transition-colors flex items-center gap-2">
-                            YOUTUBE <span class="text-xs opacity-50 font-sans">↗</span>
+                    <div class="flex flex-wrap justify-center md:justify-end gap-6 items-center">
+                        
+                        <!-- Instagram -->
+                        <a href="https://www.instagram.com/fhw_funky_hotdog_works?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-fhw-cyan transition-colors hover:scale-110 transform duration-300" aria-label="Instagram">
+                            <!-- サイズを 26 -> 34 に拡大 -->
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
                         </a>
                         
-                        <div class="flex items-center gap-4 border-l border-zinc-800 pl-6">
-                            <a href="#" class="text-zinc-600 cursor-not-allowed flex items-center gap-2 group relative">
-                                ETSY
-                                <span class="absolute -top-3 -right-6 bg-zinc-800 text-[9px] px-1.5 py-0.5 text-zinc-400 group-hover:bg-fhw-pink group-hover:text-white transition-colors border border-zinc-700">SOON</span>
-                            </a>
-                            <a href="#" class="text-zinc-600 cursor-not-allowed flex items-center gap-2 group relative">
-                                AMAZON
-                                <span class="absolute -top-3 -right-6 bg-zinc-800 text-[9px] px-1.5 py-0.5 text-zinc-400 group-hover:bg-fhw-pink group-hover:text-white transition-colors border border-zinc-700">SOON</span>
-                            </a>
-                        </div>
+                        <!-- X (Twitter) -->
+                        <a href="https://x.com/fhwofficia?s=21&t=feVsQoFo79c8YtZLcf7rtw" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-fhw-cyan transition-colors hover:scale-110 transform duration-300" aria-label="X">
+                            <!-- サイズを 26 -> 34 に拡大 -->
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4l11.733 16h4.267l-11.733-16z"></path>
+                                <path d="M4 20l6.768-6.768m2.46-2.46l6.772-6.772"></path>
+                            </svg>
+                        </a>
+
+                        <!-- Pinterest -->
+                        <a href="https://pin.it/6IcjgmrrI" target="_blank" rel="noopener noreferrer" class="text-zinc-400 hover:text-fhw-cyan transition-colors hover:scale-110 transform duration-300" aria-label="Pinterest">
+                            <!-- サイズを 26 -> 34 に拡大 -->
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M10 21.5v-8.5c0-2 1.5-3.5 3.5-3.5s3.5 1.5 3.5 4-2 5-4 5c-1.5 0-2.5-1-2.5-1"></path>
+                            </svg>
+                        </a>
+
+                        <!-- YouTube (Coming Soon) -->
+                        <a href="#" onclick="return false;" class="text-zinc-600 cursor-not-allowed flex items-center group relative transition-colors" aria-label="YouTube">
+                            <!-- サイズを 26 -> 34 に拡大 -->
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 group-hover:opacity-80">
+                                <rect x="2" y="5" width="20" height="14" rx="4"></rect>
+                                <path d="M10 9l5 3-5 3v-6z"></path>
+                            </svg>
+                            <!-- Coming Soon バッジ -->
+                            <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-zinc-800 text-[10px] px-2 py-1 text-zinc-400 font-blackops tracking-widest border border-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                                COMING SOON...
+                            </span>
+                        </a>
+
                     </div>
                 </div>
             </div>
