@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIOT CARNIVAL - EXTRA SPICY v48</title>
+    <title>RIOT CARNIVAL - EXTRA SPICY v50</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@700;900&family=Zen+Old+Mincho:wght@700;900&family=Mochiy+Pop+P+One&family=Outfit:wght@800&family=Reenie+Beanie&display=swap" rel="stylesheet">
     <style>
@@ -125,12 +125,15 @@
         }
         body.dark-mode header { box-shadow: 0 0 10px var(--header-border); }
 
+        /* FIX: Header Image Absolute Positioning */
         .header-icon-img {
             width: 100px;
             height: auto;
-            position: relative;
-            top: 10px;
+            position: absolute; /* Changed from relative to absolute so it doesn't stretch header */
+            top: 10px; /* 10px down from header top */
+            left: 0;
             transform: rotate(-5deg);
+            transform-origin: center center;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
             z-index: 60;
@@ -354,9 +357,12 @@
     <!-- SHUTTER ELEMENT -->
     <div id="shutter" class="fixed top-0 left-0 w-full h-full z-[100] pointer-events-none transform -translate-y-full transition-transform duration-700 ease-in-out border-b-8 border-gray-600"></div>
 
-    <!-- HEADER (REDUCED HEIGHT) -->
-    <header class="fixed top-0 left-0 w-full py-2 px-4 flex justify-between items-center z-50">
-        <div>
+    <!-- HEADER (FIXED HEIGHT TO 56px) -->
+    <!-- h-14 sets height to 56px exactly, keeping it slim like Image 2 -->
+    <header class="fixed top-0 left-0 w-full h-14 px-4 flex justify-between items-center z-50">
+        
+        <!-- Wrapper for logo to not affect header height -->
+        <div class="relative w-[100px] h-full">
             <img src="icon.PNG" alt="FHW" class="header-icon-img" id="logoBtn">
         </div>
         
@@ -369,8 +375,8 @@
         </div>
     </header>
 
-    <!-- PADDING ADJUSTED TO PREVENT OVERLAP (pt-32 for mobile, pt-40 for larger screens) -->
-    <main class="container mx-auto pt-32 md:pt-40 relative z-10">
+    <!-- MAIN CONTENT PADDING ADJUSTED FOR SLIMMER HEADER -->
+    <main class="container mx-auto pt-28 md:pt-36 relative z-10">
 
         <!-- HERO SECTION -->
         <section class="relative px-2 mb-12 flex flex-col items-center text-center">
@@ -480,7 +486,7 @@
                         <a href="https://pin.it/RPOoOORJs" target="_blank" class="footer-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.182 0 7.433 2.981 7.433 6.953 0 4.156-2.623 7.502-6.273 7.502-1.221 0-2.372-.635-2.766-1.385l-.753 2.875c-.272 1.042-1.01 2.342-1.5 3.136 1.12.343 2.308.528 3.535.528 6.621 0 11.988-5.368 11.988-11.987C24.005 5.367 18.638 0 12.017 0z"/></svg>
                         </a>
-                        <!-- YouTube (No Target, Does nothing) -->
+                        <!-- YouTube -->
                         <a href="javascript:void(0)" class="footer-icon cursor-not-allowed opacity-30" title="準備中">
                             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
                         </a>
@@ -571,5 +577,4 @@
     </script>
 </body>
 </html>
-
 
