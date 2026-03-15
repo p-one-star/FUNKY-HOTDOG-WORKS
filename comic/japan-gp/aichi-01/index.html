@@ -17,7 +17,7 @@
             --neon-cyan: #00f0ff;
             --neon-lime: #ccff00;
             --neon-pink: #ff0055;
-            --neon-red: #ff0022; 
+            --neon-red: #ff0022; /* 照準マーク用の赤 */
             --border-dim: rgba(255, 255, 255, 0.1);
             --font-main: 'Helvetica Neue', Arial, sans-serif;
             --font-mono: 'Courier New', Courier, monospace;
@@ -387,26 +387,23 @@
             justify-content: center;
             position: relative;
             transition: transform 0.3s ease;
-            /* ★隠しボタン用の設定 */
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* ホバー時にうっすらハイライトして「押せる感」を演出 */
         .extra-image-wrapper::after {
             content: '';
             position: absolute;
-            inset: -20px; /* 画像がはみ出してるのでクリック領域も少し広めに */
+            inset: -20px; 
             border-radius: 20px;
             background: rgba(255,255,255,0);
             transition: background 0.3s ease;
-            z-index: 20; /* 画像や文字より上 */
+            z-index: 20; 
         }
         .extra-image-wrapper:hover::after {
-            background: rgba(255,255,255,0.03); /* PCでマウスを乗せた時だけうっすら光る */
+            background: rgba(255,255,255,0.03); 
         }
 
-        /* 左側の画像を「はみ出し仕様」の超巨大サイズに！ */
         .img-left {
             position: absolute;
             top: 50%;
@@ -420,7 +417,6 @@
             pointer-events: none; 
         }
 
-        /* 右側の画像：サイズ190%のまま、少し左にズラして見切れすぎないように調整 */
         .img-right {
             position: absolute;
             top: 50%;
@@ -493,8 +489,33 @@
             50% { opacity: 1; transform: translate(-50%, -50%) scale(1.02); }
         }
 
+        /* ★ ロケーティングテキスト */
+        .target-mark .locating-text {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--neon-red);
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            opacity: 0;
+            text-shadow: 0 0 5px var(--neon-red);
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+
+        .target-mark .locating-text.active {
+            animation: textFlash 0.3s infinite alternate;
+        }
+
+        @keyframes textFlash {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
         /* --- マップ用のスタイリッシュなテキスト設定 --- */
-        
         .map-top-text {
             position: absolute;
             top: -20px; 
@@ -531,7 +552,6 @@
             text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
         }
 
-        /* 下部の AICHI.JAPAN テキスト */
         .map-bottom-text {
             position: absolute;
             bottom: -70px; 
@@ -588,14 +608,13 @@
             box-shadow: 0 0 30px rgba(0, 240, 255, 0.2), inset 0 0 20px rgba(0, 240, 255, 0.1);
             position: relative;
             transform: translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s;
         }
 
         .action-modal.active .action-modal-content {
             transform: translateY(0);
         }
 
-        /* マシン用のモーダルはピンクベースに */
         .action-modal.machine-type .action-modal-content {
             border-color: var(--neon-pink);
             box-shadow: 0 0 30px rgba(255, 0, 85, 0.2), inset 0 0 20px rgba(255, 0, 85, 0.1);
@@ -675,6 +694,34 @@
             border-color: #fff;
         }
 
+        /* TOMATOボタンを押した時のメッセージ用スタイル */
+        .tomato-message {
+            padding: 20px 0;
+            animation: fadeIn 0.5s forwards;
+        }
+        .t-welcome {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 3px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+        }
+        .t-zone {
+            font-family: 'Black Ops One', sans-serif;
+            font-size: 1.8rem;
+            color: var(--neon-lime);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(204, 255, 0, 0.4);
+            letter-spacing: 2px;
+        }
+        .t-warn {
+            color: var(--neon-pink);
+            font-family: 'Impact', sans-serif;
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+            text-shadow: 0 0 8px rgba(255, 0, 85, 0.5);
+        }
 
         /* Share Area */
         .share-area {
@@ -1168,12 +1215,17 @@
 
         <!-- Extra Images Area (左右に2つ並ぶ画像スペース・隠しボタン化) -->
         <div class="extra-images-area">
-            <!-- 左側：愛知県（クリックで Aichi Modal を開く） -->
-            <div class="extra-image-wrapper" onclick="openActionModal('aichiModal')">
+            <!-- 左側：愛知県（クリックでロケーティング演出後にAichi Modalを開く） -->
+            <div class="extra-image-wrapper" onclick="openAichiModalWithLocating()">
                 <img src="aj.PNG" alt="Aichi Map" class="img-left" onerror="this.onerror=null; this.src='aj.png';">
+                
+                <!-- 照準マーク -->
                 <div class="target-mark">
                     <div class="dot"></div>
+                    <!-- ★追加：LOCATINGテキスト -->
+                    <div class="locating-text" id="locatingText">LOCATING...</div>
                 </div>
+
                 <div class="map-bottom-text">
                     <span>AICHI</span><span class="flag">🇯🇵</span><span>JAPAN</span>
                 </div>
@@ -1235,7 +1287,7 @@
         </div>
     </div>
 
-    <!-- ★追加：Aichi Warp Popup Modal -->
+    <!-- Aichi Warp Popup Modal -->
     <div class="action-modal aichi-type" id="aichiModal">
         <div class="action-modal-content">
             <h2 class="action-modal-title">WARP TO AICHI?</h2>
@@ -1243,27 +1295,26 @@
             <div class="action-modal-buttons">
                 <!-- GOボタン：Google Earthで座標を開く -->
                 <button class="action-btn btn-go" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">GO</button>
-                <!-- TOMATOボタン：指定URLを開く -->
-                <button class="action-btn btn-tomato" onclick="window.open('https://funkyhotdog.com/wild-tomato', '_blank')">TOMATO</button>
+                <!-- TOMATOボタン演出 -->
+                <button class="action-btn btn-tomato" onclick="jumpToTomato()">TOMATO</button>
                 <!-- BUCKボタン：ポップアップを閉じる -->
                 <button class="action-btn btn-buck" onclick="closeActionModal('aichiModal')">BUCK</button>
             </div>
         </div>
     </div>
 
-    <!-- ★追加：Machine Buy Popup Modal -->
+    <!-- Machine Buy Popup Modal -->
     <div class="action-modal machine-type" id="machineModal">
         <div class="action-modal-content">
             <h2 class="action-modal-title">BUY THIS MADNESS?</h2>
             <p class="action-modal-desc">STILL TUNING IN THE GARAGE...<br>COMING SOON.</p>
             <div class="action-modal-buttons">
-                <!-- BUCKボタン：ポップアップを閉じる -->
                 <button class="action-btn btn-buck" onclick="closeActionModal('machineModal')">BUCK</button>
             </div>
         </div>
     </div>
 
-    <!-- 横スワイプで登場する「NEXT COMIC UI」 (右から左へスワイプで出現) -->
+    <!-- 横スワイプで登場する「NEXT COMIC UI」 -->
     <div id="nextOverlay" class="next-overlay">
         <div class="next-overlay-close" onclick="closeNextUI()">×</div>
         <div class="next-overlay-content">
@@ -1280,7 +1331,7 @@
         </div>
     </div>
 
-    <!-- 横スワイプで登場する「PREV COMIC UI」 (左から右へスワイプで出現) -->
+    <!-- 横スワイプで登場する「PREV COMIC UI」 -->
     <div id="prevOverlay" class="prev-overlay">
         <div class="prev-overlay-close" onclick="closePrevUI()">×</div>
         <div class="prev-overlay-content">
@@ -1299,8 +1350,8 @@
     </div>
 
     <script>
-        // SNSシェア用設定（必要に応じてリポジトリURL等を変更してください）
-        const SHARE_URL = "https://p-one-star.github.io/FUNKY-03/"; // 必要に応じてAICHI-01等に変更
+        // SNSシェア用設定
+        const SHARE_URL = "https://p-one-star.github.io/FUNKY-03/"; 
         const MEDIA_URL = "https://p-one-star.github.io/FUNKY-03/AICHI.jpeg"; 
 
         // Language Toggle Function
@@ -1310,15 +1361,15 @@
             document.body.setAttribute('data-lang', newLang);
         }
 
-        // --- ★追加：Action Modal 制御 ---
+        // --- Action Modal 制御 ---
         function openActionModal(id) {
             document.getElementById(id).classList.add('active');
-            document.body.style.overflow = 'hidden'; // 背景のスクロールを止める
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeActionModal(id) {
             document.getElementById(id).classList.remove('active');
-            document.body.style.overflow = ''; // スクロールを戻す
+            document.body.style.overflow = ''; 
         }
 
         // 背景クリックでモーダルを閉じる処理
@@ -1330,6 +1381,108 @@
                 }
             });
         });
+
+        // --- ★修正：愛知県クリック時の「控えめなロケーティング演出」 ---
+        let isLocating = false;
+
+        function openAichiModalWithLocating() {
+            if (isLocating) return; // 実行中の連打防止
+            isLocating = true;
+            
+            const target = document.querySelector('.target-mark');
+            const locatingText = document.getElementById('locatingText');
+            
+            // LOCATING... テキストの点滅開始
+            locatingText.classList.add('active'); 
+            
+            // 動きを少しゆっくり（0.3s）に
+            target.style.transition = 'top 0.3s ease, left 0.3s ease';
+            target.style.animation = 'targetPulse 0.15s infinite alternate'; // 探知中は少し激しく点滅
+            
+            let count = 0;
+            const maxJumps = 6; // ジャンプ回数を減らして短く
+            const baseTop = 35; // 元のTop位置
+            const baseLeft = 30; // 元のLeft位置
+            
+            const interval = setInterval(() => {
+                // 移動範囲を元の位置の周辺（±10%）に限定し、ジリジリ探る感じに
+                const randomTop = baseTop + (Math.random() * 20 - 10); 
+                const randomLeft = baseLeft + (Math.random() * 20 - 10);
+                target.style.top = randomTop + '%';
+                target.style.left = randomLeft + '%';
+                
+                count++;
+                if (count >= maxJumps) {
+                    clearInterval(interval);
+                    // 最後に名古屋城の位置(元の位置)に戻す
+                    setTimeout(() => {
+                        target.style.top = baseTop + '%';
+                        target.style.left = baseLeft + '%';
+                        
+                        // ロックオン！の演出（大きく光る）
+                        target.style.animation = 'none'; 
+                        target.style.boxShadow = '0 0 20px var(--neon-red), inset 0 0 10px var(--neon-red)';
+                        target.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                        target.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                        
+                        // テキストを LOCKED に変更して表示
+                        locatingText.classList.remove('active');
+                        locatingText.innerText = 'LOCKED';
+                        locatingText.style.opacity = '1';
+                        
+                        // ロックオンの余韻を残してモーダルを開く
+                        setTimeout(() => {
+                            openActionModal('aichiModal');
+                            isLocating = false;
+                            
+                            // モーダルが開いた裏で、エフェクトを元の「渋い拍動」状態にこっそり戻しておく
+                            setTimeout(() => {
+                                target.style.transform = 'translate(-50%, -50%) scale(1)';
+                                target.style.boxShadow = '0 0 5px var(--neon-red), inset 0 0 5px var(--neon-red)';
+                                target.style.animation = 'targetPulse 4s infinite ease-in-out';
+                                target.style.transition = '';
+                                locatingText.style.opacity = '0';
+                                locatingText.innerText = 'LOCATING...'; // 次回のためにテキストも戻す
+                            }, 300);
+                        }, 800); 
+                    }, 300);
+                }
+            }, 300); // 0.3秒間隔でじっくり移動
+        }
+
+        // --- TOMATOボタンクリック時の「サイバー演出＆ジャンプ」 ---
+        function jumpToTomato() {
+            const modalContent = document.querySelector('#aichiModal .action-modal-content');
+            
+            // 現在のコンテンツを保存しておく（戻ってきた時用）
+            const originalHTML = modalContent.innerHTML;
+            
+            // 警告メッセージに書き換え
+            modalContent.innerHTML = `
+                <div class="tomato-message">
+                    <div class="t-welcome">🍅 WELCOME 🍅</div>
+                    <div class="t-zone">TOO FUNKY ZONE</div>
+                    <div class="t-warn">⚠ MYSTERIES ROAMING FREE ⚠</div>
+                </div>
+            `;
+            
+            // モーダルの枠色もライムグリーンに変更してヤバさを演出
+            modalContent.style.borderColor = 'var(--neon-lime)';
+            modalContent.style.boxShadow = '0 0 30px rgba(204, 255, 0, 0.2), inset 0 0 20px rgba(204, 255, 0, 0.1)';
+            
+            // 2.5秒後に指定URLへジャンプ
+            setTimeout(() => {
+                window.location.href = 'https://funkyhotdog.com/wild-tomato';
+                
+                // ユーザーがブラウザバックで戻ってきた時のためにリセット処理を入れておく
+                setTimeout(() => {
+                    modalContent.innerHTML = originalHTML;
+                    modalContent.style.borderColor = '';
+                    modalContent.style.boxShadow = '';
+                    closeActionModal('aichiModal');
+                }, 1000);
+            }, 2500);
+        }
 
         // --- Swipe Gesture Handling (Global) ---
         let pageTouchStartX = 0;
@@ -1350,47 +1503,32 @@
             const nextUI = document.getElementById('nextOverlay');
             const prevUI = document.getElementById('prevOverlay');
             
-            // X方向の移動量がY方向より大きい場合は「横スワイプ」と判定
             if (Math.abs(diffX) > Math.abs(diffY)) {
                 if (diffX > 80) {
-                    // 左スワイプ (右から左へ動かした) -> Nextへ
                     if (prevUI.classList.contains('active')) {
                         closePrevUI();
-                    } else if (!modal.classList.contains('active')) {
+                    } else if (!document.getElementById('comicModal').classList.contains('active')) {
                         openNextUI();
                     }
                 } else if (diffX < -80) {
-                    // 右スワイプ (左から右へ動かした) -> Prevへ
                     if (nextUI.classList.contains('active')) {
                         closeNextUI();
-                    } else if (!modal.classList.contains('active')) {
+                    } else if (!document.getElementById('comicModal').classList.contains('active')) {
                         openPrevUI();
                     }
                 }
             } else {
-                // 縦スワイプの場合
-                if (modal.classList.contains('active') && !isZoomed && diffY < -80) {
+                if (document.getElementById('comicModal').classList.contains('active') && !isZoomed && diffY < -80) {
                     closeModal(new Event('swipe'));
                 }
             }
         });
 
         // --- Next & Prev Comic Overlay Functions ---
-        function openNextUI() {
-            document.getElementById('nextOverlay').classList.add('active');
-        }
-
-        function closeNextUI() {
-            document.getElementById('nextOverlay').classList.remove('active');
-        }
-
-        function openPrevUI() {
-            document.getElementById('prevOverlay').classList.add('active');
-        }
-
-        function closePrevUI() {
-            document.getElementById('prevOverlay').classList.remove('active');
-        }
+        function openNextUI() { document.getElementById('nextOverlay').classList.add('active'); }
+        function closeNextUI() { document.getElementById('nextOverlay').classList.remove('active'); }
+        function openPrevUI() { document.getElementById('prevOverlay').classList.add('active'); }
+        function closePrevUI() { document.getElementById('prevOverlay').classList.remove('active'); }
 
         function showTrainingMessageOverlay(btn) {
             if (btn.classList.contains('is-tuning')) return;
@@ -1409,21 +1547,20 @@
         }
 
         // --- Modal & Double Tap Zoom Handling ---
-        const modal = document.getElementById('comicModal');
-        const modalImg = modal.querySelector('img');
+        const modalImg = document.querySelector('#comicModal img');
         let isZoomed = false;
         let lastTapTime = 0;
         
         function openModal() {
-            modal.classList.add('active');
+            document.getElementById('comicModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             isZoomed = false;
             modalImg.style.transform = 'scale(1)';
         }
 
         function closeModal(e) {
-            if (e.type === 'swipe' || e.target === modal || e.target.classList.contains('modal-close')) {
-                modal.classList.remove('active');
+            if (e.type === 'swipe' || e.target.id === 'comicModal' || e.target.classList.contains('modal-close')) {
+                document.getElementById('comicModal').classList.remove('active');
                 document.body.style.overflow = '';
                 if(isZoomed) {
                     modalImg.style.transform = 'scale(1)';
@@ -1432,7 +1569,7 @@
             }
         }
 
-        modal.addEventListener('click', closeModal);
+        document.getElementById('comicModal').addEventListener('click', closeModal);
 
         function toggleZoom(e) {
             if (!isZoomed) {
@@ -1461,7 +1598,6 @@
         modalImg.addEventListener('touchstart', function(e) {
             const currentTime = new Date().getTime();
             const tapLength = currentTime - lastTapTime;
-            
             if (tapLength < 300 && tapLength > 0) {
                 e.preventDefault(); 
                 toggleZoom(e); 
@@ -1469,22 +1605,16 @@
             lastTapTime = currentTime;
         }, {passive: false});
 
-        modalImg.addEventListener('dblclick', function(e) {
-            toggleZoom(e); 
-        });
+        modalImg.addEventListener('dblclick', function(e) { toggleZoom(e); });
 
         // --- Lower Nav Training Message ---
         function showTrainingMessage(btn) {
             if (btn.classList.contains('is-tuning')) return;
-
             const originalTextEn = btn.querySelector('.lang-en').innerText;
             const originalTextJp = btn.querySelector('.lang-jp').innerText;
-            
             btn.classList.add('is-tuning');
-            
             btn.querySelector('.lang-en').innerText = "STILL TUNING THE ENGINE...";
             btn.querySelector('.lang-jp').innerText = "ただいま調教中...";
-            
             setTimeout(() => {
                 btn.classList.remove('is-tuning');
                 btn.querySelector('.lang-en').innerText = originalTextEn;
@@ -1505,11 +1635,8 @@
         function copyLink(btn) {
             const originalTextEn = btn.querySelector('.lang-en').innerText;
             const originalTextJp = btn.querySelector('.lang-jp').innerText;
-            
             if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(SHARE_URL).then(() => {
-                    showCopiedState(btn, originalTextEn, originalTextJp);
-                });
+                navigator.clipboard.writeText(SHARE_URL).then(() => { showCopiedState(btn, originalTextEn, originalTextJp); });
             } else {
                 const textArea = document.createElement("textarea");
                 textArea.value = SHARE_URL;
@@ -1518,9 +1645,7 @@
                 try {
                     document.execCommand('copy');
                     showCopiedState(btn, originalTextEn, originalTextJp);
-                } catch (err) {
-                    console.error('Failed to copy', err);
-                }
+                } catch (err) { console.error('Failed to copy', err); }
                 document.body.removeChild(textArea);
             }
         }
@@ -1529,7 +1654,6 @@
             btn.classList.add('copied');
             btn.querySelector('.lang-en').innerText = "COPIED!";
             btn.querySelector('.lang-jp').innerText = "コピー完了!";
-            
             setTimeout(() => {
                 btn.classList.remove('copied');
                 btn.querySelector('.lang-en').innerText = originalTextEn;
