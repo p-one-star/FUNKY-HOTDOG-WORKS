@@ -28,6 +28,7 @@
     }
 
     body {
+        /* リングの外側（下界）をグレーに設定 */
         background-color: #222222; 
         color: var(--c-white);
         font-family: "Helvetica Neue", Arial, sans-serif;
@@ -56,9 +57,10 @@
        ========================================== */
     #map-bg {
         z-index: 10;
-        pointer-events: auto; 
+        pointer-events: auto; /* ドラッグ操作の受け皿 */
     }
 
+    /* 放牧の柵（巨大なネオンフラフープ） */
     #border-wrapper {
         position: absolute;
         top: 50%; 
@@ -67,9 +69,11 @@
         height: 2000px;
         transform: translate(-50%, -50%);
         border-radius: 50%;
+        /* 普段はうっすら光る程度 */
         box-shadow: 0 0 80px rgba(0, 255, 255, 0.1), 0 0 80px rgba(255, 0, 255, 0.1);
     }
 
+    /* グラデーションで色が変わる回転リング */
     .ring-gradient {
         position: absolute;
         top: 0; left: 0; 
@@ -83,6 +87,7 @@
         animation: spinRing 60s linear infinite;
     }
 
+    /* リングの内側（真っ黒な床） */
     .ring-inner {
         position: absolute;
         top: 15px; left: 15px; right: 15px; bottom: 15px;
@@ -150,6 +155,7 @@
         pointer-events: none; 
     }
 
+    /* スパーク（電流）エフェクト（✨のような十字星型） */
     .spark {
         position: absolute;
         pointer-events: none;
@@ -183,6 +189,7 @@
         100% { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 0; }
     }
 
+    /* 絵文字のスタイル */
     .emoji-item {
         position: absolute;
         display: flex;
@@ -190,11 +197,12 @@
         align-items: center;
         font-size: 80px; 
         transform: translate(-50%, -50%);
-        pointer-events: none; 
+        pointer-events: none; /* 基本は触れない */
         will-change: left, top;
         z-index: 25;
     }
 
+    /* メダルのスタイル */
     .medal {
         position: absolute;
         border-radius: 50%;
@@ -401,11 +409,11 @@
         for(let i=0; i<21; i++) colors.push('lime');
         for(let i=0; i<21; i++) colors.push('pink');
 
-        // ★ サイズの構成を変更
+        // ★ サイズの構成
         let sizes = [];
         for(let i=0; i<47; i++) sizes.push('normal');
-        for(let i=0; i<13; i++) sizes.push('large'); // 14から13に減らす
-        sizes.push('small'); // 1つだけ小さいのを追加
+        for(let i=0; i<13; i++) sizes.push('large');
+        sizes.push('small');
         for(let i=0; i<2; i++)  sizes.push('huge');
         sizes.sort(() => Math.random() - 0.5); 
 
@@ -423,7 +431,6 @@
         assignSpecial(0); assignSpecial(21); assignSpecial(42);
         medalConfigs.sort(() => Math.random() - 0.5);
 
-        // ★ 半径と重さに 'small' を追加
         const radiusMap = { 'small': 35, 'normal': 50, 'large': 70, 'huge': 100 };
         const massMap = { 'small': 0.5, 'normal': 1, 'large': 2.5, 'huge': 6 };
 
@@ -537,6 +544,12 @@
         } else if (obj.type === 'emoji') {
             el.className = 'emoji-item';
             el.textContent = obj.char;
+            
+            // ★ 🍙だけはタップできるように設定
+            if (obj.char === '🍙') {
+                el.style.pointerEvents = 'auto';
+                el.style.cursor = 'pointer';
+            }
         }
         
         el.style.left = `${obj.x}px`;
@@ -747,9 +760,16 @@
         isDragging = false;
 
         if (!hasMoved) {
+            // メダルのタップ判定
             const targetMedal = e.target.closest('.medal');
             if (targetMedal) {
                 handleMedalTap(targetMedal);
+            }
+
+            // ★ 絵文字のタップ判定（🍙の場合のみジャンプ）
+            const targetEmoji = e.target.closest('.emoji-item');
+            if (targetEmoji && targetEmoji.textContent === '🍙') {
+                window.location.href = 'https://funkyhotdog.com/world';
             }
         }
     });
@@ -762,7 +782,7 @@
 
     function handleMedalTap(medalEl) {
         const id = parseInt(medalEl.dataset.id);
-        const m = objectData.find(item => item.id === id);
+        const m = objectData.find(item => item.id === id && item.type === 'medal');
         
         if (!m || m.isCaught) return;
 
