@@ -522,7 +522,10 @@
                 html.classList.remove('dark');
                 html.classList.add('light');
                 lightBtn.classList.replace('opacity-40', 'opacity-100');
-                lightBtn.remove('grayscale');
+                
+                // ★【修正箇所】 remove -> classList.remove に修正！
+                lightBtn.classList.remove('grayscale');
+                
                 darkBtn.classList.replace('opacity-100', 'opacity-40');
                 darkBtn.classList.add('grayscale');
             }
