@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIOT CARNIVAL - EXTRA SPICY v50</title>
+    <title>RIOT CARNIVAL - EXTRA SPICY v51</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Zen+Kaku+Gothic+New:wght@700;900&family=Zen+Old+Mincho:wght@700;900&family=Mochiy+Pop+P+One&family=Outfit:wght@800&family=Reenie+Beanie&display=swap" rel="stylesheet">
     <style>
@@ -125,12 +125,12 @@
         }
         body.dark-mode header { box-shadow: 0 0 10px var(--header-border); }
 
-        /* FIX: Header Image Absolute Positioning */
+        /* FIX: Header Image Positioning */
         .header-icon-img {
             width: 100px;
             height: auto;
-            position: absolute; /* Changed from relative to absolute so it doesn't stretch header */
-            top: 10px; /* 10px down from header top */
+            position: absolute; 
+            top: 4px; /* Slightly raised from 10px */
             left: 0;
             transform: rotate(-5deg);
             transform-origin: center center;
@@ -357,11 +357,10 @@
     <!-- SHUTTER ELEMENT -->
     <div id="shutter" class="fixed top-0 left-0 w-full h-full z-[100] pointer-events-none transform -translate-y-full transition-transform duration-700 ease-in-out border-b-8 border-gray-600"></div>
 
-    <!-- HEADER (FIXED HEIGHT TO 56px) -->
-    <!-- h-14 sets height to 56px exactly, keeping it slim like Image 2 -->
-    <header class="fixed top-0 left-0 w-full h-14 px-4 flex justify-between items-center z-50">
+    <!-- HEADER (Height fixed to 70px to push pink line down slightly) -->
+    <header class="fixed top-0 left-0 w-full h-[70px] px-4 flex justify-between items-center z-50">
         
-        <!-- Wrapper for logo to not affect header height -->
+        <!-- Wrapper for logo -->
         <div class="relative w-[100px] h-full">
             <img src="icon.PNG" alt="FHW" class="header-icon-img" id="logoBtn">
         </div>
@@ -375,7 +374,6 @@
         </div>
     </header>
 
-    <!-- MAIN CONTENT PADDING ADJUSTED FOR SLIMMER HEADER -->
     <main class="container mx-auto pt-28 md:pt-36 relative z-10">
 
         <!-- HERO SECTION -->
