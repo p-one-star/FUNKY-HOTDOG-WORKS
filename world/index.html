@@ -21,6 +21,7 @@
             --yellow: #ffcc00; 
             --purple: #b026ff; 
             --white: #ffffff; 
+            --sake-blue: #88ccff; /* ★ 日本酒用の新カラー追加！ */
             --text-color: #ffffff;
             --font-main: 'Arial Black', Impact, 'Segoe UI', sans-serif;
             --font-stencil: 'Black Ops One', Impact, cursive, sans-serif;
@@ -230,6 +231,7 @@
         .zone.yellow { --theme-color: var(--yellow); }
         .zone.purple { --theme-color: var(--purple); } 
         .zone.white  { --theme-color: var(--white); } 
+        .zone.sake-blue { --theme-color: var(--sake-blue); } 
 
         /* === LOCKED ZONES === */
         .zone.locked {
@@ -549,12 +551,15 @@
                 <div class="zone-desc">Japan Origin<br>Don't touch</div>
             </div>
 
-            <!-- ★ 完全な「？」ゾーン (開くたびに色と絵文字がランダムになります) -->
-            <div class="zone locked" onclick="handleZoneClick(this, '', 'alien')">
+            <!-- ★ 新規追加: SAKE POWER (LOCKED) -->
+            <div class="zone sake-blue locked-visible" onclick="handleZoneClick(this, '', 'construction')">
                 <div class="locked-badge">LOCKED</div>
-                <div class="zone-huge-question">?</div>
+                <div class="zone-icon">🍶</div>
+                <div class="zone-title">SAKE POWER</div>
+                <div class="zone-desc">Crafted in Japan<br>Quiet madness</div>
             </div>
 
+            <!-- 完全な「？」ゾーン (残り2個) -->
             <div class="zone locked" onclick="handleZoneClick(this, '', 'ghost')">
                 <div class="locked-badge">LOCKED</div>
                 <div class="zone-huge-question">?</div>
