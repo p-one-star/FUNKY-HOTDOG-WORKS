@@ -135,7 +135,6 @@
     .c-gray { text-shadow: 0 0 4px var(--c-gray), 0 0 8px var(--c-gray), 0 0 12px var(--c-gray); }
 
     .title-top span { font-size: min(28vw, 150px); }
-
     .title-center span {
         display: block;
         margin-top: 10px;
@@ -205,6 +204,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        overflow: hidden; 
         
         font-family: 'Black Ops One', cursive;
         color: var(--c-black); 
@@ -217,13 +217,12 @@
         will-change: left, top;
     }
 
-    /* ★ 画像メダル用のスタイル */
     .medal-image {
         width: 100%;
         height: 100%;
         border-radius: 50%;
         object-fit: cover;
-        pointer-events: none; /* 画像自体がタップを邪魔しないようにする */
+        pointer-events: none;
     }
 
     .medal.size-small  { width: 70px; height: 70px; font-size: 36px; }
@@ -246,9 +245,6 @@
         100% { box-shadow: 0 0 5px var(--c-white), inset 0 0 5px var(--c-white); opacity: 0.8; }
     }
 
-    /* ==========================================
-       もがく・暴れる時の色の変化 (シアン→ライム, ライム→ピンク, ピンク→シアン)
-       ========================================== */
     .medal.color-cyan.shaking {
         border-color: var(--c-lime) !important;
         box-shadow: 0 0 25px var(--c-lime), inset 0 0 25px var(--c-lime) !important;
@@ -265,9 +261,6 @@
         z-index: 40;
     }
 
-    /* ==========================================
-       もがく・暴れる時のアニメーション (3パターン)
-       ========================================== */
     .medal.shake-pattern-1.shaking { animation: shakeAnim1 0.1s infinite !important; }
     .medal.shake-pattern-2.shaking { animation: shakeAnim2 0.15s infinite !important; }
     .medal.shake-pattern-3.shaking { animation: shakeAnim3 0.2s infinite !important; }
@@ -290,8 +283,9 @@
         100% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); }
     }
 
+
     /* ==========================================
-       層4：ポップアップ モーダル (Z: 100)
+       層4：進化したポップアップ モーダル (Z: 100)
        ========================================== */
     #modal-overlay {
         position: fixed;
@@ -317,25 +311,173 @@
         background-color: var(--c-black);
         border: 2px solid var(--c-white);
         box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
-        padding: 50px 80px;
-        border-radius: 12px;
+        border-radius: 16px;
         transform: scale(1);
         transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* 通常の???は中央寄せ */
+    }
+
+    /* 詳細バッジモードの時のサイズ拡張 */
+    #modal-content.is-badge-mode {
+        width: 90vw;
+        max-width: 400px;
+        height: 85vh; 
+        max-height: 700px;
+        padding: 20px;
+        justify-content: flex-start; /* 上詰め */
     }
 
     #modal-overlay.hidden #modal-content { transform: scale(0.8); }
 
-    .modal-text {
+    /* --- 通常の???モード用 --- */
+    #modal-type-mystery {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px 80px;
+    }
+
+    .modal-text-mystery {
         font-family: 'Black Ops One', cursive; 
         color: var(--c-black);
         font-size: 48px;
         letter-spacing: 8px;
         text-align: center;
     }
+
+    /* --- 画像バッジ詳細モード用 --- */
+    #modal-type-badge {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    #modal-type-mystery.hidden,
+    #modal-type-badge.hidden {
+        display: none !important;
+    }
+
+    .modal-image-area {
+        flex: 1; 
+        min-height: 0; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+    }
     
-    .modal-text.color-cyan { text-shadow: 0 0 2px var(--c-cyan), 0 0 5px var(--c-cyan), 0 0 10px var(--c-cyan), 0 0 15px var(--c-cyan); }
-    .modal-text.color-lime { text-shadow: 0 0 2px var(--c-lime), 0 0 5px var(--c-lime), 0 0 10px var(--c-lime), 0 0 15px var(--c-lime); }
-    .modal-text.color-pink { text-shadow: 0 0 2px var(--c-pink), 0 0 5px var(--c-pink), 0 0 10px var(--c-pink), 0 0 15px var(--c-pink); }
+    .modal-image-area img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; 
+        border-radius: 50%;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-info-area {
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Black Ops One', cursive; 
+        color: var(--c-black);
+    }
+
+    .modal-info-title {
+        font-size: 24px;
+        letter-spacing: 2px;
+        margin-bottom: 4px;
+    }
+    .modal-info-subtitle {
+        font-size: 32px;
+        letter-spacing: 4px;
+        margin-bottom: 10px;
+    }
+    .modal-info-desc {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        color: var(--c-white);
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .modal-action-area {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-btn {
+        background-color: var(--c-black);
+        border: 2px solid;
+        border-radius: 8px;
+        padding: 14px;
+        font-family: 'Black Ops One', cursive;
+        font-size: 16px;
+        letter-spacing: 1px;
+        color: var(--c-white);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    /* --- テーマカラー連動 --- */
+    /* シアンベース */
+    .modal-theme-cyan .modal-text-mystery,
+    .modal-theme-cyan .modal-info-title, .modal-theme-cyan .modal-info-subtitle {
+        text-shadow: 0 0 2px var(--c-cyan), 0 0 5px var(--c-cyan), 0 0 10px var(--c-cyan);
+    }
+    .modal-theme-cyan .modal-btn {
+        border-color: var(--c-cyan);
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.3);
+        text-shadow: 0 0 5px var(--c-cyan);
+    }
+    .modal-theme-cyan .modal-btn:active { background-color: rgba(0, 255, 255, 0.2); }
+
+    /* ライムベース */
+    .modal-theme-lime .modal-text-mystery,
+    .modal-theme-lime .modal-info-title, .modal-theme-lime .modal-info-subtitle {
+        text-shadow: 0 0 2px var(--c-lime), 0 0 5px var(--c-lime), 0 0 10px var(--c-lime);
+    }
+    .modal-theme-lime .modal-btn {
+        border-color: var(--c-lime);
+        box-shadow: 0 0 10px rgba(204, 255, 0, 0.3), inset 0 0 10px rgba(204, 255, 0, 0.3);
+        text-shadow: 0 0 5px var(--c-lime);
+    }
+    .modal-theme-lime .modal-btn:active { background-color: rgba(204, 255, 0, 0.2); }
+
+    /* ピンクベース（※画像バッジでは使わず、???でのみ使用） */
+    .modal-theme-pink .modal-text-mystery {
+        text-shadow: 0 0 2px var(--c-pink), 0 0 5px var(--c-pink), 0 0 10px var(--c-pink);
+    }
+
+
+    /* ==========================================
+       層5：トランジション（画面遷移用フルスクリーン） (Z: 200)
+       ========================================== */
+    #transition-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background-color: var(--c-black);
+        z-index: 200;
+        display: flex; justify-content: center; align-items: center;
+        opacity: 1; transition: opacity 0.3s ease;
+    }
+
+    #transition-overlay.hidden {
+        opacity: 0; pointer-events: none;
+    }
+
+    #transition-text {
+        font-family: 'Black Ops One', cursive;
+        color: var(--c-white);
+        font-size: 28px;
+        text-align: center;
+        white-space: pre-wrap; /* JSの\nで改行させるため */
+        line-height: 1.5;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
 
 </style>
 </head>
@@ -360,10 +502,38 @@
 
     <div id="map-fg" class="map-layer"></div>
 
+    <!-- モーダル画面 -->
     <div id="modal-overlay" class="hidden">
         <div id="modal-content">
-            <div id="modal-text" class="modal-text">???</div>
+            
+            <!-- 通常の???モード -->
+            <div id="modal-type-mystery">
+                <div class="modal-text-mystery">???</div>
+            </div>
+
+            <!-- 画像バッジ詳細モード -->
+            <div id="modal-type-badge" class="hidden">
+                <div class="modal-image-area">
+                    <img src="01BADGE.PNG" alt="Badge">
+                </div>
+                <div class="modal-info-area">
+                    <div class="modal-info-title">AICHI ★ 01</div>
+                    <div class="modal-info-subtitle">MISO KATSU</div>
+                    <div class="modal-info-desc">YOUR PRIZE IS OUT THERE.</div>
+                </div>
+                <div class="modal-action-area">
+                    <button class="modal-btn" id="claim-btn">CLAIM YOUR PRIZE</button>
+                    <button class="modal-btn" id="continue-btn">CONTINUE STORY</button>
+                    <button class="modal-btn" id="modal-close-btn">CLOSE</button>
+                </div>
+            </div>
+
         </div>
+    </div>
+
+    <!-- トランジション（画面遷移）用オーバーレイ -->
+    <div id="transition-overlay" class="hidden">
+        <div id="transition-text"></div>
     </div>
 
 <script>
@@ -382,6 +552,7 @@
     const TOTAL_EMOJIS = 20; 
     
     let objectData = []; 
+    let badgeOpenCount = 0; // バッジを開いた回数（色を切り替えるため）
 
     function generateMapData() {
         const titleRect = {
@@ -450,13 +621,12 @@
                 isEscaper: isEscaper,
                 shakePattern: shakePattern,
                 isCaught: false,
-                isImage: false, // 画像進化フラグ
+                isImage: false, 
                 imageUrl: '',
                 element: null 
             });
         }
 
-        // 絵文字データの生成
         for (let i = 0; i < TOTAL_EMOJIS; i++) {
             let char = EMOJI_LIST[i % EMOJI_LIST.length];
             let radius = 45; 
@@ -515,12 +685,12 @@
     if (objectData.length === 0) {
         generateMapData();
 
-        // ★ 生成後に、ノーマルサイズで逃げないメダルの中からランダムに1つ選んで画像に進化させる
+        // ノーマルサイズで逃げないメダルの中から1匹だけ画像バッジにする
         let normalCandidates = objectData.filter(m => m.type === 'medal' && m.sizeClass === 'normal' && !m.isEscaper);
         if (normalCandidates.length > 0) {
             let luckyOne = normalCandidates[Math.floor(Math.random() * normalCandidates.length)];
             luckyOne.isImage = true;
-            luckyOne.imageUrl = '01BADGE.PNG'; // 画像のファイル名を指定
+            luckyOne.imageUrl = '01BADGE.PNG'; 
         }
     }
 
@@ -536,7 +706,6 @@
         if (obj.type === 'medal') {
             el.className = `medal color-${obj.color} size-${obj.sizeClass} shake-pattern-${obj.shakePattern}`;
             
-            // ★ 画像メダルの場合は <img> タグを挿入
             if (obj.isImage) {
                 el.innerHTML = `<img src="${obj.imageUrl}" class="medal-image" alt="badge">`;
             } else {
@@ -713,7 +882,7 @@
     }
 
     window.addEventListener('pointerdown', (e) => {
-        if (!modalOverlay.classList.contains('hidden')) return;
+        if (!modalOverlay.classList.contains('hidden') || !transitionOverlay.classList.contains('hidden')) return;
         isDragging = true;
         hasMoved = false;
         startX = e.clientX;
@@ -780,7 +949,12 @@
        5. モーダル表示＆もがく・逃げる制御
        ========================================== */
     const modalOverlay = document.getElementById('modal-overlay');
-    const modalText = document.getElementById('modal-text');
+    const modalContent = document.getElementById('modal-content');
+    const modalTypeMystery = document.getElementById('modal-type-mystery');
+    const modalTypeBadge = document.getElementById('modal-type-badge');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const transitionOverlay = document.getElementById('transition-overlay');
+    const transitionText = document.getElementById('transition-text');
 
     function handleMedalTap(medalEl) {
         const id = parseInt(medalEl.dataset.id);
@@ -795,6 +969,7 @@
             medalEl.classList.remove('shaking');
             
             if (m.isEscaper) {
+                // 逃げるヤツ
                 m.isCaught = false; 
                 m.baseSpeed = 15; 
                 m.angle = Math.random() * 2 * Math.PI; 
@@ -806,22 +981,69 @@
                 }, 3000);
 
             } else {
+                // 捕まえた
                 m.isCaught = false; 
                 
-                modalText.className = 'modal-text'; 
-                if (medalEl.classList.contains('color-cyan')) modalText.classList.add('color-cyan');
-                if (medalEl.classList.contains('color-lime')) modalText.classList.add('color-lime');
-                if (medalEl.classList.contains('color-pink')) modalText.classList.add('color-pink');
+                modalContent.className = ''; // クラスリセット
+
+                if (m.isImage) {
+                    // ★ 画像バッジの場合
+                    modalTypeMystery.classList.add('hidden');
+                    modalTypeBadge.classList.remove('hidden');
+                    modalContent.classList.add('is-badge-mode');
+
+                    // 色はシアンとライムを交互にループ（ピンクなし）
+                    if (badgeOpenCount % 2 === 0) {
+                        modalContent.classList.add('modal-theme-cyan');
+                    } else {
+                        modalContent.classList.add('modal-theme-lime');
+                    }
+                    badgeOpenCount++;
+
+                } else {
+                    // ★ 通常の???の場合
+                    modalTypeMystery.classList.remove('hidden');
+                    modalTypeBadge.classList.add('hidden');
+                    modalContent.classList.remove('is-badge-mode');
+
+                    // 色はメダルの色に依存
+                    if (medalEl.classList.contains('color-cyan')) modalContent.classList.add('modal-theme-cyan');
+                    if (medalEl.classList.contains('color-lime')) modalContent.classList.add('modal-theme-lime');
+                    if (medalEl.classList.contains('color-pink')) modalContent.classList.add('modal-theme-pink');
+                }
 
                 modalOverlay.classList.remove('hidden');
             }
         }, 800); 
     }
 
+    // 閉じる処理
+    function closeModal() {
+        modalOverlay.classList.add('hidden');
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
     modalOverlay.addEventListener('pointerdown', (e) => {
-        if (e.target === modalOverlay) {
-            modalOverlay.classList.add('hidden');
-        }
+        if (e.target === modalOverlay) closeModal();
+    });
+
+    // ★ ボタンのトランジション（画面遷移）処理
+    document.getElementById('claim-btn').addEventListener('click', () => {
+        closeModal();
+        transitionText.textContent = "YOUR PRIZE IS OUT THERE.\nGO FIND IT.";
+        transitionOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            window.location.href = 'https://funkyhotdog.com/wild-tomato';
+        }, 2000);
+    });
+
+    document.getElementById('continue-btn').addEventListener('click', () => {
+        closeModal();
+        transitionText.textContent = "FOLLOW THE STORY.";
+        transitionOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            window.location.href = 'https://funkyhotdog.com/comic/japan-gp/aichi-01';
+        }, 2000);
     });
 
     initPosition();
