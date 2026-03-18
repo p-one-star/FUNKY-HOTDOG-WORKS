@@ -205,7 +205,6 @@
           <div class="relative aspect-[9/16] bg-[#0a0a0a] border border-[#222222] rounded-sm flex flex-col justify-center items-center overflow-hidden z-10">
             <img src="AICHI.jpeg" alt="AICHI Comic" class="w-full h-full object-cover">
           </div>
-          <!-- ★修正: 「TAP TO EXPAND」のテキスト案内を削除しました -->
         </div>
 
         <!-- --- ストーリーテキスト ＆ CRAFTED IN JAPAN エリア --- -->
@@ -386,15 +385,20 @@
   </div>
 
   <!-- ==========================================
-       ★秘密のギミックモーダル 1: クルマ (BUY THIS MADNESS?) ★
+       ★秘密のギミックモーダル 1: クルマ (THIS MACHINE IS NOT FOR SALE.) ★
        ========================================== -->
   <div id="buy-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
     <div class="relative bg-black border-[3px] border-[#ff0000] px-4 py-8 w-full max-w-[340px] flex flex-col items-center justify-center" style="box-shadow: 0 0 15px rgba(255,0,0,0.3);">
-      <h3 class="font-impact text-[28px] text-white tracking-widest text-center mb-8 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #ff0000, 0 0 20px rgba(255,0,0,0.6);">
-        BUY THIS MADNESS<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
+      
+      <!-- ★修正: テキスト内容の変更 -->
+      <h3 class="font-impact text-[26px] text-white tracking-widest text-center mb-8 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #ff0000, 0 0 20px rgba(255,0,0,0.6);">
+        THIS MACHINE IS<br>NOT FOR SALE.
       </h3>
+      <div class="font-mono text-[#888888] text-[14px] text-center tracking-widest mb-6 leading-[1.8]">
+        BUILT FOR AICHI GP.<br>ONLY ONE EXISTS.
+      </div>
       <div class="font-mono text-[#888888] text-[14px] text-center tracking-widest mb-10 leading-[1.8]">
-        STILL TUNING IN THE<br>GARAGE...<br>COMING SOON.
+        YET.
       </div>
       <button class="w-[80%] border-2 border-[#555555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="closeBuyModal()">
         <span class="font-impact text-[#888888] text-[20px] tracking-widest uppercase">BUCK</span>
@@ -468,7 +472,7 @@
       setTimeout(() => { buyModal.classList.add('hidden'); buyModal.classList.remove('flex'); }, 300);
     }
 
-    // --- 秘密のギミック (愛知県スナイパー) ひょこひょこ移動！ ---
+    // --- 秘密のギミック (愛知県スナイパー) ---
     const warpModal = document.getElementById('warp-modal');
     const targetMark = document.getElementById('target-mark');
     const locatingText = document.getElementById('locating-text');
@@ -490,7 +494,7 @@
         { top: '26%', left: '12%' },
         { top: '14%', left: '20%' },
         { top: '20%', left: '10%' },
-        { top: '8%', left: '2%' } // 最終ロックオン位置！(マップ左端のドンピシャ位置)
+        { top: '8%', left: '2%' } // 最終ロックオン位置
       ];
 
       let stepIdx = 0;
@@ -567,7 +571,7 @@
       }, 300);
     }
 
-    // --- ★修正: 画像モーダル (全画面・ピンポイントズーム・スワイプ) 機能 ---
+    // --- 画像モーダル (全画面・ピンポイントズーム・スワイプ) 機能 ---
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-img');
     const modalHint = document.getElementById('modal-hint');
@@ -613,7 +617,7 @@
       }, 300); 
     }
 
-    // ★修正: タップした場所を画面の中心に持ってきてズームする計算
+    // タップした場所を画面の中心に持ってきてズームする計算
     function toggleZoom(clientX, clientY) {
       if (isZoomed) {
         isZoomed = false;
@@ -629,15 +633,12 @@
         
         const rect = modalImg.getBoundingClientRect();
         
-        // 画像要素の中心座標 (1倍の時は画面中央と一致)
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         
-        // タップした位置の、中心からのズレ
         const offsetX = clientX - centerX;
         const offsetY = clientY - centerY;
         
-        // タップした部分を画面中央に持ってくるためのTranslate移動量
         currentTx = -offsetX * currentScale;
         currentTy = -offsetY * currentScale;
         
