@@ -101,14 +101,29 @@
     <!-- ヘッダー -->
     <header class="fixed w-full z-50 transition-all duration-300 glass-panel border-b-0">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- ロゴとUPDATE時間 -->
-            <div class="flex items-baseline space-x-3 sm:space-x-4">
-                <div class="text-2xl font-bold tracking-[0.2em] text-gold font-en">FHW</div>
-                <div class="text-[9px] sm:text-[10px] tracking-widest text-gray-400 font-en opacity-80">JST 00:00 UPDATE</div>
+            
+            <div class="flex items-center">
+                <!-- ロゴ -->
+                <div class="text-2xl sm:text-3xl font-bold tracking-[0.2em] text-gold font-en">FHW</div>
+                
+                <!-- 2段構成のカウントダウンタイマー（サイズを限界まで大きく） -->
+                <div class="flex flex-col justify-center ml-4 sm:ml-6">
+                    <div class="text-xs sm:text-sm text-gray-400 tracking-[0.5em] opacity-80 pl-[2.5rem] sm:pl-[3.5rem] mb-[-4px]">終刻</div>
+                    <div class="text-xl sm:text-2xl text-gray-400 opacity-80 flex items-baseline space-x-2 drop-shadow-md">
+                        <span class="tracking-widest text-sm sm:text-base">残</span>
+                        <div class="flex items-baseline font-en tracking-[0.1em]">
+                            <span id="timer-h" class="text-[#E5D3B3] transition-colors duration-300">00</span>
+                            <span class="timer-colon text-[#E5D3B3] transition-colors duration-300 mx-0.5">:</span>
+                            <span id="timer-m" class="text-[#E5D3B3] transition-colors duration-300">00</span>
+                            <span class="timer-colon text-[#E5D3B3] transition-colors duration-300 mx-0.5">:</span>
+                            <span id="timer-s" class="text-[#E5D3B3] transition-colors duration-300">00</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- 🍙リンク -->
-            <a href="https://funkyhotdog.com/world" class="text-2xl hover:scale-110 transition-transform duration-300" title="World">
+            <a href="https://funkyhotdog.com/world" class="text-2xl sm:text-3xl hover:scale-110 transition-transform duration-300" title="World">
                 🍙
             </a>
         </div>
@@ -123,18 +138,12 @@
             
             <!-- 専用の透過PNG枠を使ったボタン -->
             <a href="#collection" class="relative inline-flex flex-col items-center justify-center w-[280px] h-[130px] sm:w-[320px] sm:h-[150px] group transition-all duration-500">
-                
-                <!-- 用意された透過PNG（waku.PNG）を表示 -->
-                <!-- translate-y-[5%] を追加して画像だけを5%下にずらしました -->
                 <img src="waku.PNG" alt="枠" class="absolute inset-0 w-full h-full object-contain pointer-events-none transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(229,211,179,0.6)] translate-y-[5%]">
-
-                <!-- テキスト部分（画像は下がるが文字はそのままの位置） -->
                 <div class="relative z-10 flex flex-col items-center">
                     <span class="text-gold tracking-[0.2em] sm:tracking-[0.3em] text-2xl sm:text-3xl font-bold mb-1 pl-1 drop-shadow-md">一期一会</span>
                     <span class="text-[8px] sm:text-[9px] text-[#E5D3B3] tracking-widest font-en opacity-80 drop-shadow-sm">ONE CHANCE. ONE MOMENT.</span>
                 </div>
             </a>
-
         </div>
     </section>
 
@@ -241,9 +250,7 @@
                 </div>
             </div>
             
-            <!-- スクロール用の余白 -->
             <div class="snap-center flex-none w-2 sm:w-4"></div>
-
         </div>
     </section>
 
@@ -258,6 +265,67 @@
     <!-- スクリプト -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- JST 日本時間 カウントダウンタイマー処理（赤色発光・点滅ギミック追加） ---
+            function updateCountdown() {
+                const now = new Date();
+                const jstOffset = 9 * 60 * 60 * 1000;
+                const jstNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + jstOffset);
+
+                const jstTomorrow = new Date(jstNow);
+                jstTomorrow.setHours(24, 0, 0, 0);
+
+                let diff = jstTomorrow - jstNow;
+
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const pad = (num) => String(num).padStart(2, '0');
+
+                // DOM要素の取得
+                const hEl = document.getElementById('timer-h');
+                const mEl = document.getElementById('timer-m');
+                const sEl = document.getElementById('timer-s');
+                const colons = document.querySelectorAll('.timer-colon');
+
+                if (!hEl || !mEl || !sEl) return;
+
+                // 時間をセット
+                hEl.textContent = pad(h);
+                mEl.textContent = pad(m);
+                sEl.textContent = pad(s);
+
+                // スタイルクラスの定義
+                const normalClass = "text-[#E5D3B3] transition-colors duration-300";
+                // 発光する赤色
+                const redClass = "text-[#ff3b30] drop-shadow-[0_0_6px_rgba(255,59,48,0.8)] transition-colors duration-300";
+                // 激しすぎない上品な点滅（pulse）＋発光する赤色
+                const blinkClass = "animate-pulse text-[#ff3b30] drop-shadow-[0_0_8px_rgba(255,59,48,0.9)] transition-colors duration-300";
+
+                // 一旦すべてノーマルクラスにリセット
+                hEl.className = normalClass;
+                mEl.className = normalClass;
+                sEl.className = normalClass;
+                colons.forEach(c => c.className = `timer-colon mx-0.5 sm:mx-1 ${normalClass}`);
+
+                // カウントダウンギミックの判定
+                if (h === 0) {
+                    if (m < 10) {
+                        // 残り10分未満（09:59〜00:00）：全体が赤く発光して点滅
+                        hEl.className = blinkClass;
+                        mEl.className = blinkClass;
+                        sEl.className = blinkClass;
+                        colons.forEach(c => c.className = `timer-colon mx-0.5 sm:mx-1 ${blinkClass}`);
+                    } else if (m % 10 === 0) {
+                        // 残り1時間未満で 50, 40, 30, 20, 10 分台の時：「分」だけ赤く発光
+                        mEl.className = redClass;
+                    }
+                }
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+
             // --- シェアメニューの開閉処理 ---
             const shareBtns = document.querySelectorAll('.share-btn');
             const allMenus = document.querySelectorAll('.share-menu');
@@ -280,7 +348,7 @@
                 });
             });
 
-            // --- コピーリンクの偽物アクション ---
+            // --- コピーリンクのアクション ---
             const copyBtns = document.querySelectorAll('.copy-link-btn');
             copyBtns.forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -292,13 +360,11 @@
                     const originalIcon = iconSpan.innerHTML;
                     const originalText = textSpan.innerHTML;
                     
-                    // Copied!に変更
                     iconSpan.innerHTML = '🔗';
                     iconSpan.classList.add('text-[#C5A059]');
                     textSpan.innerHTML = 'Copied!';
                     textSpan.classList.add('text-[#C5A059]', 'font-bold');
                     
-                    // 2秒後に戻す
                     setTimeout(() => {
                         iconSpan.innerHTML = originalIcon;
                         iconSpan.classList.remove('text-[#C5A059]');
@@ -383,7 +449,7 @@
             }
             animate();
 
-            // --- スムーススクロール（ページ内リンク用） ---
+            // --- スムーススクロール ---
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
