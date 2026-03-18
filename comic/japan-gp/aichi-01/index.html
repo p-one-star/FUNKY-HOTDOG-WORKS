@@ -16,33 +16,23 @@
   <meta name="twitter:description" content="Because in Aichi, it's miso-katsu. / 愛知と言えば、味噌カツだて。">
   <meta name="twitter:image" content="https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg">
 
-  <!-- Tailwind CSS (CDN) の読み込み -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- 外部フォントの読み込み -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
   
   <style>
-    /* 基本フォント設定とタップハイライト無効化 */
     .font-blackops { font-family: 'Black Ops One', system-ui; }
     .font-impact { font-family: 'Impact', 'Arial Black', sans-serif; }
     * { -webkit-tap-highlight-color: transparent; }
     
-    body { 
-      background-color: black; 
-      color: white; 
-      overflow-x: hidden;
-    }
+    body { background-color: black; color: white; overflow-x: hidden; }
 
-    /* スクロールバーを完全に隠すクラス */
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* ==========================================
-       言語切り替え用のCSS
-       ========================================== */
+    /* 言語切り替え */
     .lang-en { display: none; }
     .lang-ja { display: block; }
     body.is-english .lang-en { display: block; }
@@ -52,115 +42,69 @@
     body.is-english span.lang-en { display: inline; }
     body.is-english span.lang-ja { display: none; }
 
-    /* ==========================================
-       アニメーション
-       ========================================== */
+    /* アニメーション */
     @keyframes breathe {
-      0% { transform: scale(1); }
+      0%, 100% { transform: scale(1); }
       50% { transform: scale(1.15); }
-      100% { transform: scale(1); }
     }
-    .animate-breathe {
-      animation: breathe 40s ease-in-out infinite;
-      display: inline-block;
-    }
+    .animate-breathe { animation: breathe 4s ease-in-out infinite; display: inline-block; }
 
-    /* LOCATING用 薄ら見え隠れする高速フリッカーアニメーション */
     @keyframes locating-flicker {
       0%, 100% { opacity: 0.1; }
       50% { opacity: 0.8; }
       25%, 75% { opacity: 0.3; }
     }
-    .animate-locating {
-      animation: locating-flicker 0.15s infinite;
-    }
+    .animate-locating { animation: locating-flicker 0.15s infinite; }
 
-    /* PRIZEの裏で「5秒停止、2秒キラン✨」の合計7秒ループ */
+    /* PRIZEの流れる光 */
     .prize-flowing-glow {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       color: transparent;
       -webkit-text-stroke: 4px transparent; 
-      background: linear-gradient(
-        110deg, 
-        #666666 0%, 
-        #666666 45%, 
-        #ffffff 50%, 
-        #666666 55%, 
-        #666666 100%
-      );
+      background: linear-gradient(110deg, #666 0%, #666 45%, #fff 50%, #666 55%, #666 100%);
       background-size: 400% auto; 
-      -webkit-background-clip: text;
-      background-clip: text;
+      -webkit-background-clip: text; background-clip: text;
       filter: blur(2px) drop-shadow(0 0 3px rgba(255, 255, 255, 0.9));
-      /* 合計7秒間の無限ループ */
-      animation: flash-flow 7s linear infinite;
-      pointer-events: none;
-      z-index: 0;
+      animation: flash-flow 7s linear infinite; pointer-events: none; z-index: 0;
     }
     @keyframes flash-flow {
-      /* 7秒周期: 0〜5秒(約71.43%)は100%の位置で待機 */
-      /* 5秒〜7秒(100%)で0%の位置へ移動し、2秒かけて光が走る */
       0%, 71.43% { background-position: 100% center; }
       100% { background-position: 0% center; }
     }
 
-    /* ==========================================
-       裏パネルの特製デザイン
-       ========================================== */
+    /* パネルデザイン */
     .h2-glow {
-      color: black;
-      -webkit-text-stroke: 1.5px white;
+      color: black; -webkit-text-stroke: 1.5px white;
       text-shadow: 0 0 5px rgba(150, 150, 150, 1), 0 0 10px rgba(150, 150, 150, 0.6);
     }
 
-    /* ==========================================
-       左右共通のパネルボタン
-       ========================================== */
     .panel-btn {
-      background-color: rgba(0, 0, 0, 0.5);
-      border: 3px solid #00e5ff;
+      background-color: rgba(0, 0, 0, 0.5); border: 3px solid #00e5ff;
       box-shadow: 0 0 15px rgba(0,229,255,0.4), inset 0 0 15px rgba(0,229,255,0.4);
-      color: #00e5ff;
-      text-decoration: none;
-      outline: none;
-      transition: all 0.2s ease;
-      cursor: pointer;
+      color: #00e5ff; transition: all 0.2s ease; cursor: pointer;
     }
     .panel-btn .text-normal { display: block; color: inherit; transition: color 0.2s ease; }
     .panel-btn .text-active { display: none; color: #ff0000; }
 
+    .panel-btn:active:not(.is-alert) {
+      background-color: #00e5ff; color: black; box-shadow: 0 0 30px rgba(0,229,255,1), inset 0 0 15px rgba(0,229,255,0.8);
+    }
     @media (hover: hover) {
       .panel-btn:hover:not(.is-alert) {
-        background-color: #00e5ff;
-        color: black;
-        box-shadow: 0 0 30px rgba(0,229,255,1), inset 0 0 15px rgba(0,229,255,0.8);
+        background-color: #00e5ff; color: black; box-shadow: 0 0 30px rgba(0,229,255,1), inset 0 0 15px rgba(0,229,255,0.8);
       }
     }
-    .panel-btn:active:not(.is-alert) {
-      background-color: #00e5ff;
-      color: black;
-      box-shadow: 0 0 30px rgba(0,229,255,1), inset 0 0 15px rgba(0,229,255,0.8);
-    }
 
-    /* ギミック発動時 (JSで付与) */
+    /* ギミック発動時 */
     .gimmick-next-btn.is-alert {
-      background-color: rgba(0, 0, 0, 0.5) !important;
-      border-color: #ff0000 !important; /* 純粋な赤 */
+      background-color: rgba(0, 0, 0, 0.5) !important; border-color: #ff0000 !important;
       box-shadow: 0 0 25px rgba(255,0,0,0.8), inset 0 0 25px rgba(255,0,0,0.8) !important;
     }
     .gimmick-next-btn.is-alert .text-normal { display: none !important; }
     .gimmick-next-btn.is-alert .text-active { display: block !important; color: #ff0000 !important; }
 
-    /* ==========================================
-       シェアボタン
-       ========================================== */
-    .share-btn {
-      transition: all 0.2s ease;
-    }
-    .share-btn:active {
-      transform: scale(0.97);
-    }
+    .share-btn { transition: all 0.2s ease; }
+    .share-btn:active { transform: scale(0.97); }
     .share-btn.is-clicked {
       border-color: #00e5ff !important;
       box-shadow: 0 0 15px rgba(0,229,255,0.6), inset 0 0 15px rgba(0,229,255,0.3) !important;
@@ -169,35 +113,29 @@
 </head>
 <body class="font-sans relative is-english">
 
-  <!-- --- ヘッダー領域 --- -->
+  <!-- ヘッダー -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md border-b border-[#222222] flex items-center justify-between px-3 h-14 w-full">
-    
     <div class="relative z-20 flex items-center justify-start w-12">
-      <img src="icon.PNG" alt="Logo" class="absolute top-[-30px] left-[0px] w-[100px] max-w-none rotate-[-5deg] transition-all duration-200 active:scale-110 active:rotate-[-12deg] cursor-pointer select-none origin-center drop-shadow-lg">
+      <img src="https://funkyhotdog.com/comic/japan-gp/icon.PNG" alt="Logo" class="absolute top-[-30px] left-[0px] w-[100px] max-w-none rotate-[-5deg] transition-all duration-200 active:scale-110 active:rotate-[-12deg] cursor-pointer select-none origin-center drop-shadow-lg">
     </div>
-
-    <div class="absolute left-1/2 transform -translate-x-1/2 font-blackops text-[26px] z-0 whitespace-nowrap" style="color: #000000; text-shadow: 0 0 2px #00e5ff, 0 0 5px #00e5ff, 0 0 8px #00e5ff;">
+    <div class="absolute left-1/2 transform -translate-x-1/2 font-blackops text-[26px] z-0 whitespace-nowrap" style="color: #000; text-shadow: 0 0 2px #00e5ff, 0 0 5px #00e5ff, 0 0 8px #00e5ff;">
       AICHI ★01
     </div>
-
     <div class="flex items-center gap-2 relative z-10 ml-auto">
-      <button onclick="toggleLanguage()" class="flex items-center gap-1.5 bg-black border border-[#333333] rounded-full px-1.5 py-0.5 outline-none cursor-pointer">
+      <button onclick="toggleLanguage()" class="flex items-center gap-1.5 bg-black border border-[#333] rounded-full px-1.5 py-0.5 outline-none cursor-pointer">
         <span id="icon-us" class="text-[11px] transition-opacity opacity-100">🇺🇸</span>
-        <div class="w-px h-2.5 bg-[#444444]"></div>
+        <div class="w-px h-2.5 bg-[#444]"></div>
         <span id="icon-jp" class="text-[11px] transition-opacity opacity-30">🇯🇵</span>
       </button>
-      
       <div class="text-[18px] animate-breathe origin-center">🍙</div>
     </div>
   </header>
 
-  <!-- ==========================================
-       横スクロール・カルーセル領域
-       ========================================== -->
+  <!-- カルーセル領域 -->
   <div id="carousel" class="flex w-full h-full overflow-x-auto snap-x snap-mandatory hide-scrollbar relative z-10" style="scroll-behavior: auto; visibility: hidden;">
 
-    <!-- --- 【ページ1】左側のパネル (PREV) --- -->
-    <section class="w-screen shrink-0 snap-center relative bg-black">
+    <!-- 左パネル (PREV) -->
+    <section class="w-screen shrink-0 snap-center relative">
       <div id="left-panel-content" class="absolute top-0 w-full h-screen flex flex-col items-center justify-center z-0 overflow-hidden">
         <div class="transform rotate-[6deg] flex flex-col items-center justify-center">
           <h2 class="font-impact text-[42px] tracking-wider mb-6 text-center leading-[0.9] h2-glow">
@@ -206,13 +144,13 @@
           <a href="https://p-one-star.github.io/FUNKY-02/" class="panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center">
               <span class="font-blackops text-[26px] tracking-widest uppercase text-normal text-center w-full whitespace-nowrap">PREV FUNKY</span>
           </a>
-          <div class="font-impact text-[#888888] text-sm tracking-widest uppercase">SWIPE LEFT TO CANCEL →</div>
+          <div class="font-impact text-[#888] text-sm tracking-widest uppercase">SWIPE LEFT TO CANCEL →</div>
         </div>
       </div>
     </section>
 
-    <!-- --- 【ページ2】メインコンテンツ (中央) --- -->
-    <section class="w-screen shrink-0 snap-center relative pb-20 bg-black">
+    <!-- メインコンテンツ -->
+    <section class="w-screen shrink-0 snap-center relative pb-20">
       <main class="w-full max-w-md mx-auto px-2 pt-20">
         
         <div class="mt-4 mb-4 flex flex-col items-center justify-center font-blackops leading-[0.9] text-white">
@@ -221,88 +159,73 @@
           <div class="text-[72px]">FHW</div>
         </div>
 
-        <div class="flex justify-center mb-8">
-          <div class="font-blackops text-white text-[30px] tracking-widest flex items-center gap-2">
-            <span class="font-sans text-[24px] inline-block transform -scale-x-100">🏁</span>
-            JAPAN <span class="font-sans text-[24px]">🇯🇵</span> GP
-            <span class="font-sans text-[24px] inline-block">🏁</span>
-          </div>
+        <div class="font-blackops text-white text-[30px] tracking-widest flex items-center justify-center gap-2 mb-8">
+          <span class="font-sans text-[24px] inline-block transform -scale-x-100">🏁</span>
+          JAPAN <span class="font-sans text-[24px]">🇯🇵</span> GP
+          <span class="font-sans text-[24px] inline-block">🏁</span>
         </div>
 
-        <!-- 四コマ漫画エリア (クリックで拡大) -->
-        <div class="relative w-full px-2 mb-12 cursor-pointer transition-transform active:scale-[0.98]" onclick="openModal()">
+        <!-- 漫画エリア -->
+        <div class="relative w-full px-2 mb-12 cursor-pointer transition-transform active:scale-[0.98]" onclick="showImageModal()">
           <div class="absolute inset-2 bg-[#00e5ff] blur-[20px] opacity-20 rounded-lg"></div>
-          <div class="relative aspect-[9/16] bg-[#0a0a0a] border border-[#222222] rounded-sm flex flex-col justify-center items-center overflow-hidden z-10">
-            <img src="AICHI.jpeg" alt="AICHI Comic" class="w-full h-full object-cover">
+          <div class="relative aspect-[9/16] bg-[#0a0a0a] border border-[#222] rounded-sm flex flex-col justify-center items-center overflow-hidden z-10">
+            <img src="https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg" alt="AICHI Comic" class="w-full h-full object-cover">
           </div>
         </div>
 
-        <!-- --- ストーリーテキスト ＆ CRAFTED IN JAPAN エリア --- -->
+        <!-- ストーリー ＆ CRAFTED IN JAPAN -->
         <div class="relative mb-6 pl-3 border-l-[3px] border-[#ccff00] pb-2">
           <div class="tracking-wider text-[17px] leading-[1.8]">
             <div class="lang-ja">
-              <div class="text-[#cccccc] mb-4">愛知 ★01</div>
-              <div class="text-[#cccccc] mb-6">彼はレースが始まる前から<br>もう勝った気でいる。<br>スピードより先に、<br>自信だけがゴールしている。</div>
-              <div class="text-[#cccccc] mb-3">アクセルは全開。<br>頭の中は表彰台。<br>だが現実はーー</div>
-              <div class="text-[#00ffff] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.5));">パンダに乗ったイヌに追われる。</div>
-              <div class="text-[#cccccc] mb-3">だがFHWでは、<br>そんなもんでは止まらない。<br>なぜなら彼は</div>
-              <div class="text-[#ccff00] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(204,255,0,0.5));">味噌で育っとるもんで。</div>
-              <div class="text-[#cccccc] mb-6">そしてこの街ではーー<br>暴走すると<br>参加賞がもらえる。</div>
-              <div class="text-[#cccccc] mb-3">愛知と言えば</div>
-              <div class="text-[#ff00aa] font-bold mb-2" style="filter: drop-shadow(0 0 8px rgba(255,0,170,0.5));">味噌カツだて。</div>
+              <div class="text-[#ccc] mb-4">愛知 ★01</div>
+              <div class="text-[#ccc] mb-6">彼はレースが始まる前から<br>もう勝った気でいる。<br>スピードより先に、<br>自信だけがゴールしている。</div>
+              <div class="text-[#ccc] mb-3">アクセルは全開。<br>頭の中は表彰台。<br>だが現実はーー</div>
+              <div class="text-[#0ff] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.5));">パンダに乗ったイヌに追われる。</div>
+              <div class="text-[#ccc] mb-3">だがFHWでは、<br>そんなもんでは止まらない。<br>なぜなら彼は</div>
+              <div class="text-[#cf0] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(204,255,0,0.5));">味噌で育っとるもんで。</div>
+              <div class="text-[#ccc] mb-6">そしてこの街ではーー<br>暴走すると<br>参加賞がもらえる。</div>
+              <div class="text-[#ccc] mb-3">愛知と言えば</div>
+              <div class="text-[#f0a] font-bold mb-2" style="filter: drop-shadow(0 0 8px rgba(255,0,170,0.5));">味噌カツだて。</div>
             </div>
             <div class="lang-en">
-              <div class="text-[#cccccc] mb-4">AICHI ★01</div>
-              <div class="text-[#cccccc] mb-6">He thinks he's already won<br>before the race even starts.<br>In his world,<br>confidence crosses the finish line first.</div>
-              <div class="text-[#cccccc] mb-3">Throttle wide open.<br>Podium already in his head.<br>But reality—</div>
-              <div class="text-[#00ffff] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.5));">a dog in a panda car is chasing him.</div>
-              <div class="text-[#cccccc] mb-3">But in FHW,<br>that's not enough to stop him.<br>Because he was</div>
-              <div class="text-[#ccff00] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(204,255,0,0.5));">raised on miso.</div>
-              <div class="text-[#cccccc] mb-6">And in this town—<br>when you go full throttle,<br>you still get a participation prize.</div>
-              <div class="text-[#cccccc] mb-3">Because in Aichi,</div>
-              <div class="text-[#ff00aa] font-bold mb-2" style="filter: drop-shadow(0 0 8px rgba(255,0,170,0.5));">it's miso-katsu.</div>
+              <div class="text-[#ccc] mb-4">AICHI ★01</div>
+              <div class="text-[#ccc] mb-6">He thinks he's already won<br>before the race even starts.<br>In his world,<br>confidence crosses the finish line first.</div>
+              <div class="text-[#ccc] mb-3">Throttle wide open.<br>Podium already in his head.<br>But reality—</div>
+              <div class="text-[#0ff] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(0,255,255,0.5));">a dog in a panda car is chasing him.</div>
+              <div class="text-[#ccc] mb-3">But in FHW,<br>that's not enough to stop him.<br>Because he was</div>
+              <div class="text-[#cf0] font-bold mb-6" style="filter: drop-shadow(0 0 8px rgba(204,255,0,0.5));">raised on miso.</div>
+              <div class="text-[#ccc] mb-6">And in this town—<br>when you go full throttle,<br>you still get a participation prize.</div>
+              <div class="text-[#ccc] mb-3">Because in Aichi,</div>
+              <div class="text-[#f0a] font-bold mb-2" style="filter: drop-shadow(0 0 8px rgba(255,0,170,0.5));">it's miso-katsu.</div>
             </div>
           </div>
 
-          <!-- YOU MADE IT. と CLAIM YOUR PRIZE -->
+          <!-- YOU MADE IT. -->
           <div class="mt-8 mb-10">
-            <!-- YOU MADE IT. -->
-            <div class="text-[#e5e5e5] font-impact text-[22px] tracking-widest pl-1">
-              YOU MADE IT.
-            </div>
-            
+            <div class="text-[#e5e5e5] font-impact text-[22px] tracking-widest pl-1">YOU MADE IT.</div>
             <div class="mt-14 flex justify-start">
-              <!-- クリック時に openPrizeModal() を発動 -->
-              <button class="bg-transparent outline-none transition-transform active:scale-[0.97] text-left p-0 flex flex-col items-start gap-0 cursor-pointer" onclick="openPrizeModal()">
-                <!-- 上段: CLAIM YOUR -->
-                <span class="text-[#111111] font-blackops tracking-widest text-[30px] leading-none" 
-                      style="text-shadow: 0 0 2px rgba(255,255,255,0.85), 0 0 4px rgba(255,255,255,0.65), 0 0 5px rgba(255,255,255,0.5);">
+              <button class="bg-transparent outline-none transition-transform active:scale-[0.97] text-left p-0 flex flex-col items-start gap-0 cursor-pointer" onclick="initPrizeModal()">
+                <span class="text-[#111] font-blackops tracking-widest text-[30px] leading-none" style="text-shadow: 0 0 2px rgba(255,255,255,0.85), 0 0 4px rgba(255,255,255,0.65), 0 0 5px rgba(255,255,255,0.5);">
                   CLAIM YOUR
                 </span>
-                
-                <!-- 下段: PRIZE -->
                 <span class="relative inline-block w-full text-left mt-1">
                   <span class="prize-flowing-glow font-blackops tracking-wider text-[36px] leading-none" aria-hidden="true">PRIZE</span>
-                  <span class="relative z-10 text-black font-blackops tracking-wider text-[36px] leading-none" style="text-shadow: 0 0 1px rgba(255,255,255,0.8);">
-                    PRIZE
-                  </span>
+                  <span class="relative z-10 text-black font-blackops tracking-wider text-[36px] leading-none" style="text-shadow: 0 0 1px rgba(255,255,255,0.8);">PRIZE</span>
                 </span>
-                
               </button>
             </div>
           </div>
 
-          <!-- CRAFTED IN JAPAN & 印鑑 -->
+          <!-- CRAFTED IN JAPAN -->
           <div class="relative mt-2 pt-6 mb-4"> 
             <div class="absolute right-[5%] top-[-35px] z-20 pointer-events-none">
-              <img src="icon2.PNG" alt="Stamp" class="w-[80px] h-[80px] object-contain transform rotate-[-8deg] opacity-90 drop-shadow-md">
+              <img src="https://funkyhotdog.com/comic/japan-gp/icon2.PNG" alt="Stamp" class="w-[80px] h-[80px] object-contain transform rotate-[-8deg] opacity-90 drop-shadow-md">
             </div>
-
             <div class="font-impact relative flex justify-center items-center tracking-[0.6em] pl-[0.6em] text-[#e5e5e5] text-[20px]">
               <span>CRAFTED</span>
               <span class="relative mx-[0.4em] flex items-center justify-center">
                 <div class="absolute z-0 transform -translate-x-[6px] flex items-center justify-center">
-                  <div class="w-[36px] h-[36px] bg-[#ff0000] rounded-full blur-[2px] opacity-100 animate-breathe origin-center" style="box-shadow: 0 0 10px rgba(255,0,0,0.8);"></div>
+                  <div class="w-[36px] h-[36px] bg-[#f00] rounded-full blur-[2px] opacity-100 animate-breathe origin-center" style="box-shadow: 0 0 10px rgba(255,0,0,0.8);"></div>
                 </div>
                 <span class="relative z-10 text-white">IN</span>
               </span>
@@ -312,97 +235,79 @@
         </div>
 
         <div class="font-impact">
-          <!-- --- LOCAL ROOTS (マップと車) ギミック搭載エリア --- -->
+          <!-- LOCAL ROOTS (マップと車) -->
           <div class="relative w-full h-[280px] mb-10 px-2 mt-6 z-30">
             <!-- 愛知県マップ -->
             <div class="absolute top-[-125px] left-[-110px] w-[150%] h-[150%] z-10 pointer-events-none">
-              <img src="aj.PNG" alt="Aichi Map" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
+              <img src="https://funkyhotdog.com/comic/japan-gp/aj.PNG" alt="Aichi Map" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
             </div>
-
-            <!-- ギミック用: 愛知県を覆う透明ボタン (タップでスナイパー発動) -->
+            <!-- 愛知県 スナイパーボタン -->
             <div class="absolute top-[0px] left-[0px] w-[60%] h-[70%] z-40 cursor-pointer" onclick="startLocating()"></div>
 
-            <!-- マップ上の赤ターゲットマーク -->
-            <div id="target-mark" class="absolute top-[20%] left-[20%] w-6 h-6 z-20 pointer-events-none" style="transition: all 0.2s ease-out;">
-              <div class="absolute inset-0 border-[1.5px] border-[#ff0000] rounded-full" style="box-shadow: 0 0 4px #ff0000, inset 0 0 4px #ff0000;"></div>
-              <div class="absolute top-1/2 left-[-4px] right-[-4px] h-[1.5px] bg-[#ff0000] transform -translate-y-1/2" style="box-shadow: 0 0 4px #ff0000;"></div>
-              <div class="absolute top-[-4px] bottom-[-4px] left-1/2 w-[1.5px] bg-[#ff0000] transform -translate-x-1/2" style="box-shadow: 0 0 4px #ff0000;"></div>
-              
-              <!-- 照準の上に追従する LOCATING / LOCKED テキスト -->
-              <div id="locating-text" class="absolute bottom-[130%] left-1/2 transform -translate-x-1/2 text-[#ff0000] font-blackops text-[12px] tracking-[0.1em] whitespace-nowrap opacity-0 transition-opacity duration-200" style="text-shadow: 0 0 4px #ff0000;"></div>
+            <!-- 赤ターゲットマーク -->
+            <div id="target-mark" class="absolute top-[20%] left-[20%] w-6 h-6 z-20 pointer-events-none transition-all duration-200 ease-out">
+              <div class="absolute inset-0 border-[1.5px] border-[#f00] rounded-full shadow-[0_0_4px_#f00,inset_0_0_4px_#f00]"></div>
+              <div class="absolute top-1/2 left-[-4px] right-[-4px] h-[1.5px] bg-[#f00] transform -translate-y-1/2 shadow-[0_0_4px_#f00]"></div>
+              <div class="absolute top-[-4px] bottom-[-4px] left-1/2 w-[1.5px] bg-[#f00] transform -translate-x-1/2 shadow-[0_0_4px_#f00]"></div>
+              <!-- LOCATING テキスト -->
+              <div id="locating-text" class="absolute bottom-[130%] left-1/2 transform -translate-x-1/2 text-[#f00] font-blackops text-[12px] tracking-[0.1em] whitespace-nowrap opacity-0 transition-opacity duration-200" style="text-shadow: 0 0 4px #f00;"></div>
             </div>
 
-            <!-- 右上: 座標とテキスト -->
+            <!-- 右上: 座標 -->
             <div class="absolute top-[-15px] right-8 z-20 pr-2 flex flex-col items-end pointer-events-none">
-              <div class="text-[#888888] text-[16px] tracking-wider font-bold text-right leading-tight">35.1850°N</div>
-              <div class="text-[#888888] text-[16px] tracking-wider font-bold text-right leading-tight">136.8997°E</div>
-              <div class="w-full h-[1.5px] bg-[#666666] my-1 opacity-80"></div>
-              <div class="text-[#666666] text-xs tracking-widest font-bold text-right">LOCAL ROOTS</div>
+              <div class="text-[#888] text-[16px] tracking-wider font-bold text-right leading-tight">35.1850°N</div>
+              <div class="text-[#888] text-[16px] tracking-wider font-bold text-right leading-tight">136.8997°E</div>
+              <div class="w-full h-[1.5px] bg-[#666] my-1 opacity-80"></div>
+              <div class="text-[#666] text-xs tracking-widest font-bold text-right">LOCAL ROOTS</div>
             </div>
 
             <!-- 車 -->
             <div class="absolute bottom-[-10px] right-[-80px] w-[90%] h-[130%] z-30 pointer-events-none flex items-end justify-end">
-               <img src="maru.PNG" alt="Car" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
+               <img src="https://funkyhotdog.com/comic/japan-gp/maru.PNG" alt="Car" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
             </div>
+            <!-- 車ボタン -->
+            <div class="absolute bottom-[-10px] right-[-30px] w-[50%] h-[60%] z-40 cursor-pointer" onclick="showModal('buy-modal')"></div>
 
-            <!-- ギミック用: 車を覆う透明ボタン (タップでBUYモーダル開く) -->
-            <div class="absolute bottom-[-10px] right-[-30px] w-[50%] h-[60%] z-40 cursor-pointer" onclick="openBuyModal()"></div>
-
-            <!-- 左下: AICHI JAPAN テキスト -->
+            <!-- 左下: AICHI JAPAN -->
             <div class="absolute bottom-[-15px] left-4 z-40 flex items-center gap-2 pointer-events-none">
-              <span class="text-[#888888] text-2xl tracking-wider">AICHI</span>
-              <span class="text-xl font-sans">🇯🇵</span>
-              <span class="text-[#888888] text-2xl tracking-wider">JAPAN</span>
+              <span class="text-[#888] text-2xl tracking-wider">AICHI</span><span class="text-xl font-sans">🇯🇵</span><span class="text-[#888] text-2xl tracking-wider">JAPAN</span>
             </div>
           </div>
 
-          <!-- --- シェア・ナビゲーションセクション --- -->
+          <!-- シェア・ナビゲーション -->
           <div class="mt-10 mb-8 px-2 relative z-40 bg-black pt-4 font-impact">
-            
-            <h2 class="text-center text-[#888888] text-[28px] tracking-widest mb-6 uppercase">
-              <span class="lang-ja">SHARE THIS MADNESS</span>
-              <span class="lang-en">SHARE THIS MADNESS</span>
+            <h2 class="text-center text-[#888] text-[28px] tracking-widest mb-6 uppercase">
+              <span class="lang-ja">SHARE THIS MADNESS</span><span class="lang-en">SHARE THIS MADNESS</span>
             </h2>
 
-            <!-- シェアボタン群 -->
             <div class="grid grid-cols-2 gap-3 mb-3">
-              <button onclick="shareCopyLink(this)" class="share-btn flex items-center justify-center gap-2 border border-[#333333] bg-black py-3 px-2 outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#999999]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                <span class="text-[18px] text-[#cccccc] tracking-wider uppercase mt-[2px]">
-                  <span class="lang-ja">リンクをコピー</span>
-                  <span class="lang-en">COPY LINK</span>
-                </span>
+              <button onclick="shareCopyLink(this)" class="share-btn flex items-center justify-center gap-2 border border-[#333] bg-black py-3 px-2 outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#999]"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span class="text-[18px] text-[#ccc] tracking-wider uppercase mt-[2px]"><span class="lang-ja">リンクをコピー</span><span class="lang-en">COPY LINK</span></span>
               </button>
-              
-              <button onclick="shareX(this)" class="share-btn flex items-center justify-center gap-2 border border-[#333333] bg-black py-3 px-2 outline-none">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="text-[#999999]"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
-                <span class="text-[18px] text-[#cccccc] tracking-wider uppercase mt-[2px]">
-                  <span class="lang-ja">シェア</span>
-                  <span class="lang-en">SHARE ON X</span>
-                </span>
+              <button onclick="shareX(this)" class="share-btn flex items-center justify-center gap-2 border border-[#333] bg-black py-3 px-2 outline-none">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="text-[#999]"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 22.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg>
+                <span class="text-[18px] text-[#ccc] tracking-wider uppercase mt-[2px]"><span class="lang-ja">シェア</span><span class="lang-en">SHARE ON X</span></span>
               </button>
             </div>
             
             <div class="flex justify-center mb-10">
-              <button onclick="sharePinterest(this)" class="share-btn flex items-center justify-center gap-2.5 border border-[#333333] bg-black py-3 px-8 min-w-[160px] outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" width="20" height="20" fill="currentColor" class="text-[#999999]">
+              <button onclick="sharePinterest(this)" class="share-btn flex items-center justify-center gap-2.5 border border-[#333] bg-black py-3 px-8 min-w-[160px] outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" width="20" height="20" fill="currentColor" class="text-[#999]">
                   <path d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-107 0-163.9 71.8-163.9 150.1 0 36.4 19.4 81.7 50.3 96.1 4.7 2.2 7.2 1.2 8.3-3.3 .8-3.4 5-20.3 6.9-28.1 .6-2.5 .3-4.7-1.7-7.1-10.1-12.5-18.3-35.3-18.3-56.6 0-54.7 41.4-107.6 112-107.6 60.9 0 103.6 41.5 103.6 100.9 0 67.1-33.9 113.6-78 113.6-24.3 0-42.6-20.1-36.7-44.8 7-29.5 20.5-61.3 20.5-82.6 0-19-10.2-34.9-31.4-34.9-24.9 0-44.9 25.7-44.9 60.2 0 22 7.4 36.8 7.4 36.8s-24.5 103.8-29 123.2c-5 21.4-3 51.6-.9 71.2C65.4 450.9 0 361.1 0 256 0 119 111 8 248 8s248 111 248 248z"/>
                 </svg>
-                <span class="text-[20px] text-[#cccccc] tracking-wider uppercase mt-[2px]">
-                  <span class="lang-ja">シェア</span>
-                  <span class="lang-en">SHARE</span>
-                </span>
+                <span class="text-[20px] text-[#ccc] tracking-wider uppercase mt-[2px]"><span class="lang-ja">シェア</span><span class="lang-en">SHARE</span></span>
               </button>
             </div>
 
             <!-- ナビゲーションボタン -->
             <div class="flex flex-col gap-3 w-full">
-              <a href="https://funkyhotdog.com/world" class="block w-full bg-black border border-[#333333] py-5 text-center outline-none">
-                <span class="text-[#cccccc] tracking-widest text-[22px] uppercase font-impact">BACK TO WORLD MAP</span>
+              <a href="https://funkyhotdog.com/world" class="block w-full bg-black border border-[#333] py-5 text-center outline-none">
+                <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact">BACK TO WORLD MAP</span>
               </a>
-              <button class="gimmick-next-btn w-full bg-black border border-[#333333] border-l-[3px] border-l-[#00e5ff] py-5 flex justify-center items-center outline-none transition-colors">
-                <span class="text-[#cccccc] tracking-widest text-[22px] uppercase font-impact text-normal">NEXT FUNKY ★02</span>
-                <span class="text-[#ff0000] tracking-widest text-[26px] uppercase font-blackops text-active hidden">STILL TUNING...</span>
+              <button class="gimmick-next-btn w-full bg-black border border-[#333] border-l-[3px] border-l-[#00e5ff] py-5 flex justify-center items-center outline-none transition-colors">
+                <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact text-normal">NEXT FUNKY ★02</span>
+                <span class="text-[#f00] tracking-widest text-[26px] uppercase font-blackops text-active hidden">STILL TUNING...</span>
               </button>
             </div>
           </div>
@@ -410,609 +315,300 @@
       </main>
     </section>
 
-    <!-- --- 【ページ3】右側のパネル (NEXT) --- -->
-    <section class="w-screen shrink-0 snap-center relative bg-black">
+    <!-- 右パネル (NEXT) -->
+    <section class="w-screen shrink-0 snap-center relative">
       <div id="right-panel-content" class="absolute top-0 w-full h-screen flex flex-col items-center justify-center z-0 overflow-hidden">
         <div class="transform -rotate-[6deg] flex flex-col items-center justify-center">
           <h2 class="font-impact text-[42px] tracking-wider mb-6 text-center leading-[0.9] h2-glow">
             READY FOR<br>MORE MADNESS<span class="font-blackops inline-block transform -translate-y-[4px] scale-[1.1] ml-1">?</span>
           </h2>
-          <button id="next-btn" class="gimmick-next-btn panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center">
+          <button class="gimmick-next-btn panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center">
               <span class="font-blackops text-[26px] tracking-widest uppercase text-normal text-center w-full whitespace-nowrap">NEXT FUNKY</span>
-              <span class="text-[#ff0000] tracking-widest text-[26px] uppercase font-blackops text-active text-center w-full whitespace-nowrap hidden">STILL TUNING...</span>
+              <span class="text-[#f00] tracking-widest text-[26px] uppercase font-blackops text-active text-center w-full whitespace-nowrap hidden">STILL TUNING...</span>
           </button>
-          <div class="font-impact text-[#888888] text-sm tracking-widest uppercase">← SWIPE RIGHT TO CANCEL</div>
+          <div class="font-impact text-[#888] text-sm tracking-widest uppercase">← SWIPE RIGHT TO CANCEL</div>
         </div>
       </div>
     </section>
 
   </div> <!-- End of carousel -->
 
-  <!-- ==========================================
-       画像拡大用モーダル (全画面表示)
-       ========================================== -->
+  <!-- ★ モーダル群 (一括管理) ★ -->
+  <!-- 画像拡大モーダル -->
   <div id="image-modal" class="fixed inset-0 z-[100] bg-black hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300">
-    <div class="absolute top-4 right-4 text-white text-4xl font-blackops z-[110] cursor-pointer drop-shadow-md px-4 py-2" onclick="closeModal()">×</div>
-    <img id="modal-img" src="AICHI.jpeg" alt="AICHI Comic Full" class="max-w-full max-h-screen object-contain transition-transform duration-200 origin-center cursor-move select-none" draggable="false">
+    <div class="absolute top-4 right-4 text-white text-4xl font-blackops z-[110] cursor-pointer drop-shadow-md px-4 py-2" onclick="hideImageModal()">×</div>
+    <img id="modal-img" src="https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg" alt="AICHI Comic Full" class="max-w-full max-h-screen object-contain transition-transform duration-200 origin-center cursor-move select-none" draggable="false">
   </div>
 
-  <!-- ==========================================
-       ★秘密のギミックモーダル 1: クルマ (THIS MACHINE IS NOT FOR SALE.) ★
-       ========================================== -->
+  <!-- クルマモーダル -->
   <div id="buy-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <div class="relative bg-black border-[3px] border-[#ff0000] px-4 py-8 w-full max-w-[340px] flex flex-col items-center justify-center" style="box-shadow: 0 0 15px rgba(255,0,0,0.3);">
-      
-      <h3 class="font-impact text-[26px] text-white tracking-widest text-center mb-8 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #ff0000, 0 0 20px rgba(255,0,0,0.6);">
-        THIS MACHINE IS<br>NOT FOR SALE.
-      </h3>
-      <div class="font-mono text-[#888888] text-[14px] text-center tracking-widest mb-6 leading-[1.8]">
-        BUILT FOR AICHI GP.<br>ONLY ONE EXISTS.
-      </div>
-      <div class="font-mono text-[#888888] text-[14px] text-center tracking-widest mb-10 leading-[1.8]">
-        YET.
-      </div>
-      <button class="w-[80%] border-2 border-[#555555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="closeBuyModal()">
-        <span class="font-impact text-[#888888] text-[20px] tracking-widest uppercase">BUCK</span>
+    <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] flex flex-col items-center justify-center shadow-[0_0_15px_rgba(255,0,0,0.3)]">
+      <h3 class="font-impact text-[26px] text-white tracking-widest text-center mb-8 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #f00, 0 0 20px rgba(255,0,0,0.6);">THIS MACHINE IS<br>NOT FOR SALE.</h3>
+      <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-6 leading-[1.8]">BUILT FOR AICHI GP.<br>ONLY ONE EXISTS.</div>
+      <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-10 leading-[1.8]">YET.</div>
+      <button class="w-[80%] border-2 border-[#555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="hideModal('buy-modal')">
+        <span class="font-impact text-[#888] text-[20px] tracking-widest uppercase">BUCK</span>
       </button>
     </div>
   </div>
 
-  <!-- ==========================================
-       ★秘密のギミックモーダル 2: 愛知スナイパー (WARP TO AICHI?) ★
-       ========================================== -->
+  <!-- スナイパー WARPモーダル -->
   <div id="warp-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <div class="relative bg-black border-[3px] border-[#00e5ff] px-4 py-8 w-full max-w-[340px] flex flex-col items-center justify-center" style="box-shadow: 0 0 15px rgba(0,229,255,0.3);">
-      <h3 class="font-impact text-[28px] text-white tracking-widest text-center mb-6 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.6);">
-        WARP TO AICHI<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
-      </h3>
-      <div class="font-mono text-[#888888] text-[14px] text-center tracking-widest mb-8 leading-[1.8]">
-        Maybe the real world<br>opens.
-      </div>
-      
-      <button class="w-[90%] border-2 border-[#00e5ff] py-3 mb-4 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="warpToGo()">
+    <div class="relative bg-black border-[3px] border-[#00e5ff] px-4 py-8 w-full max-w-[340px] flex flex-col items-center justify-center shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+      <h3 class="font-impact text-[28px] text-white tracking-widest text-center mb-6 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.6);">WARP TO AICHI<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span></h3>
+      <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-8 leading-[1.8]">Maybe the real world<br>opens.</div>
+      <button class="w-[90%] border-2 border-[#00e5ff] py-3 mb-4 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">
         <span class="font-impact text-[#00e5ff] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">GO</span>
       </button>
-      
-      <button class="w-[90%] border-2 border-[#ff0000] py-3 mb-6 text-center outline-none transition-colors active:bg-[#ff0000] group" onclick="warpToTomato()">
-        <span class="font-impact text-[#ff0000] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">TOMATO</span>
+      <button class="w-[90%] border-2 border-[#f00] py-3 mb-6 text-center outline-none transition-colors active:bg-[#f00] group" onclick="warpToTomato()">
+        <span class="font-impact text-[#f00] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">TOMATO</span>
       </button>
-
-      <button class="w-[90%] border-2 border-[#555555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="closeWarpModal()">
-        <span class="font-impact text-[#888888] text-[20px] tracking-widest uppercase">BUCK</span>
+      <button class="w-[90%] border-2 border-[#555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="hideModal('warp-modal')">
+        <span class="font-impact text-[#888] text-[20px] tracking-widest uppercase">BUCK</span>
       </button>
     </div>
   </div>
 
-  <!-- ==========================================
-       ★秘密のギミックモーダル 3: TOMATO (TOO FUNKY ZONE) ★
-       ========================================== -->
+  <!-- TOMATOモーダル -->
   <div id="tomato-modal" class="fixed inset-0 z-[300] bg-black hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <div class="relative bg-black border-[3px] border-[#ccff00] p-8 w-full max-w-[340px] flex flex-col items-center justify-center" style="box-shadow: 0 0 20px rgba(204,255,0,0.3), inset 0 0 10px rgba(204,255,0,0.1);">
-      
-      <div class="text-white font-impact text-[32px] tracking-widest mb-6 flex items-center justify-center gap-2" style="text-shadow: 0 0 10px rgba(255,255,255,0.8);">
-        <span class="text-[28px]">🍅</span>
-        <span>WELCOME</span>
-        <span class="text-[28px]">🍅</span>
-      </div>
-      
-      <div class="text-[#ccff00] font-blackops text-[24px] tracking-widest text-center mb-8 whitespace-nowrap" style="text-shadow: 0 0 10px #ccff00;">
-        TOO FUNKY ZONE
-      </div>
-      
-      <div class="text-[#ff0033] font-impact text-[16px] tracking-[0.1em] text-center" style="text-shadow: 0 0 8px #ff0033;">
-        ⚠️ MYSTERIES ROAMING FREE ⚠️
-      </div>
-      
+    <div class="relative bg-black border-[3px] border-[#ccff00] p-8 w-full max-w-[340px] flex flex-col items-center justify-center shadow-[0_0_20px_rgba(204,255,0,0.3),inset_0_0_10px_rgba(204,255,0,0.1)]">
+      <div class="text-white font-impact text-[32px] tracking-widest mb-6 flex items-center justify-center gap-2" style="text-shadow: 0 0 10px rgba(255,255,255,0.8);"><span class="text-[28px]">🍅</span><span>WELCOME</span><span class="text-[28px]">🍅</span></div>
+      <div class="text-[#cf0] font-blackops text-[24px] tracking-widest text-center mb-8 whitespace-nowrap" style="text-shadow: 0 0 10px #cf0;">TOO FUNKY ZONE</div>
+      <div class="text-[#f03] font-impact text-[16px] tracking-[0.1em] text-center" style="text-shadow: 0 0 8px #f03;">⚠️ MYSTERIES ROAMING FREE ⚠️</div>
     </div>
   </div>
 
-  <!-- ==========================================
-       ★秘密のギミックモーダル 4: PRIZE (報酬画面) ★
-       ========================================== -->
+  <!-- PRIZEモーダル -->
   <div id="prize-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
     <div class="relative bg-black border-[2px] border-white px-4 py-10 w-full max-w-[340px] flex flex-col items-center justify-center">
-      
-      <!-- メインコンテンツ(初期表示用) -->
       <div id="prize-content" class="w-full flex flex-col items-center">
-        <!-- YOU MADE IT. (弱め) -->
-        <div class="font-impact text-[16px] text-[#888888] tracking-widest text-center mb-1 leading-tight uppercase">
-          YOU MADE IT.
-        </div>
-        <!-- YOU EARNED THIS. (強め) -->
-        <div class="font-impact text-[26px] text-[#ffffff] tracking-widest text-center mb-6 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">
-          YOU EARNED THIS.
-        </div>
-        
-        <!-- ★修正: メダル画像をさらに大幅に拡大 (280px) ＆ ドロップシャドウ追加 -->
+        <div class="font-impact text-[16px] text-[#888] tracking-widest text-center mb-1 leading-tight uppercase">YOU MADE IT.</div>
+        <div class="font-impact text-[26px] text-white tracking-widest text-center mb-6 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">YOU EARNED THIS.</div>
         <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative">
-          <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <!-- 画像がない場合のプレースホルダー -->
-          <div class="hidden w-[140px] h-[140px] border-2 border-[#555555] flex-col items-center justify-center bg-[#111111]">
-            <span class="font-impact text-[#555555] text-[16px] tracking-widest">MEDAL</span>
-          </div>
+          <img src="https://funkyhotdog.com/comic/japan-gp/01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl">
         </div>
-
-        <!-- CLAIM YOUR PRIZE ボタン (主役🔥) -->
-        <button class="w-[90%] border-[3px] border-white py-3 mb-4 text-center outline-none transition-colors active:bg-white group" onclick="actionClaimPrize()">
+        <button class="w-[90%] border-[3px] border-white py-3 mb-4 text-center outline-none transition-colors active:bg-white group" onclick="actionPrize('CLAIM')">
           <span class="font-impact text-white group-active:text-black text-[22px] tracking-widest uppercase transition-colors" style="text-shadow: 0 0 5px rgba(255,255,255,0.5);">CLAIM YOUR PRIZE</span>
         </button>
-
-        <!-- VIEW PRODUCTS ボタン (サブ) -->
-        <button class="w-[90%] border-[2px] border-[#555555] py-3 mb-6 text-center outline-none transition-colors active:bg-[#555555] group" onclick="actionViewProducts()">
-          <span class="font-impact text-[#888888] group-active:text-black text-[18px] tracking-widest uppercase transition-colors">VIEW PRODUCTS</span>
+        <button class="w-[90%] border-[2px] border-[#555] py-3 mb-6 text-center outline-none transition-colors active:bg-[#555] group" onclick="actionPrize('VIEW')">
+          <span class="font-impact text-[#888] group-active:text-black text-[18px] tracking-widest uppercase transition-colors">VIEW PRODUCTS</span>
         </button>
-
-        <!-- BACK ボタン -->
-        <button class="w-[90%] border-2 border-[#333333] py-3 text-center outline-none transition-colors active:bg-[#222]" onclick="closePrizeModal()">
-          <span class="font-impact text-[#555555] text-[18px] tracking-widest uppercase">BACK</span>
+        <button class="w-[90%] border-2 border-[#333] py-3 text-center outline-none transition-colors active:bg-[#222]" onclick="hideModal('prize-modal')">
+          <span class="font-impact text-[#555] text-[18px] tracking-widest uppercase">BACK</span>
         </button>
       </div>
-
-      <!-- メッセージ表示用コンテナ (初期は隠しておく) -->
       <div id="prize-message" class="w-full hidden flex-col items-center justify-center text-center py-10 min-h-[300px]">
         <div id="prize-msg-1" class="font-impact text-[26px] text-white tracking-widest mb-4 uppercase" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);"></div>
-        <div id="prize-msg-2" class="font-impact text-[20px] text-[#aaaaaa] tracking-widest uppercase"></div>
+        <div id="prize-msg-2" class="font-impact text-[20px] text-[#aaa] tracking-widest uppercase"></div>
       </div>
-
     </div>
   </div>
 
-  <!-- ==========================================
-       JavaScript処理
-       ========================================== -->
+  <!-- JavaScript -->
   <script>
-    // --- 秘密のギミック (PRIZE) のアクション ---
-    const prizeModal = document.getElementById('prize-modal');
-    const prizeContent = document.getElementById('prize-content');
-    const prizeMessage = document.getElementById('prize-message');
-    const prizeMsg1 = document.getElementById('prize-msg-1');
-    const prizeMsg2 = document.getElementById('prize-msg-2');
+    // --- 共通モーダル制御関数 ---
+    function showModal(id) {
+      const m = document.getElementById(id);
+      m.classList.remove('hidden'); m.classList.add('flex');
+      setTimeout(() => { m.classList.remove('opacity-0'); m.classList.add('opacity-100'); }, 10);
+    }
+    function hideModal(id) {
+      const m = document.getElementById(id);
+      m.classList.remove('opacity-100'); m.classList.add('opacity-0');
+      setTimeout(() => { m.classList.add('hidden'); m.classList.remove('flex'); }, 300);
+    }
 
-    function openPrizeModal() {
-      // 毎回開くときに中身を初期状態(コンテンツ表示)にしておく
-      prizeContent.classList.remove('hidden');
-      prizeMessage.classList.add('hidden');
-      prizeMessage.classList.remove('flex');
+    // --- PRIZE ギミック ---
+    function initPrizeModal() {
+      document.getElementById('prize-content').classList.remove('hidden');
+      document.getElementById('prize-message').classList.add('hidden');
+      document.getElementById('prize-message').classList.remove('flex');
+      showModal('prize-modal');
+    }
+    function actionPrize(type) {
+      document.getElementById('prize-content').classList.add('hidden');
+      const msgWrap = document.getElementById('prize-message');
+      msgWrap.classList.remove('hidden'); msgWrap.classList.add('flex');
       
-      prizeModal.classList.remove('hidden');
-      prizeModal.classList.add('flex');
-      setTimeout(() => { prizeModal.classList.remove('opacity-0'); prizeModal.classList.add('opacity-100'); }, 10);
+      const m1 = document.getElementById('prize-msg-1'), m2 = document.getElementById('prize-msg-2');
+      if(type === 'CLAIM') {
+        m1.innerText = 'YOUR PRIZE IS OUT THERE.'; m2.innerText = 'GO FIND IT.';
+        setTimeout(() => window.location.href = 'https://funkyhotdog.com/wild-tomato', 2000);
+      } else {
+        m1.innerText = 'STORE LOCKED.'; m2.innerText = "YOU'RE TOO EARLY.";
+        setTimeout(() => hideModal('prize-modal'), 2000);
+      }
     }
 
-    function closePrizeModal() {
-      prizeModal.classList.remove('opacity-100');
-      prizeModal.classList.add('opacity-0');
-      setTimeout(() => { prizeModal.classList.add('hidden'); prizeModal.classList.remove('flex'); }, 300);
-    }
-
-    // 主役🔥 CLAIM YOUR PRIZE 押下時
-    function actionClaimPrize() {
-      prizeContent.classList.add('hidden');
-      prizeMessage.classList.remove('hidden');
-      prizeMessage.classList.add('flex');
-      
-      prizeMsg1.innerText = 'YOUR PRIZE IS OUT THERE.';
-      prizeMsg2.innerText = 'GO FIND IT.';
-      
-      setTimeout(() => {
-        window.location.href = 'https://funkyhotdog.com/wild-tomato';
-      }, 2000);
-    }
-
-    // サブ VIEW PRODUCTS 押下時
-    function actionViewProducts() {
-      prizeContent.classList.add('hidden');
-      prizeMessage.classList.remove('hidden');
-      prizeMessage.classList.add('flex');
-      
-      prizeMsg1.innerText = 'STORE LOCKED.';
-      prizeMsg2.innerText = "YOU'RE TOO EARLY.";
-      
-      setTimeout(() => {
-        closePrizeModal(); // 2秒後にモーダルを閉じる(元の漫画へ)
-      }, 2000);
-    }
-
-    // --- 秘密のギミック (クルマ) ---
-    const buyModal = document.getElementById('buy-modal');
-    function openBuyModal() {
-      buyModal.classList.remove('hidden');
-      buyModal.classList.add('flex');
-      setTimeout(() => { buyModal.classList.remove('opacity-0'); buyModal.classList.add('opacity-100'); }, 10);
-    }
-    function closeBuyModal() {
-      buyModal.classList.remove('opacity-100');
-      buyModal.classList.add('opacity-0');
-      setTimeout(() => { buyModal.classList.add('hidden'); buyModal.classList.remove('flex'); }, 300);
-    }
-
-    // --- 秘密のギミック (愛知県スナイパー) ひょこひょこ移動！ ---
-    const warpModal = document.getElementById('warp-modal');
-    const targetMark = document.getElementById('target-mark');
-    const locatingText = document.getElementById('locating-text');
+    // --- 愛知県スナイパー ギミック ---
     let isLocating = false;
-
     function startLocating() {
       if(isLocating) return;
       isLocating = true;
+      const target = document.getElementById('target-mark');
+      const text = document.getElementById('locating-text');
       
-      locatingText.innerText = 'LOCATING...';
-      locatingText.classList.remove('opacity-0');
-      locatingText.classList.add('animate-locating');
-      locatingText.style.opacity = '';
+      text.innerText = 'LOCATING...';
+      text.classList.remove('opacity-0'); text.classList.add('animate-locating'); text.style.opacity = '';
       
-      targetMark.style.transition = 'all 0.2s ease-out';
-      
-      const steps = [
-        { top: '18%', left: '24%' },
-        { top: '26%', left: '12%' },
-        { top: '14%', left: '20%' },
-        { top: '20%', left: '10%' },
-        { top: '8%', left: '2%' } // 最終ロックオン位置！(マップ左端のドンピシャ位置)
-      ];
-
-      let stepIdx = 0;
-      
-      const moveInterval = setInterval(() => {
-        if (stepIdx < steps.length) {
-          targetMark.style.top = steps[stepIdx].top;
-          targetMark.style.left = steps[stepIdx].left;
-          stepIdx++;
+      const steps = [{t:'18%',l:'24%'}, {t:'26%',l:'12%'}, {t:'14%',l:'20%'}, {t:'20%',l:'10%'}, {t:'8%',l:'2%'}];
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < steps.length) {
+          target.style.top = steps[i].t; target.style.left = steps[i].l; i++;
         } else {
-          clearInterval(moveInterval);
-          
+          clearInterval(interval);
           setTimeout(() => {
-            locatingText.classList.remove('animate-locating'); 
-            locatingText.innerText = 'LOCKED';
-            locatingText.style.opacity = '1'; 
-            
+            text.classList.remove('animate-locating'); text.innerText = 'LOCKED'; text.style.opacity = '1';
             setTimeout(() => {
-              locatingText.style.opacity = '';
-              locatingText.classList.add('opacity-0');
-              openWarpModal();
-              
-              setTimeout(() => {
-                targetMark.style.transition = 'none'; 
-                targetMark.style.top = '20%';
-                targetMark.style.left = '20%';
-                isLocating = false;
-              }, 500);
+              text.style.opacity = ''; text.classList.add('opacity-0');
+              showModal('warp-modal');
+              setTimeout(() => { target.style.top = '20%'; target.style.left = '20%'; isLocating = false; }, 500);
             }, 800);
           }, 200);
         }
       }, 250);
     }
 
-    function openWarpModal() {
-      warpModal.classList.remove('hidden');
-      warpModal.classList.add('flex');
-      setTimeout(() => { warpModal.classList.remove('opacity-0'); warpModal.classList.add('opacity-100'); }, 10);
-    }
-    function closeWarpModal() {
-      warpModal.classList.remove('opacity-100');
-      warpModal.classList.add('opacity-0');
-      setTimeout(() => { warpModal.classList.add('hidden'); warpModal.classList.remove('flex'); }, 300);
-    }
-
-    // --- GOボタンで Google Earth ジャンプ ---
-    function warpToGo() {
-      const earthUrl = 'https://earth.google.com/web/search/35.1850,136.8997';
-      window.open(earthUrl, '_blank');
-    }
-
-    // --- TOMATOボタンで 狂気の世界へジャンプ ---
     function warpToTomato() {
-      const tomatoModal = document.getElementById('tomato-modal');
-      
-      warpModal.classList.remove('opacity-100');
-      warpModal.classList.add('opacity-0');
-      
+      hideModal('warp-modal');
       setTimeout(() => {
-        warpModal.classList.add('hidden');
-        warpModal.classList.remove('flex');
-        
-        tomatoModal.classList.remove('hidden');
-        tomatoModal.classList.add('flex');
-        setTimeout(() => {
-          tomatoModal.classList.remove('opacity-0');
-          tomatoModal.classList.add('opacity-100');
-        }, 10);
-        
-        setTimeout(() => {
-          window.location.href = 'https://funkyhotdog.com/wild-tomato';
-        }, 2000);
-        
+        showModal('tomato-modal');
+        setTimeout(() => window.location.href = 'https://funkyhotdog.com/wild-tomato', 2000);
       }, 300);
     }
 
-    // --- 画像モーダル (全画面・ピンポイントズーム・スワイプ) 機能 ---
-    const modal = document.getElementById('image-modal');
+    // --- 画像ズームモーダル ---
+    const imgModal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-img');
-    let isZoomed = false;
-    let currentScale = 1;
-    let currentTx = 0;
-    let currentTy = 0;
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let lastTouchX = 0;
-    let lastTouchY = 0;
-    let isDragging = false;
+    let isZoomed = false, cScale = 1, cTx = 0, cTy = 0, startX, startY, lastX, lastY, isDrag = false, lastTap = 0;
 
-    function openModal() {
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        modal.classList.add('opacity-100');
-      }, 10);
-      
-      isZoomed = false;
-      currentScale = 1;
-      currentTx = 0;
-      currentTy = 0;
+    function showImageModal() {
+      showModal('image-modal');
+      isZoomed = false; cScale = 1; cTx = 0; cTy = 0;
       modalImg.style.transform = `translate(0px, 0px) scale(1)`;
       document.body.style.overflow = 'hidden';
     }
-
-    function closeModal() {
-      modal.classList.remove('opacity-100');
-      modal.classList.add('opacity-0');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-        isZoomed = false;
-        currentScale = 1;
-        currentTx = 0;
-        currentTy = 0;
-        modalImg.style.transform = `translate(0px, 0px) scale(1)`;
-        document.body.style.overflow = '';
-      }, 300); 
+    function hideImageModal() {
+      hideModal('image-modal');
+      setTimeout(() => { document.body.style.overflow = ''; }, 300);
     }
 
-    function toggleZoom(clientX, clientY) {
+    function toggleZoom(cX, cY) {
       if (isZoomed) {
-        isZoomed = false;
-        currentScale = 1;
-        currentTx = 0;
-        currentTy = 0;
-        modalImg.style.transform = `translate(0px, 0px) scale(1)`;
+        isZoomed = false; cScale = 1; cTx = 0; cTy = 0;
       } else {
-        isZoomed = true;
-        currentScale = 2.5;
-        
-        const rect = modalImg.getBoundingClientRect();
-        
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        
-        const offsetX = clientX - centerX;
-        const offsetY = clientY - centerY;
-        
-        currentTx = -offsetX * currentScale;
-        currentTy = -offsetY * currentScale;
-        
-        modalImg.style.transform = `translate(${currentTx}px, ${currentTy}px) scale(${currentScale})`;
+        isZoomed = true; cScale = 2.5;
+        const r = modalImg.getBoundingClientRect();
+        cTx = -(cX - (r.left + r.width/2)) * cScale;
+        cTy = -(cY - (r.top + r.height/2)) * cScale;
       }
+      modalImg.style.transform = `translate(${cTx}px, ${cTy}px) scale(${cScale})`;
     }
 
-    modalImg.addEventListener('dblclick', (e) => {
-      toggleZoom(e.clientX, e.clientY);
-    });
-
-    let lastTap = 0;
-    modal.addEventListener('touchstart', (e) => {
-      if (e.touches.length === 1) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        lastTouchX = touchStartX;
-        lastTouchY = touchStartY;
-      }
+    modalImg.addEventListener('dblclick', (e) => toggleZoom(e.clientX, e.clientY));
+    imgModal.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) { startX = lastX = e.touches[0].clientX; startY = lastY = e.touches[0].clientY; }
     }, {passive: false});
-
-    modal.addEventListener('touchmove', (e) => {
+    imgModal.addEventListener('touchmove', (e) => {
+      e.preventDefault();
       if (isZoomed && e.touches.length === 1) {
-        e.preventDefault(); 
-        const touchX = e.touches[0].clientX;
-        const touchY = e.touches[0].clientY;
-        currentTx += (touchX - lastTouchX);
-        currentTy += (touchY - lastTouchY);
-        modalImg.style.transform = `translate(${currentTx}px, ${currentTy}px) scale(${currentScale})`;
-        lastTouchX = touchX;
-        lastTouchY = touchY;
-      } else if (!isZoomed) {
-        e.preventDefault(); 
+        cTx += (e.touches[0].clientX - lastX); cTy += (e.touches[0].clientY - lastY);
+        modalImg.style.transform = `translate(${cTx}px, ${cTy}px) scale(${cScale})`;
+        lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
       }
     }, {passive: false});
-
-    modal.addEventListener('touchend', (e) => {
-      const currentTime = new Date().getTime();
-      const tapLength = currentTime - lastTap;
-      
-      if (tapLength < 300 && tapLength > 0) {
-        e.preventDefault();
-        toggleZoom(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
-        lastTap = currentTime;
-        return;
-      }
-      lastTap = currentTime;
-
+    imgModal.addEventListener('touchend', (e) => {
+      const now = new Date().getTime(), tapLen = now - lastTap;
+      lastTap = now;
+      if (tapLen < 300 && tapLen > 0) { e.preventDefault(); return toggleZoom(e.changedTouches[0].clientX, e.changedTouches[0].clientY); }
       if (isZoomed) return;
-
-      const touchEndX = e.changedTouches[0].clientX;
-      const touchEndY = e.changedTouches[0].clientY;
-      const diffX = touchEndX - touchStartX;
-      const diffY = touchEndY - touchStartY;
-
-      if (Math.abs(diffX) > 50 || Math.abs(diffY) > 50) {
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-          closeModal();
-          const carousel = document.getElementById('carousel');
-          if (diffX > 0) {
-            carousel.scrollTo({ left: 0, behavior: 'smooth' }); 
-          } else {
-            carousel.scrollTo({ left: window.innerWidth * 2, behavior: 'smooth' }); 
-          }
-        } else {
-          if (diffY > 50) {
-            closeModal(); 
-          }
-        }
+      
+      const dX = e.changedTouches[0].clientX - startX, dY = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dX) > 50 || Math.abs(dY) > 50) {
+        if (Math.abs(dX) > Math.abs(dY)) {
+          hideImageModal();
+          const carl = document.getElementById('carousel');
+          carl.scrollTo({ left: dX > 0 ? 0 : window.innerWidth * 2, behavior: 'smooth' });
+        } else if (dY > 50) hideImageModal();
       }
     });
 
-    modal.addEventListener('mousedown', (e) => {
-      if (e.target === modalImg && isZoomed) {
-        isDragging = true;
-        lastTouchX = e.clientX;
-        lastTouchY = e.clientY;
-      }
-    });
+    // PCマウスドラッグ対応
+    imgModal.addEventListener('mousedown', (e) => { if (e.target === modalImg && isZoomed) { isDrag = true; lastX = e.clientX; lastY = e.clientY; }});
     window.addEventListener('mousemove', (e) => {
-      if (isDragging && isZoomed) {
-        currentTx += (e.clientX - lastTouchX);
-        currentTy += (e.clientY - lastTouchY);
-        modalImg.style.transform = `translate(${currentTx}px, ${currentTy}px) scale(${currentScale})`;
-        lastTouchX = e.clientX;
-        lastTouchY = e.clientY;
+      if (isDrag && isZoomed) {
+        cTx += (e.clientX - lastX); cTy += (e.clientY - lastY);
+        modalImg.style.transform = `translate(${cTx}px, ${cTy}px) scale(${cScale})`;
+        lastX = e.clientX; lastY = e.clientY;
       }
     });
-    window.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
+    window.addEventListener('mouseup', () => isDrag = false);
 
-    // --- 共通: シェアボタンクリック時のシアン発光フィードバック ---
-    function triggerClickFeedback(btn) {
+    // --- シェア & 言語機能 ---
+    const shareUrl = 'https://funkyhotdog.com/comic/japan-gp/aichi-01';
+    function triggerClick(btn) {
       btn.classList.add('is-clicked');
-      const svg = btn.querySelector('svg');
-      const spans = btn.querySelectorAll('span');
-      if (svg) {
-        svg.classList.remove('text-[#999999]');
-        svg.classList.add('text-[#00e5ff]');
-      }
-      spans.forEach(span => {
-        if (span.classList.contains('text-[#cccccc]')) {
-          span.classList.remove('text-[#cccccc]');
-          span.classList.add('text-[#00e5ff]');
-          span.dataset.origColor = 'text-[#cccccc]';
-        }
-      });
+      const svg = btn.querySelector('svg'), spans = btn.querySelectorAll('span');
+      if(svg) { svg.classList.replace('text-[#999]','text-[#00e5ff]'); }
+      spans.forEach(s => { if(s.classList.contains('text-[#ccc]')){ s.classList.replace('text-[#ccc]','text-[#00e5ff]'); s.dataset.oc = 'text-[#ccc]'; }});
       setTimeout(() => {
         btn.classList.remove('is-clicked');
-        if (svg) {
-          svg.classList.remove('text-[#00e5ff]');
-          svg.classList.add('text-[#999999]');
-        }
-        spans.forEach(span => {
-          if (span.dataset.origColor) {
-            span.classList.remove('text-[#00e5ff]');
-            span.classList.add(span.dataset.origColor);
-          }
-        });
+        if(svg) { svg.classList.replace('text-[#00e5ff]','text-[#999]'); }
+        spans.forEach(s => { if(s.dataset.oc){ s.classList.replace('text-[#00e5ff]', s.dataset.oc); }});
       }, 2000);
     }
-
-    // --- シェア機能 ---
-    const shareUrl = 'https://funkyhotdog.com/comic/japan-gp/aichi-01';
-    const shareImgUrl = 'https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg'; 
-
+    
     function shareX(btn) {
-      triggerClickFeedback(btn);
-      const textEn = "Because in Aichi, it's miso-katsu.\n\nAICHI ★01\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW #FUNKYHOTDOGWORKS\n\n";
-      const textJa = "愛知と言えば、味噌カツだて。\n愛知 ★01\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW #FUNKYHOTDOGWORKS\n\n";
-      const text = (isEnglish ? textEn : textJa) + shareUrl;
-      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-      setTimeout(() => { window.open(twitterUrl, '_blank'); }, 100);
+      triggerClick(btn);
+      const text = (isEnglish ? "Because in Aichi, it's miso-katsu.\n\nAICHI ★01\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW\n\n" : "愛知と言えば、味噌カツだて。\n愛知 ★01\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW\n\n") + shareUrl;
+      setTimeout(() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank'), 100);
     }
-
     function shareCopyLink(btn) {
-      triggerClickFeedback(btn);
-      const textArea = document.createElement("textarea");
-      textArea.value = shareUrl;
-      document.body.appendChild(textArea);
-      textArea.select();
+      triggerClick(btn);
+      const ta = document.createElement("textarea"); ta.value = shareUrl; document.body.appendChild(ta); ta.select();
       try {
         document.execCommand('copy');
-        const jaSpan = btn.querySelector('.lang-ja');
-        const enSpan = btn.querySelector('.lang-en');
-        const origJa = jaSpan.innerText;
-        const origEn = enSpan.innerText;
-        jaSpan.innerText = 'コピー完了!';
-        enSpan.innerText = 'COPIED!';
-        setTimeout(() => {
-          jaSpan.innerText = origJa;
-          enSpan.innerText = origEn;
-        }, 2000);
-      } catch (err) {
-        console.error('Copy failed', err);
-      }
-      document.body.removeChild(textArea);
+        const ja = btn.querySelector('.lang-ja'), en = btn.querySelector('.lang-en'), oJa = ja.innerText, oEn = en.innerText;
+        ja.innerText = 'コピー完了!'; en.innerText = 'COPIED!';
+        setTimeout(() => { ja.innerText = oJa; en.innerText = oEn; }, 2000);
+      } catch(e){} document.body.removeChild(ta);
     }
-
     function sharePinterest(btn) {
-      triggerClickFeedback(btn);
-      const desc = isEnglish ? "AICHI ★01 - FHW" : "愛知 ★01 - FHW";
-      const pinterestUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent(shareImgUrl)}&description=${encodeURIComponent(desc)}`;
-      setTimeout(() => { window.open(pinterestUrl, '_blank'); }, 100);
-    }
-
-    // --- ギミック関連 (右パネル & 下部ナビゲーション共通) ---
-    const nextBtns = document.querySelectorAll('.gimmick-next-btn');
-    nextBtns.forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        if(this.classList.contains('is-alert')) return;
-        this.classList.add('is-alert');
-        setTimeout(() => {
-          this.classList.remove('is-alert');
-        }, 2000);
-      });
-    });
-
-    const initCarousel = document.getElementById('carousel');
-    if(initCarousel) {
-      initCarousel.scrollLeft = window.innerWidth;
-      initCarousel.style.visibility = 'visible';
+      triggerClick(btn);
+      setTimeout(() => window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent('https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg')}&description=${encodeURIComponent(isEnglish ? "AICHI ★01 - FHW" : "愛知 ★01 - FHW")}`, '_blank'), 100);
     }
 
     let isEnglish = true;
     function toggleLanguage() {
       isEnglish = !isEnglish;
-      const body = document.body;
-      const iconUs = document.getElementById('icon-us');
-      const iconJp = document.getElementById('icon-jp');
-      if (isEnglish) {
-        body.classList.add('is-english');
-        iconUs.classList.replace('opacity-30', 'opacity-100');
-        iconJp.classList.replace('opacity-100', 'opacity-30');
-      } else {
-        body.classList.remove('is-english');
-        iconUs.classList.replace('opacity-100', 'opacity-30');
-        iconJp.classList.replace('opacity-30', 'opacity-100');
-      }
+      document.body.classList.toggle('is-english', isEnglish);
+      document.getElementById('icon-us').classList.replace(isEnglish ? 'opacity-30':'opacity-100', isEnglish ? 'opacity-100':'opacity-30');
+      document.getElementById('icon-jp').classList.replace(isEnglish ? 'opacity-100':'opacity-30', isEnglish ? 'opacity-30':'opacity-100');
     }
 
-    window.addEventListener('load', () => {
-      if(initCarousel) initCarousel.scrollLeft = window.innerWidth;
+    // --- その他 (ボタンエフェクト・カルーセル) ---
+    document.querySelectorAll('.gimmick-next-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault(); if(this.classList.contains('is-alert')) return;
+        this.classList.add('is-alert'); setTimeout(() => this.classList.remove('is-alert'), 2000);
+      });
     });
 
-    window.addEventListener('resize', () => {
-      if(initCarousel && initCarousel.scrollLeft > window.innerWidth * 0.5 && initCarousel.scrollLeft < window.innerWidth * 1.5) {
-        initCarousel.scrollLeft = window.innerWidth;
-      }
-    });
+    const initCarousel = document.getElementById('carousel');
+    if(initCarousel) { initCarousel.scrollLeft = window.innerWidth; initCarousel.style.visibility = 'visible'; }
+    window.addEventListener('load', () => { if(initCarousel) initCarousel.scrollLeft = window.innerWidth; });
+    window.addEventListener('resize', () => { if(initCarousel && initCarousel.scrollLeft > window.innerWidth*0.5 && initCarousel.scrollLeft < window.innerWidth*1.5) initCarousel.scrollLeft = window.innerWidth; });
 
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          const leftPanel = document.getElementById('left-panel-content');
-          const rightPanel = document.getElementById('right-panel-content');
-          if (leftPanel) leftPanel.style.transform = `translateY(${scrollY}px)`;
-          if (rightPanel) rightPanel.style.transform = `translateY(${scrollY}px)`;
+          const lP = document.getElementById('left-panel-content'), rP = document.getElementById('right-panel-content');
+          if (lP) lP.style.transform = `translateY(${window.scrollY}px)`;
+          if (rP) rP.style.transform = `translateY(${window.scrollY}px)`;
           ticking = false;
-        });
-        ticking = true;
+        }); ticking = true;
       }
     });
   </script>
