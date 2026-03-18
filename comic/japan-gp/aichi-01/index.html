@@ -128,7 +128,7 @@
         <span id="icon-jp" class="text-[11px] transition-opacity opacity-30">🇯🇵</span>
       </button>
       
-      <!-- ★ 復旧: おにぎりリンク ★ -->
+      <!-- おにぎりリンク -->
       <a href="https://funkyhotdog.com/world" class="text-[18px] animate-breathe origin-center block no-underline outline-none cursor-pointer">🍙</a>
     </div>
   </header>
@@ -343,19 +343,17 @@
   </div>
 
   <!-- ==========================================
-       ★ クルマモーダル (全高統一・画像最大化版) ★
+       ★ クルマモーダル (スケール調整・微左移動版) ★
        ========================================== -->
   <div id="buy-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <!-- min-h-[620px] で3つのモーダルの高さを完全に統一 -->
     <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       
-      <!-- 画像 (一番上、枠線被りギリギリまで拡大) -->
-      <!-- w-[calc(100%+32px)] で横幅いっぱい。 scale-[1.15] で枠を突き破る迫力を演出 -->
+      <!-- 画像 (scale-[1.035] で0.9倍に縮小, -translate-x-4 で少し左に移動) -->
       <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
-        <img src="maru.PNG" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.15]">
+        <img src="maru.PNG" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] -translate-x-4">
       </div>
 
-      <!-- テキスト群 (中央寄り) -->
+      <!-- テキスト群 -->
       <div class="flex flex-col items-center mt-auto mb-10 w-full">
         <h3 class="font-impact text-[28px] text-white tracking-widest text-center mb-6 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #f00, 0 0 20px rgba(255,0,0,0.6);">
           THIS MACHINE IS<br>NOT FOR SALE.
@@ -368,7 +366,7 @@
         </div>
       </div>
       
-      <!-- BUCKボタン (一番下) -->
+      <!-- BUCKボタン -->
       <button class="w-[90%] border-2 border-[#555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="hideModal('buy-modal')">
         <span class="font-impact text-[#888] text-[20px] tracking-widest uppercase">BUCK</span>
       </button>
@@ -376,15 +374,15 @@
   </div>
 
   <!-- ==========================================
-       ★ 愛知WARPモーダル (全高統一・画像最大化版) ★
+       ★ 愛知WARPモーダル (スケール1.1倍拡大版) ★
        ========================================== -->
   <div id="warp-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
     <div class="relative bg-black border-[3px] border-[#00e5ff] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(0,229,255,0.3)] overflow-hidden">
       
-      <!-- シルエット＆WARP文字 (一番上、限界まで大きく) -->
+      <!-- シルエット＆WARP文字 -->
       <div class="relative w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center">
-        <!-- シルエット画像 (scale-[1.2] で限界まで大きく) -->
-        <img src="aj.PNG" alt="Aichi Map" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.2]">
+        <!-- シルエット画像 (scale-[1.32] でさらに拡大) -->
+        <img src="aj.PNG" alt="Aichi Map" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.32]">
         
         <!-- 重ねるテキスト -->
         <h3 class="absolute inset-0 flex items-center justify-center font-impact text-[32px] text-white tracking-widest text-center leading-tight uppercase whitespace-nowrap z-10" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.8), 0 0 5px #000;">
@@ -397,7 +395,7 @@
         Maybe the real world<br>opens.
       </div>
       
-      <!-- 3つのボタン (一番下) -->
+      <!-- 3つのボタン -->
       <div class="w-full flex flex-col items-center gap-4">
         <button class="w-[90%] border-[2px] border-[#00e5ff] py-3 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">
           <span class="font-impact text-[#00e5ff] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">GO</span>
@@ -422,18 +420,19 @@
   </div>
 
   <!-- ==========================================
-       ★ PRIZEモーダル (全高統一基準) ★
+       ★ PRIZEモーダル (BADGE 1.2倍拡大版) ★
        ========================================== -->
   <div id="prize-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <!-- min-h-[620px] で3つのモーダルの高さを完全に統一 -->
     <div class="relative bg-black border-[2px] border-white px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between">
       
       <div id="prize-content" class="w-full h-full flex flex-col items-center justify-between">
         <div class="w-full flex flex-col items-center">
           <div class="font-impact text-[16px] text-[#888] tracking-widest text-center mb-1 leading-tight uppercase">YOU MADE IT.</div>
           <div class="font-impact text-[26px] text-white tracking-widest text-center mb-4 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">YOU EARNED THIS.</div>
+          
           <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative">
-            <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl">
+            <!-- ★ 画像自体を scale-[1.2] で1.2倍に拡大 ★ -->
+            <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl transform scale-[1.2]">
           </div>
         </div>
 
