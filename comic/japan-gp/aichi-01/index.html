@@ -234,6 +234,23 @@
             </div>
           </div>
 
+          <!-- ★修正: YOU MADE IT. と 物理ボタン (フォントと空間の調整) ★ -->
+          <div class="mt-8 mb-10">
+            <!-- 1行分のスペース (上のmt-8と合わせて表現) / IMPACTフォントに変更 -->
+            <div class="text-[#e5e5e5] font-impact text-[22px] tracking-widest">
+              YOU MADE IT.
+            </div>
+            <!-- 空間を少し広く (mt-14) -->
+            <div class="mt-14">
+              <!-- 物理ボタン / Black Ops One、黒文字、白の強く狭い発光 -->
+              <button class="border border-[#666666] bg-transparent text-black font-blackops tracking-widest text-[18px] px-8 py-3 outline-none transition-colors active:bg-white/10" 
+                      style="text-shadow: 0 0 2px #fff, 0 0 3px #fff, 0 0 4px #fff, 0 0 5px #fff;">
+                CLAIM YOUR PRIZE
+              </button>
+            </div>
+          </div>
+
+          <!-- CRAFTED IN JAPAN & 印鑑 (ここから下はそのまま押し出されます) -->
           <div class="relative mt-2 pt-6 mb-4"> 
             <div class="absolute right-[5%] top-[-35px] z-20 pointer-events-none">
               <img src="icon2.PNG" alt="Stamp" class="w-[80px] h-[80px] object-contain transform rotate-[-8deg] opacity-90 drop-shadow-md">
@@ -374,14 +391,7 @@
        ========================================== -->
   <div id="image-modal" class="fixed inset-0 z-[100] bg-black hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300">
     <div class="absolute top-4 right-4 text-white text-4xl font-blackops z-[110] cursor-pointer drop-shadow-md px-4 py-2" onclick="closeModal()">×</div>
-    
     <img id="modal-img" src="AICHI.jpeg" alt="AICHI Comic Full" class="max-w-full max-h-screen object-contain transition-transform duration-200 origin-center cursor-move select-none" draggable="false">
-    
-    <div id="modal-hint" class="absolute bottom-10 text-[#888888] font-impact tracking-widest text-sm text-center pointer-events-none transition-opacity duration-300">
-      <span class="block mb-1">DOUBLE TAP TO ZOOM</span>
-      <span class="block mb-1">SWIPE DOWN TO CLOSE</span>
-      <span class="block">SWIPE LEFT/RIGHT TO PANELS</span>
-    </div>
   </div>
 
   <!-- ==========================================
@@ -390,7 +400,6 @@
   <div id="buy-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
     <div class="relative bg-black border-[3px] border-[#ff0000] px-4 py-8 w-full max-w-[340px] flex flex-col items-center justify-center" style="box-shadow: 0 0 15px rgba(255,0,0,0.3);">
       
-      <!-- ★修正: テキスト内容の変更 -->
       <h3 class="font-impact text-[26px] text-white tracking-widest text-center mb-8 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #ff0000, 0 0 20px rgba(255,0,0,0.6);">
         THIS MACHINE IS<br>NOT FOR SALE.
       </h3>
@@ -574,7 +583,6 @@
     // --- 画像モーダル (全画面・ピンポイントズーム・スワイプ) 機能 ---
     const modal = document.getElementById('image-modal');
     const modalImg = document.getElementById('modal-img');
-    const modalHint = document.getElementById('modal-hint');
     let isZoomed = false;
     let currentScale = 1;
     let currentTx = 0;
@@ -598,7 +606,6 @@
       currentTx = 0;
       currentTy = 0;
       modalImg.style.transform = `translate(0px, 0px) scale(1)`;
-      modalHint.classList.remove('opacity-0');
       document.body.style.overflow = 'hidden';
     }
 
@@ -617,7 +624,6 @@
       }, 300); 
     }
 
-    // タップした場所を画面の中心に持ってきてズームする計算
     function toggleZoom(clientX, clientY) {
       if (isZoomed) {
         isZoomed = false;
@@ -625,11 +631,9 @@
         currentTx = 0;
         currentTy = 0;
         modalImg.style.transform = `translate(0px, 0px) scale(1)`;
-        modalHint.classList.remove('opacity-0'); 
       } else {
         isZoomed = true;
         currentScale = 2.5;
-        modalHint.classList.add('opacity-0'); 
         
         const rect = modalImg.getBoundingClientRect();
         
