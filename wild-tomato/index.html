@@ -28,7 +28,6 @@
     }
 
     body {
-        /* リングの外側（下界）をグレーに設定 */
         background-color: #222222; 
         color: var(--c-white);
         font-family: "Helvetica Neue", Arial, sans-serif;
@@ -57,10 +56,9 @@
        ========================================== */
     #map-bg {
         z-index: 10;
-        pointer-events: auto; /* ドラッグ操作の受け皿 */
+        pointer-events: auto; 
     }
 
-    /* 放牧の柵（巨大なネオンフラフープ） */
     #border-wrapper {
         position: absolute;
         top: 50%; 
@@ -69,11 +67,9 @@
         height: 2000px;
         transform: translate(-50%, -50%);
         border-radius: 50%;
-        /* 普段はうっすら光る程度 */
         box-shadow: 0 0 80px rgba(0, 255, 255, 0.1), 0 0 80px rgba(255, 0, 255, 0.1);
     }
 
-    /* グラデーションで色が変わる回転リング */
     .ring-gradient {
         position: absolute;
         top: 0; left: 0; 
@@ -87,7 +83,6 @@
         animation: spinRing 60s linear infinite;
     }
 
-    /* リングの内側（真っ黒な床） */
     .ring-inner {
         position: absolute;
         top: 15px; left: 15px; right: 15px; bottom: 15px;
@@ -155,7 +150,6 @@
         pointer-events: none; 
     }
 
-    /* スパーク（電流）エフェクト（✨のような十字星型） */
     .spark {
         position: absolute;
         pointer-events: none;
@@ -189,7 +183,6 @@
         100% { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 0; }
     }
 
-    /* 絵文字のスタイル */
     .emoji-item {
         position: absolute;
         display: flex;
@@ -197,12 +190,11 @@
         align-items: center;
         font-size: 80px; 
         transform: translate(-50%, -50%);
-        pointer-events: none; /* 基本は触れない */
+        pointer-events: none; 
         will-change: left, top;
         z-index: 25;
     }
 
-    /* メダルのスタイル */
     .medal {
         position: absolute;
         border-radius: 50%;
@@ -225,7 +217,15 @@
         will-change: left, top;
     }
 
-    /* ★ 各サイズのスタイル定義 */
+    /* ★ 画像メダル用のスタイル */
+    .medal-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        pointer-events: none; /* 画像自体がタップを邪魔しないようにする */
+    }
+
     .medal.size-small  { width: 70px; height: 70px; font-size: 36px; }
     .medal.size-normal { width: 100px; height: 100px; font-size: 54px; }
     .medal.size-large  { width: 140px; height: 140px; font-size: 76px; }
@@ -268,17 +268,10 @@
     /* ==========================================
        もがく・暴れる時のアニメーション (3パターン)
        ========================================== */
-    .medal.shake-pattern-1.shaking {
-        animation: shakeAnim1 0.1s infinite !important;
-    }
-    .medal.shake-pattern-2.shaking {
-        animation: shakeAnim2 0.15s infinite !important;
-    }
-    .medal.shake-pattern-3.shaking {
-        animation: shakeAnim3 0.2s infinite !important;
-    }
+    .medal.shake-pattern-1.shaking { animation: shakeAnim1 0.1s infinite !important; }
+    .medal.shake-pattern-2.shaking { animation: shakeAnim2 0.15s infinite !important; }
+    .medal.shake-pattern-3.shaking { animation: shakeAnim3 0.2s infinite !important; }
 
-    /* パターン1: 小刻みに激しくブルブル */
     @keyframes shakeAnim1 {
         0% { transform: translate(calc(-50% + 4px), calc(-50% + 4px)) scale(1.15); }
         25% { transform: translate(calc(-50% - 4px), calc(-50% + 4px)) scale(1.15); }
@@ -286,21 +279,16 @@
         75% { transform: translate(calc(-50% + 4px), calc(-50% - 4px)) scale(1.15); }
         100% { transform: translate(calc(-50% + 4px), calc(-50% + 4px)) scale(1.15); }
     }
-
-    /* パターン2: 左右に大きくイヤイヤする */
     @keyframes shakeAnim2 {
         0% { transform: translate(calc(-50% - 15px), -50%) scale(1.15); }
         50% { transform: translate(calc(-50% + 15px), -50%) scale(1.15); }
         100% { transform: translate(calc(-50% - 15px), -50%) scale(1.15); }
     }
-
-    /* パターン3: 伸び縮みしながら少し回転する（パニック） */
     @keyframes shakeAnim3 {
         0% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); }
         50% { transform: translate(-50%, -50%) scale(0.9) rotate(15deg); }
         100% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); }
     }
-
 
     /* ==========================================
        層4：ポップアップ モーダル (Z: 100)
@@ -370,7 +358,6 @@
         </div>
     </div>
 
-    <!-- ここにメダル、絵文字、スパークが描画される -->
     <div id="map-fg" class="map-layer"></div>
 
     <div id="modal-overlay" class="hidden">
@@ -409,7 +396,6 @@
         for(let i=0; i<21; i++) colors.push('lime');
         for(let i=0; i<21; i++) colors.push('pink');
 
-        // ★ サイズの構成
         let sizes = [];
         for(let i=0; i<47; i++) sizes.push('normal');
         for(let i=0; i<13; i++) sizes.push('large');
@@ -464,10 +450,13 @@
                 isEscaper: isEscaper,
                 shakePattern: shakePattern,
                 isCaught: false,
+                isImage: false, // 画像進化フラグ
+                imageUrl: '',
                 element: null 
             });
         }
 
+        // 絵文字データの生成
         for (let i = 0; i < TOTAL_EMOJIS; i++) {
             let char = EMOJI_LIST[i % EMOJI_LIST.length];
             let radius = 45; 
@@ -525,6 +514,14 @@
 
     if (objectData.length === 0) {
         generateMapData();
+
+        // ★ 生成後に、ノーマルサイズで逃げないメダルの中からランダムに1つ選んで画像に進化させる
+        let normalCandidates = objectData.filter(m => m.type === 'medal' && m.sizeClass === 'normal' && !m.isEscaper);
+        if (normalCandidates.length > 0) {
+            let luckyOne = normalCandidates[Math.floor(Math.random() * normalCandidates.length)];
+            luckyOne.isImage = true;
+            luckyOne.imageUrl = '01BADGE.PNG'; // 画像のファイル名を指定
+        }
     }
 
     /* ==========================================
@@ -538,14 +535,21 @@
         
         if (obj.type === 'medal') {
             el.className = `medal color-${obj.color} size-${obj.sizeClass} shake-pattern-${obj.shakePattern}`;
-            el.innerHTML = '<span>?</span>';
+            
+            // ★ 画像メダルの場合は <img> タグを挿入
+            if (obj.isImage) {
+                el.innerHTML = `<img src="${obj.imageUrl}" class="medal-image" alt="badge">`;
+            } else {
+                el.innerHTML = '<span>?</span>';
+            }
+
             el.style.animationDelay = `${Math.random() * 3}s`;
             el.dataset.id = obj.id;
+
         } else if (obj.type === 'emoji') {
             el.className = 'emoji-item';
             el.textContent = obj.char;
             
-            // ★ 🍙だけはタップできるように設定
             if (obj.char === '🍙') {
                 el.style.pointerEvents = 'auto';
                 el.style.cursor = 'pointer';
@@ -760,13 +764,11 @@
         isDragging = false;
 
         if (!hasMoved) {
-            // メダルのタップ判定
             const targetMedal = e.target.closest('.medal');
             if (targetMedal) {
                 handleMedalTap(targetMedal);
             }
 
-            // ★ 絵文字のタップ判定（🍙の場合のみジャンプ）
             const targetEmoji = e.target.closest('.emoji-item');
             if (targetEmoji && targetEmoji.textContent === '🍙') {
                 window.location.href = 'https://funkyhotdog.com/world';
