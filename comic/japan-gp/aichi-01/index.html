@@ -72,6 +72,31 @@
       100% { background-position: 0% center; }
     }
 
+    /* ★ 追加: BADGE周りの光エフェクト (5.5秒周期 = 4秒停止 + 1.5秒回転) ★ */
+    .badge-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 135%; /* バッジのscale-[1.2]に合わせて、少しはみ出すサイズ */
+      height: 135%;
+      border-radius: 50%;
+      /* 彗星の尾のようなグラデーション */
+      background: conic-gradient(from 0deg, transparent 0%, transparent 70%, rgba(255, 255, 255, 0.2) 85%, rgba(255, 255, 255, 0.8) 100%);
+      filter: blur(10px);
+      z-index: 0;
+      pointer-events: none;
+      animation: badge-spin 5.5s linear infinite;
+    }
+    @keyframes badge-spin {
+      /* 0%〜72.72% (約4秒間): 非表示で停止 */
+      0%, 72.72% { transform: translate(-50%, -50%) rotate(0deg); opacity: 0; }
+      /* 少しフェードインしながら回転開始 */
+      75% { opacity: 1; }
+      95% { opacity: 1; }
+      /* 100% (1.5秒経過): 1周完了して消える */
+      100% { transform: translate(-50%, -50%) rotate(360deg); opacity: 0; }
+    }
+
     /* パネルデザイン */
     .h2-glow {
       color: black; -webkit-text-stroke: 1.5px white;
@@ -420,7 +445,7 @@
   </div>
 
   <!-- ==========================================
-       ★ PRIZEモーダル (BADGE 1.2倍拡大版) ★
+       ★ PRIZEモーダル (BADGE 光エフェクト版) ★
        ========================================== -->
   <div id="prize-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
     <div class="relative bg-black border-[2px] border-white px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between">
@@ -430,9 +455,12 @@
           <div class="font-impact text-[16px] text-[#888] tracking-widest text-center mb-1 leading-tight uppercase">YOU MADE IT.</div>
           <div class="font-impact text-[26px] text-white tracking-widest text-center mb-4 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">YOU EARNED THIS.</div>
           
-          <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative">
-            <!-- ★ 画像自体を scale-[1.2] で1.2倍に拡大 ★ -->
-            <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl transform scale-[1.2]">
+          <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative z-10">
+            <!-- ★ 追記: 光のエフェクト (4秒待機, 1.5秒で1周) ★ -->
+            <div class="badge-glow"></div>
+            
+            <!-- バッジ画像本体 (上に被せるために relative z-10 を追加) -->
+            <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl transform scale-[1.2] relative z-10">
           </div>
         </div>
 
