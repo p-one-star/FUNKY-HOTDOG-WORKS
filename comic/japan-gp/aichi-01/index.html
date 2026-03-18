@@ -75,9 +75,7 @@
       animation: locating-flicker 0.15s infinite;
     }
 
-    /* ==========================================
-       ★修正: PRIZEの裏で「5秒停止、2秒キラン✨」の合計7秒ループ★
-       ========================================== */
+    /* PRIZEの裏で「5秒停止、2秒キラン✨」の合計7秒ループ */
     .prize-flowing-glow {
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -274,7 +272,8 @@
             </div>
             
             <div class="mt-14 flex justify-start">
-              <button class="bg-transparent outline-none transition-transform active:scale-[0.97] text-left p-0 flex flex-col items-start gap-0">
+              <!-- クリック時に openPrizeModal() を発動 -->
+              <button class="bg-transparent outline-none transition-transform active:scale-[0.97] text-left p-0 flex flex-col items-start gap-0 cursor-pointer" onclick="openPrizeModal()">
                 <!-- 上段: CLAIM YOUR -->
                 <span class="text-[#111111] font-blackops tracking-widest text-[30px] leading-none" 
                       style="text-shadow: 0 0 2px rgba(255,255,255,0.85), 0 0 4px rgba(255,255,255,0.65), 0 0 5px rgba(255,255,255,0.5);">
@@ -404,7 +403,7 @@
                 <span class="text-[#cccccc] tracking-widest text-[22px] uppercase font-impact">BACK TO WORLD MAP</span>
               </a>
               <button class="gimmick-next-btn w-full bg-black border border-[#333333] border-l-[3px] border-l-[#00e5ff] py-5 flex justify-center items-center outline-none transition-colors">
-                <span class="text-[#cccccc] tracking-widest text-[22px] uppercase font-impact text-normal">NEXT FUNKY ★04</span>
+                <span class="text-[#cccccc] tracking-widest text-[22px] uppercase font-impact text-normal">NEXT FUNKY ★02</span>
                 <span class="text-[#ff0000] tracking-widest text-[26px] uppercase font-blackops text-active hidden">STILL TUNING...</span>
               </button>
             </div>
@@ -510,9 +509,112 @@
   </div>
 
   <!-- ==========================================
+       ★秘密のギミックモーダル 4: PRIZE (報酬画面) ★
+       ========================================== -->
+  <div id="prize-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
+    <div class="relative bg-black border-[2px] border-white px-4 py-10 w-full max-w-[340px] flex flex-col items-center justify-center">
+      
+      <!-- メインコンテンツ(初期表示用) -->
+      <div id="prize-content" class="w-full flex flex-col items-center">
+        <!-- YOU MADE IT. (弱め) -->
+        <div class="font-impact text-[16px] text-[#888888] tracking-widest text-center mb-2 leading-tight uppercase">
+          YOU MADE IT.
+        </div>
+        <!-- YOU EARNED THIS. (強め) -->
+        <div class="font-impact text-[26px] text-[#ffffff] tracking-widest text-center mb-8 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">
+          YOU EARNED THIS.
+        </div>
+        
+        <!-- メダル(正方形画像スペース) -->
+        <div class="w-[220px] h-[220px] mb-8 flex flex-col items-center justify-center relative">
+          <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <!-- 画像がない場合のプレースホルダー -->
+          <div class="hidden w-[140px] h-[140px] border-2 border-[#555555] flex-col items-center justify-center bg-[#111111]">
+            <span class="font-impact text-[#555555] text-[16px] tracking-widest">MEDAL</span>
+          </div>
+        </div>
+
+        <!-- CLAIM YOUR PRIZE ボタン (主役🔥) -->
+        <button class="w-[90%] border-[3px] border-white py-3 mb-4 text-center outline-none transition-colors active:bg-white group" onclick="actionClaimPrize()">
+          <span class="font-impact text-white group-active:text-black text-[22px] tracking-widest uppercase transition-colors" style="text-shadow: 0 0 5px rgba(255,255,255,0.5);">CLAIM YOUR PRIZE</span>
+        </button>
+
+        <!-- VIEW PRODUCTS ボタン (サブ) -->
+        <button class="w-[90%] border-[2px] border-[#555555] py-3 mb-6 text-center outline-none transition-colors active:bg-[#555555] group" onclick="actionViewProducts()">
+          <span class="font-impact text-[#888888] group-active:text-black text-[18px] tracking-widest uppercase transition-colors">VIEW PRODUCTS</span>
+        </button>
+
+        <!-- BACK ボタン -->
+        <button class="w-[90%] border-2 border-[#333333] py-3 text-center outline-none transition-colors active:bg-[#222]" onclick="closePrizeModal()">
+          <span class="font-impact text-[#555555] text-[18px] tracking-widest uppercase">BACK</span>
+        </button>
+      </div>
+
+      <!-- メッセージ表示用コンテナ (初期は隠しておく) -->
+      <div id="prize-message" class="w-full hidden flex-col items-center justify-center text-center py-10 min-h-[300px]">
+        <div id="prize-msg-1" class="font-impact text-[26px] text-white tracking-widest mb-4 uppercase" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);"></div>
+        <div id="prize-msg-2" class="font-impact text-[20px] text-[#aaaaaa] tracking-widest uppercase"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
        JavaScript処理
        ========================================== -->
   <script>
+    // --- 秘密のギミック (PRIZE) のアクション ---
+    const prizeModal = document.getElementById('prize-modal');
+    const prizeContent = document.getElementById('prize-content');
+    const prizeMessage = document.getElementById('prize-message');
+    const prizeMsg1 = document.getElementById('prize-msg-1');
+    const prizeMsg2 = document.getElementById('prize-msg-2');
+
+    function openPrizeModal() {
+      // 毎回開くときに中身を初期状態(コンテンツ表示)にしておく
+      prizeContent.classList.remove('hidden');
+      prizeMessage.classList.add('hidden');
+      prizeMessage.classList.remove('flex');
+      
+      prizeModal.classList.remove('hidden');
+      prizeModal.classList.add('flex');
+      setTimeout(() => { prizeModal.classList.remove('opacity-0'); prizeModal.classList.add('opacity-100'); }, 10);
+    }
+
+    function closePrizeModal() {
+      prizeModal.classList.remove('opacity-100');
+      prizeModal.classList.add('opacity-0');
+      setTimeout(() => { prizeModal.classList.add('hidden'); prizeModal.classList.remove('flex'); }, 300);
+    }
+
+    // 主役🔥 CLAIM YOUR PRIZE 押下時
+    function actionClaimPrize() {
+      prizeContent.classList.add('hidden');
+      prizeMessage.classList.remove('hidden');
+      prizeMessage.classList.add('flex');
+      
+      prizeMsg1.innerText = 'YOUR PRIZE IS OUT THERE.';
+      prizeMsg2.innerText = 'GO FIND IT.';
+      
+      setTimeout(() => {
+        window.location.href = 'https://funkyhotdog.com/wild-tomato';
+      }, 2000);
+    }
+
+    // サブ VIEW PRODUCTS 押下時
+    function actionViewProducts() {
+      prizeContent.classList.add('hidden');
+      prizeMessage.classList.remove('hidden');
+      prizeMessage.classList.add('flex');
+      
+      prizeMsg1.innerText = 'STORE LOCKED.';
+      prizeMsg2.innerText = "YOU'RE TOO EARLY.";
+      
+      setTimeout(() => {
+        closePrizeModal(); // 2秒後にモーダルを閉じる(元の漫画へ)
+      }, 2000);
+    }
+
     // --- 秘密のギミック (クルマ) ---
     const buyModal = document.getElementById('buy-modal');
     function openBuyModal() {
@@ -548,7 +650,7 @@
         { top: '26%', left: '12%' },
         { top: '14%', left: '20%' },
         { top: '20%', left: '10%' },
-        { top: '8%', left: '2%' } // 最終ロックオン位置！
+        { top: '8%', left: '2%' } // 最終ロックオン位置！(マップ左端のドンピシャ位置)
       ];
 
       let stepIdx = 0;
