@@ -72,28 +72,29 @@
       100% { background-position: 0% center; }
     }
 
-    /* ★ 追加: BADGE周りの光エフェクト (5.5秒周期 = 4秒停止 + 1.5秒回転) ★ */
+    /* ★ 追加: BADGE周りの光エフェクト (5秒周期 = 4秒停止 + 1秒回転) ★ */
     .badge-glow {
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 135%; /* バッジのscale-[1.2]に合わせて、少しはみ出すサイズ */
-      height: 135%;
+      /* 1.2倍 (画像透過部分にフィットするよう調整) */
+      width: 120%; 
+      height: 120%;
       border-radius: 50%;
       /* 彗星の尾のようなグラデーション */
       background: conic-gradient(from 0deg, transparent 0%, transparent 70%, rgba(255, 255, 255, 0.2) 85%, rgba(255, 255, 255, 0.8) 100%);
       filter: blur(10px);
       z-index: 0;
       pointer-events: none;
-      animation: badge-spin 5.5s linear infinite;
+      animation: badge-spin 5.0s linear infinite;
     }
     @keyframes badge-spin {
-      /* 0%〜72.72% (約4秒間): 非表示で停止 */
-      0%, 72.72% { transform: translate(-50%, -50%) rotate(0deg); opacity: 0; }
+      /* 0%〜80% (4秒間): 非表示で停止 */
+      0%, 80% { transform: translate(-50%, -50%) rotate(0deg); opacity: 0; }
       /* 少しフェードインしながら回転開始 */
-      75% { opacity: 1; }
-      95% { opacity: 1; }
-      /* 100% (1.5秒経過): 1周完了して消える */
+      82% { opacity: 1; }
+      98% { opacity: 1; }
+      /* 100% (1秒経過): 1周完了して消える */
       100% { transform: translate(-50%, -50%) rotate(360deg); opacity: 0; }
     }
 
@@ -456,7 +457,7 @@
           <div class="font-impact text-[26px] text-white tracking-widest text-center mb-4 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">YOU EARNED THIS.</div>
           
           <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative z-10">
-            <!-- ★ 追記: 光のエフェクト (4秒待機, 1.5秒で1周) ★ -->
+            <!-- ★ 追記: 光のエフェクト (4秒待機, 1秒で1周) ★ -->
             <div class="badge-glow"></div>
             
             <!-- バッジ画像本体 (上に被せるために relative z-10 を追加) -->
