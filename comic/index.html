@@ -173,6 +173,7 @@
             </div>
           </div>
 
+          <!-- CRAFTED IN JAPAN -->
           <div class="flex flex-col items-center justify-center w-full mt-10 font-black uppercase text-slate-900 dark:text-white drop-shadow-lg leading-none">
             <div class="w-[85vw] max-w-[320px] sm:max-w-[420px] flex flex-col items-stretch">
               <div class="flex justify-between w-full text-4xl sm:text-5xl mb-2"><span>C</span><span>R</span><span>A</span><span>F</span><span>T</span><span>E</span><span>D</span></div>
@@ -208,9 +209,9 @@
                 <span class="font-black uppercase tracking-wider text-white flex items-baseline gap-1.5">
                   <span class="text-[26px] tracking-widest leading-none mt-1">FUNKY</span><span class="text-2xl text-[#ccff00]">★01</span>
                 </span>
-                <!-- シェアコンテナ (JSでメニューが挿入されます) -->
+                <!-- シェアコンテナ -->
                 <div class="relative share-container" data-episode="ep1" data-url="https://p-one-star.github.io/FUNKY-01/" data-color="cyan">
-                  <button class="btn-share text-white hover:text-cyan-400 transition-colors p-1"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
+                  <button class="btn-share text-white hover:text-[#ccff00] transition-colors p-1"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
                 </div>
               </div>
               <div class="relative w-full flex-1 flex flex-col bg-black pb-1.5 sm:pb-2">
@@ -276,12 +277,11 @@
           <!-- ★03 AICHI/愛知 -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep3" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-cyan-400 overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg">
-              <div class="px-4 py-1.5 flex-shrink-0 flex justify-between items-center bg-black relative z-30">
+              <div class="px-4 py-1 flex-shrink-0 flex justify-between items-center bg-black relative z-30">
                 <span class="font-black uppercase tracking-wider text-white flex items-baseline gap-1.5">
                   <span id="t-card3-header-text" data-font-switch="true" class="text-[26px] tracking-widest leading-none mt-1">愛知</span>
                   <span class="text-2xl font-stencil text-[#ccff00]">★01</span>
                 </span>
-                <!-- ★ ジャンプ先のURLを data-url に設定 -->
                 <div class="relative share-container" data-episode="ep3" data-url="https://funkyhotdog.com/comic/japan-gp/aichi-01" data-color="cyan">
                   <button class="btn-share text-white hover:text-cyan-400 transition-colors p-1"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
                 </div>
@@ -299,7 +299,6 @@
                     <div data-i18n="comic.phrase3" data-i18n-italic="true" class="text-outline-cyan text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider">FHW発祥の地</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
-                    <!-- ★ onclick にジャンプ先のURLを追加 -->
                     <a href="#" onclick="turnPageAndReturn(event, 'card-ep3', 'https://funkyhotdog.com/comic/japan-gp/aichi-01')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-[#ccff00] font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-[#ccff00] hover:shadow-[0_0_15px_rgba(204,255,0,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
@@ -378,7 +377,6 @@
               <a href="https://www.instagram.com/fhw_funky_hotdog_works?igsh=MXJ5emptdG1kYndscw%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="block text-gray-500 dark:text-gray-400 transition-all duration-300 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] hover:scale-110">
                 <svg viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 pointer-events-none"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
               </a>
-              <!-- ★修正: YouTubeアイコンを完全な形(FontAwesomeベース)に変更 -->
               <a href="#" class="btn-show-toast block text-gray-500 dark:text-gray-400 transition-all duration-300 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)] hover:scale-110 cursor-pointer">
                 <svg viewBox="0 0 576 512" fill="currentColor" class="w-8 h-8 pointer-events-none"><path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z"/></svg>
               </a>
@@ -396,7 +394,7 @@
 
     <!-- FOOTER -->
     <footer class="py-8 border-t-2 text-center flex flex-col items-center transition-colors duration-500 bg-slate-200 border-slate-300 dark:bg-black dark:border-zinc-900">
-      <img src="header.jpg" alt="Funky Hotdog Works Header" class="w-[80vw] max-w-[300px] object-contain rounded-xl" onerror="this.style.display='none'" />
+      <img src="header.jpg" alt="Funky Hotdog Works Header" class="w-[90vw] max-w-[420px] object-contain rounded-xl" onerror="this.style.display='none'" />
     </footer>
 
   </div>
@@ -452,10 +450,11 @@
     let currentLang = 'en';
     let isDark = true;
 
-    // 言語切り替えの全自動化
+    // ★ 言語切り替えの全自動化
     function updateLanguage() {
       const t = translations[currentLang];
       
+      // data-i18n を持つ全要素を自動翻訳
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const keys = el.getAttribute('data-i18n').split('.');
         let value = t;
@@ -463,10 +462,12 @@
         if(value) el.innerHTML = value;
       });
 
+      // フレーズのイタリック制御
       document.querySelectorAll('[data-i18n-italic="true"]').forEach(el => {
         currentLang === 'en' ? el.classList.add('italic') : el.classList.remove('italic');
       });
 
+      // 愛知カードのフォント制御
       document.querySelectorAll('[data-font-switch="true"]').forEach(el => {
         if (currentLang === 'ja') {
           el.className = "text-[26px] font-aichi tracking-widest leading-none mt-1";
@@ -475,9 +476,11 @@
         }
       });
 
+      // ヘッダー国旗の透明度
       document.getElementById('icon-en').className = currentLang === 'en' ? "text-sm transition-opacity duration-300 opacity-100 grayscale-0" : "text-sm transition-opacity duration-300 opacity-40 grayscale";
       document.getElementById('icon-ja').className = currentLang === 'ja' ? "text-sm transition-opacity duration-300 opacity-100 grayscale-0" : "text-sm transition-opacity duration-300 opacity-40 grayscale";
       
+      // 動的生成されたシェアメニュー内の翻訳更新
       document.querySelectorAll('.t-share-copy').forEach(el => el.innerText = t.comic.shareCopy);
       document.querySelectorAll('.t-share-pin').forEach(el => el.innerText = t.comic.sharePin);
       document.querySelectorAll('.t-share-x').forEach(el => el.innerText = t.comic.shareX);
@@ -492,7 +495,7 @@
     document.getElementById('btn-lang').addEventListener('click', () => { currentLang = currentLang === 'en' ? 'ja' : 'en'; updateLanguage(); });
     document.getElementById('btn-theme').addEventListener('click', () => { isDark = !isDark; updateTheme(); });
 
-    // シェアメニューの自動生成
+    // ★ シェアメニューの自動生成 (ページ読み込み時)
     function initShareMenus() {
       const template = document.getElementById('share-menu-template');
       document.querySelectorAll('.share-container').forEach(container => {
@@ -581,7 +584,7 @@
       closeAllShareMenus();
     }
 
-    // シェアメニューの開閉
+    // ★ シェアメニューの開閉 (一元化)
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('.btn-share');
       if (btn) {
@@ -604,12 +607,12 @@
       const card = document.getElementById(cardId);
       const overlay = document.getElementById('blackout-overlay');
       container.classList.remove('overflow-hidden'); card.style.zIndex = '9999';
-      document.getElementById('card-ep1').querySelectorAll('img')[1].classList.add('animate-engine-shake');
+      document.getElementById('card-ep1').querySelector('img:last-of-type').classList.add('animate-engine-shake');
       setTimeout(() => { new Audio('pn.m4a').play().catch(() => {}); }, 300);
       setTimeout(() => {
-        document.getElementById('card-ep1').querySelectorAll('img')[1].classList.remove('animate-engine-shake');
-        document.getElementById('card-ep1').querySelectorAll('img')[1].style.transition = 'transform 0.4s cubic-bezier(0.5, 0, 1, 1)';
-        document.getElementById('card-ep1').querySelectorAll('img')[1].style.transform = 'scale(1.15) translate(-150%, 150px)';
+        document.getElementById('card-ep1').querySelector('img:last-of-type').classList.remove('animate-engine-shake');
+        document.getElementById('card-ep1').querySelector('img:last-of-type').style.transition = 'transform 0.4s cubic-bezier(0.5, 0, 1, 1)';
+        document.getElementById('card-ep1').querySelector('img:last-of-type').style.transform = 'scale(1.15) translate(-150%, 150px)';
         setTimeout(() => { overlay.style.opacity = '1'; overlay.classList.remove('pointer-events-none'); }, 400);
         setTimeout(() => { window.location.href = targetUrl; }, 1800);
       }, 700);
