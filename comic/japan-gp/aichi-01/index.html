@@ -76,6 +76,38 @@
     }
 
     /* ==========================================
+       ★修正: PRIZEの裏で「5秒停止、2秒キラン✨」の合計7秒ループ★
+       ========================================== */
+    .prize-flowing-glow {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      color: transparent;
+      -webkit-text-stroke: 4px transparent; 
+      background: linear-gradient(
+        110deg, 
+        #666666 0%, 
+        #666666 45%, 
+        #ffffff 50%, 
+        #666666 55%, 
+        #666666 100%
+      );
+      background-size: 400% auto; 
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: blur(2px) drop-shadow(0 0 3px rgba(255, 255, 255, 0.9));
+      /* 合計7秒間の無限ループ */
+      animation: flash-flow 7s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes flash-flow {
+      /* 7秒周期: 0〜5秒(約71.43%)は100%の位置で待機 */
+      /* 5秒〜7秒(100%)で0%の位置へ移動し、2秒かけて光が走る */
+      0%, 71.43% { background-position: 100% center; }
+      100% { background-position: 0% center; }
+    }
+
+    /* ==========================================
        裏パネルの特製デザイン
        ========================================== */
     .h2-glow {
@@ -116,7 +148,7 @@
     /* ギミック発動時 (JSで付与) */
     .gimmick-next-btn.is-alert {
       background-color: rgba(0, 0, 0, 0.5) !important;
-      border-color: #ff0000 !important;
+      border-color: #ff0000 !important; /* 純粋な赤 */
       box-shadow: 0 0 25px rgba(255,0,0,0.8), inset 0 0 25px rgba(255,0,0,0.8) !important;
     }
     .gimmick-next-btn.is-alert .text-normal { display: none !important; }
@@ -234,23 +266,36 @@
             </div>
           </div>
 
-          <!-- ★修正: YOU MADE IT. と 物理ボタン (フォントと空間の調整) ★ -->
+          <!-- YOU MADE IT. と CLAIM YOUR PRIZE -->
           <div class="mt-8 mb-10">
-            <!-- 1行分のスペース (上のmt-8と合わせて表現) / IMPACTフォントに変更 -->
-            <div class="text-[#e5e5e5] font-impact text-[22px] tracking-widest">
+            <!-- YOU MADE IT. -->
+            <div class="text-[#e5e5e5] font-impact text-[22px] tracking-widest pl-1">
               YOU MADE IT.
             </div>
-            <!-- 空間を少し広く (mt-14) -->
-            <div class="mt-14">
-              <!-- 物理ボタン / Black Ops One、黒文字、白の強く狭い発光 -->
-              <button class="border border-[#666666] bg-transparent text-black font-blackops tracking-widest text-[18px] px-8 py-3 outline-none transition-colors active:bg-white/10" 
-                      style="text-shadow: 0 0 2px #fff, 0 0 3px #fff, 0 0 4px #fff, 0 0 5px #fff;">
-                CLAIM YOUR PRIZE
+            
+            <div class="mt-14 flex justify-start">
+              <button class="bg-transparent outline-none transition-transform active:scale-[0.97] text-left p-0 flex flex-col items-start gap-0">
+                <!-- 上段: CLAIM YOUR -->
+                <span class="text-[#111111] font-blackops tracking-widest text-[30px] leading-none" 
+                      style="text-shadow: 0 0 2px rgba(255,255,255,0.85), 0 0 4px rgba(255,255,255,0.65), 0 0 5px rgba(255,255,255,0.5);">
+                  CLAIM YOUR
+                </span>
+                
+                <!-- 下段: PRIZE (サイズ36px、裏で7秒ループの光が走る演出！) -->
+                <span class="relative inline-block w-full text-left mt-1">
+                  <!-- 背後の走る発光レイヤー -->
+                  <span class="prize-flowing-glow font-blackops tracking-wider text-[36px] leading-none" aria-hidden="true">PRIZE</span>
+                  <!-- 前面の黒文字レイヤー -->
+                  <span class="relative z-10 text-black font-blackops tracking-wider text-[36px] leading-none" style="text-shadow: 0 0 1px rgba(255,255,255,0.8);">
+                    PRIZE
+                  </span>
+                </span>
+                
               </button>
             </div>
           </div>
 
-          <!-- CRAFTED IN JAPAN & 印鑑 (ここから下はそのまま押し出されます) -->
+          <!-- CRAFTED IN JAPAN & 印鑑 -->
           <div class="relative mt-2 pt-6 mb-4"> 
             <div class="absolute right-[5%] top-[-35px] z-20 pointer-events-none">
               <img src="icon2.PNG" alt="Stamp" class="w-[80px] h-[80px] object-contain transform rotate-[-8deg] opacity-90 drop-shadow-md">
@@ -481,7 +526,7 @@
       setTimeout(() => { buyModal.classList.add('hidden'); buyModal.classList.remove('flex'); }, 300);
     }
 
-    // --- 秘密のギミック (愛知県スナイパー) ---
+    // --- 秘密のギミック (愛知県スナイパー) ひょこひょこ移動！ ---
     const warpModal = document.getElementById('warp-modal');
     const targetMark = document.getElementById('target-mark');
     const locatingText = document.getElementById('locating-text');
@@ -503,7 +548,7 @@
         { top: '26%', left: '12%' },
         { top: '14%', left: '20%' },
         { top: '20%', left: '10%' },
-        { top: '8%', left: '2%' } // 最終ロックオン位置
+        { top: '8%', left: '2%' } // 最終ロックオン位置！
       ];
 
       let stepIdx = 0;
