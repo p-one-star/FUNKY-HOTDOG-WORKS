@@ -127,7 +127,9 @@
         <div class="w-px h-2.5 bg-[#444]"></div>
         <span id="icon-jp" class="text-[11px] transition-opacity opacity-30">🇯🇵</span>
       </button>
-      <div class="text-[18px] animate-breathe origin-center">🍙</div>
+      
+      <!-- ★ 復旧: おにぎりリンク ★ -->
+      <a href="https://funkyhotdog.com/world" class="text-[18px] animate-breathe origin-center block no-underline outline-none cursor-pointer">🍙</a>
     </div>
   </header>
 
@@ -340,63 +342,73 @@
     <img id="modal-img" src="AICHI.jpeg" alt="AICHI Comic Full" class="max-w-full max-h-screen object-contain transition-transform duration-200 origin-center cursor-move select-none" draggable="false">
   </div>
 
-  <!-- クルマモーダル (リニューアル版) -->
+  <!-- ==========================================
+       ★ クルマモーダル (全高統一・画像最大化版) ★
+       ========================================== -->
   <div id="buy-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <div class="relative bg-black border-[3px] border-[#f00] px-4 py-10 w-full max-w-[340px] flex flex-col items-center justify-center shadow-[0_0_15px_rgba(255,0,0,0.3)]">
+    <!-- min-h-[620px] で3つのモーダルの高さを完全に統一 -->
+    <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       
-      <!-- メダルと同じ枠サイズで最大表示 -->
-      <div class="w-[280px] h-[280px] mb-6 flex justify-center items-center relative">
-        <img src="maru.PNG" alt="Machine" class="w-full h-full object-contain drop-shadow-2xl">
+      <!-- 画像 (一番上、枠線被りギリギリまで拡大) -->
+      <!-- w-[calc(100%+32px)] で横幅いっぱい。 scale-[1.15] で枠を突き破る迫力を演出 -->
+      <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
+        <img src="maru.PNG" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.15]">
       </div>
 
-      <h3 class="font-impact text-[26px] text-white tracking-widest text-center mb-6 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #f00, 0 0 20px rgba(255,0,0,0.6);">
-        THIS MACHINE IS<br>NOT FOR SALE.
-      </h3>
-      <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-4 leading-[1.8]">
-        BUILT FOR AICHI GP.<br>ONLY ONE EXISTS.
-      </div>
-      <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-8 leading-[1.8]">
-        YET.
+      <!-- テキスト群 (中央寄り) -->
+      <div class="flex flex-col items-center mt-auto mb-10 w-full">
+        <h3 class="font-impact text-[28px] text-white tracking-widest text-center mb-6 leading-tight uppercase whitespace-nowrap" style="text-shadow: 0 0 10px #f00, 0 0 20px rgba(255,0,0,0.6);">
+          THIS MACHINE IS<br>NOT FOR SALE.
+        </h3>
+        <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-4 leading-[1.8]">
+          BUILT FOR AICHI GP.<br>ONLY ONE EXISTS.
+        </div>
+        <div class="font-mono text-[#888] text-[14px] text-center tracking-widest leading-[1.8]">
+          YET.
+        </div>
       </div>
       
-      <!-- BUCKボタン (PRIZEモーダルの幅と統一) -->
+      <!-- BUCKボタン (一番下) -->
       <button class="w-[90%] border-2 border-[#555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="hideModal('buy-modal')">
         <span class="font-impact text-[#888] text-[20px] tracking-widest uppercase">BUCK</span>
       </button>
     </div>
   </div>
 
-  <!-- スナイパー WARPモーダル (リニューアル版) -->
+  <!-- ==========================================
+       ★ 愛知WARPモーダル (全高統一・画像最大化版) ★
+       ========================================== -->
   <div id="warp-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <div class="relative bg-black border-[3px] border-[#00e5ff] px-4 py-10 w-full max-w-[340px] flex flex-col items-center justify-center shadow-[0_0_15px_rgba(0,229,255,0.3)]">
+    <div class="relative bg-black border-[3px] border-[#00e5ff] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(0,229,255,0.3)] overflow-hidden">
       
-      <!-- 愛知県シルエット＆WARP文字被せ -->
-      <div class="relative w-[280px] h-[280px] flex justify-center items-center mb-2">
-        <!-- シルエット画像 -->
-        <img src="aj.PNG" alt="Aichi Map" class="w-full h-full object-contain opacity-70 drop-shadow-xl">
+      <!-- シルエット＆WARP文字 (一番上、限界まで大きく) -->
+      <div class="relative w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center">
+        <!-- シルエット画像 (scale-[1.2] で限界まで大きく) -->
+        <img src="aj.PNG" alt="Aichi Map" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.2]">
         
         <!-- 重ねるテキスト -->
-        <h3 class="absolute inset-0 flex items-center justify-center font-impact text-[28px] text-white tracking-widest text-center leading-tight uppercase whitespace-nowrap z-10" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.8), 0 0 5px #000;">
+        <h3 class="absolute inset-0 flex items-center justify-center font-impact text-[32px] text-white tracking-widest text-center leading-tight uppercase whitespace-nowrap z-10" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.8), 0 0 5px #000;">
           WARP TO AICHI<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
         </h3>
       </div>
       
-      <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-6 leading-[1.8]">
+      <!-- テキスト -->
+      <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mt-auto mb-8 leading-[1.8]">
         Maybe the real world<br>opens.
       </div>
       
-      <!-- 3つのボタン (PRIZEモーダルの幅と統一) -->
-      <button class="w-[90%] border-[2px] border-[#00e5ff] py-3 mb-4 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">
-        <span class="font-impact text-[#00e5ff] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">GO</span>
-      </button>
-      
-      <button class="w-[90%] border-[2px] border-[#f00] py-3 mb-6 text-center outline-none transition-colors active:bg-[#f00] group" onclick="warpToTomato()">
-        <span class="font-impact text-[#f00] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">TOMATO</span>
-      </button>
-      
-      <button class="w-[90%] border-2 border-[#555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="hideModal('warp-modal')">
-        <span class="font-impact text-[#888] text-[20px] tracking-widest uppercase">BUCK</span>
-      </button>
+      <!-- 3つのボタン (一番下) -->
+      <div class="w-full flex flex-col items-center gap-4">
+        <button class="w-[90%] border-[2px] border-[#00e5ff] py-3 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">
+          <span class="font-impact text-[#00e5ff] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">GO</span>
+        </button>
+        <button class="w-[90%] border-[2px] border-[#f00] py-3 text-center outline-none transition-colors active:bg-[#f00] group" onclick="warpToTomato()">
+          <span class="font-impact text-[#f00] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">TOMATO</span>
+        </button>
+        <button class="w-[90%] border-2 border-[#555] py-3 text-center outline-none transition-colors active:bg-[#333]" onclick="hideModal('warp-modal')">
+          <span class="font-impact text-[#888] text-[20px] tracking-widest uppercase">BUCK</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -409,25 +421,35 @@
     </div>
   </div>
 
-  <!-- PRIZEモーダル -->
+  <!-- ==========================================
+       ★ PRIZEモーダル (全高統一基準) ★
+       ========================================== -->
   <div id="prize-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
-    <div class="relative bg-black border-[2px] border-white px-4 py-10 w-full max-w-[340px] flex flex-col items-center justify-center">
-      <div id="prize-content" class="w-full flex flex-col items-center">
-        <div class="font-impact text-[16px] text-[#888] tracking-widest text-center mb-1 leading-tight uppercase">YOU MADE IT.</div>
-        <div class="font-impact text-[26px] text-white tracking-widest text-center mb-6 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">YOU EARNED THIS.</div>
-        <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative">
-          <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl">
+    <!-- min-h-[620px] で3つのモーダルの高さを完全に統一 -->
+    <div class="relative bg-black border-[2px] border-white px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between">
+      
+      <div id="prize-content" class="w-full h-full flex flex-col items-center justify-between">
+        <div class="w-full flex flex-col items-center">
+          <div class="font-impact text-[16px] text-[#888] tracking-widest text-center mb-1 leading-tight uppercase">YOU MADE IT.</div>
+          <div class="font-impact text-[26px] text-white tracking-widest text-center mb-4 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">YOU EARNED THIS.</div>
+          <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative">
+            <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl">
+          </div>
         </div>
-        <button class="w-[90%] border-[3px] border-white py-3 mb-4 text-center outline-none transition-colors active:bg-white group" onclick="actionPrize('CLAIM')">
-          <span class="font-impact text-white group-active:text-black text-[22px] tracking-widest uppercase transition-colors" style="text-shadow: 0 0 5px rgba(255,255,255,0.5);">CLAIM YOUR PRIZE</span>
-        </button>
-        <button class="w-[90%] border-[2px] border-[#555] py-3 mb-6 text-center outline-none transition-colors active:bg-[#555] group" onclick="actionPrize('VIEW')">
-          <span class="font-impact text-[#888] group-active:text-black text-[18px] tracking-widest uppercase transition-colors">VIEW PRODUCTS</span>
-        </button>
-        <button class="w-[90%] border-2 border-[#333] py-3 text-center outline-none transition-colors active:bg-[#222]" onclick="hideModal('prize-modal')">
-          <span class="font-impact text-[#555] text-[18px] tracking-widest uppercase">BACK</span>
-        </button>
+
+        <div class="w-full flex flex-col items-center gap-4 mt-auto">
+          <button class="w-[90%] border-[3px] border-white py-3 text-center outline-none transition-colors active:bg-white group" onclick="actionPrize('CLAIM')">
+            <span class="font-impact text-white group-active:text-black text-[22px] tracking-widest uppercase transition-colors" style="text-shadow: 0 0 5px rgba(255,255,255,0.5);">CLAIM YOUR PRIZE</span>
+          </button>
+          <button class="w-[90%] border-[2px] border-[#555] py-3 text-center outline-none transition-colors active:bg-[#555] group" onclick="actionPrize('VIEW')">
+            <span class="font-impact text-[#888] group-active:text-black text-[18px] tracking-widest uppercase transition-colors">VIEW PRODUCTS</span>
+          </button>
+          <button class="w-[90%] border-2 border-[#333] py-3 text-center outline-none transition-colors active:bg-[#222]" onclick="hideModal('prize-modal')">
+            <span class="font-impact text-[#555] text-[18px] tracking-widest uppercase">BACK</span>
+          </button>
+        </div>
       </div>
+      
       <div id="prize-message" class="w-full hidden flex-col items-center justify-center text-center py-10 min-h-[300px]">
         <div id="prize-msg-1" class="font-impact text-[26px] text-white tracking-widest mb-4 uppercase" style="text-shadow: 0 0 10px rgba(255,255,255,0.5);"></div>
         <div id="prize-msg-2" class="font-impact text-[20px] text-[#aaa] tracking-widest uppercase"></div>
