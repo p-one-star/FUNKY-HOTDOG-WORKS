@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FHW WORLD MAP</title>
-    <!-- Black Ops One フォントの読み込み -->
+    <!-- Black Ops One と Noto Serif JP（美しい明朝体）の読み込み -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
     
     <style>
         /* === CSS VARIABLES === */
@@ -21,10 +21,11 @@
             --yellow: #ffcc00; 
             --purple: #b026ff; 
             --white: #ffffff; 
-            --sake-blue: #88ccff; /* ★ 日本酒用の新カラー追加！ */
+            --sake-blue: #88ccff; 
             --text-color: #ffffff;
             --font-main: 'Arial Black', Impact, 'Segoe UI', sans-serif;
             --font-stencil: 'Black Ops One', Impact, cursive, sans-serif;
+            --font-kanji: 'Noto Serif JP', serif; /* ★ 漢字用の美しいフォント */
         }
 
         /* === BASE STYLES === */
@@ -213,6 +214,19 @@
             text-transform: uppercase;
             font-style: italic;
             line-height: 1.1;
+        }
+
+        /* ★ 「酒」専用の美しいスタイル */
+        .kanji-sake {
+            font-family: var(--font-kanji);
+            font-weight: 700;
+            font-style: normal; /* イタリックを解除して真っ直ぐに */
+            color: #ffffff; /* 白抜き文字に */
+            -webkit-text-stroke: 1px #ffd700; /* 金色の細い縁取り */
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); /* 軽く金色の発光 */
+            display: inline-block;
+            transform: scale(1.25) translateY(-2px); /* 漢字だけ少し大きくしてバランスを取る */
+            margin-right: 4px;
         }
 
         .zone-desc {
@@ -485,7 +499,7 @@
             <!-- === PLAYER CAR === -->
             <div id="player-car" class="player-car">
                 <div class="car-sprite">
-                    <img src="track.PNG?v=18" onerror="this.onerror=null; this.src='track.png?v=18';" alt="Player Car">
+                    <img src="track.PNG?v=19" onerror="this.onerror=null; this.src='track.png?v=19';" alt="Player Car">
                 </div>
             </div>
 
@@ -551,11 +565,11 @@
                 <div class="zone-desc">Japan Origin<br>Don't touch</div>
             </div>
 
-            <!-- ★ 新規追加: SAKE POWER (LOCKED) -->
+            <!-- ★ SAKE POWER (漢字デザイン適用) -->
             <div class="zone sake-blue locked-visible" onclick="handleZoneClick(this, '', 'construction')">
                 <div class="locked-badge">LOCKED</div>
                 <div class="zone-icon">🍶</div>
-                <div class="zone-title">SAKE POWER</div>
+                <div class="zone-title"><span class="kanji-sake">酒</span> POWER</div>
                 <div class="zone-desc">Crafted in Japan<br>Quiet madness</div>
             </div>
 
