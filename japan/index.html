@@ -65,9 +65,9 @@
         .card-image-container {
             overflow: hidden;
         }
-        .card:hover .card-emoji {
-            transform: scale(1.1);
-            opacity: 1;
+        .card:hover .card-image-container .bg-overlay {
+            transform: scale(1.05);
+            background-color: rgba(197, 160, 89, 0.2);
         }
 
         /* 全体の縦スクロールバー */
@@ -163,9 +163,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- aspect-[5/4] を aspect-square（正方形）に変更 -->
+                <!-- 1枚目: サイズを80%に縮小し、中央配置（top-[10%] left-[10%]） -->
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <img src="ai.PNG" alt="本日の一字" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
+                    <img src="ai.PNG" alt="本日の一字" class="absolute top-[10%] left-[10%] w-[80%] h-[80%] object-contain transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">漢字練習帳</p>
@@ -194,7 +194,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- aspect-square（正方形）に変更 -->
+                <!-- 2枚目: そのまま -->
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
                     <img src="kei.jpg" alt="本日の一景" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
                 </div>
@@ -225,11 +225,9 @@
                         </div>
                     </div>
                 </div>
-                <!-- aspect-square（正方形）に変更 -->
+                <!-- 3枚目: ginn.PNG に変更（2枚目と同じ設定） -->
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <div class="absolute inset-0 flex items-center justify-center flex-col">
-                        <span class="card-emoji text-6xl opacity-80 transition-all duration-500 drop-shadow-[0_0_15px_rgba(197,160,89,0.5)]">🎨</span>
-                    </div>
+                    <img src="ginn.PNG" alt="本日の一作" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">図工室</p>
@@ -239,7 +237,6 @@
                 </div>
             </div>
             
-            <!-- スクロール用の余白 -->
             <div class="snap-center flex-none w-2 sm:w-4"></div>
         </div>
     </section>
