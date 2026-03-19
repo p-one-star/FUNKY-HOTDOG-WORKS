@@ -65,6 +65,9 @@
         .card-image-container {
             overflow: hidden;
         }
+        .card-image-container .bg-overlay {
+            transition: all 0.7s ease;
+        }
         .card:hover .card-image-container .bg-overlay {
             transform: scale(1.05);
             background-color: rgba(197, 160, 89, 0.2);
@@ -88,7 +91,7 @@
 </head>
 <body class="antialiased selection:bg-[#C5A059] selection:text-black">
     
-    <!-- 金粉背景 -->
+    <!-- 全体用の金粉背景 -->
     <canvas id="gold-dust-canvas"></canvas>
 
     <!-- ヘッダー -->
@@ -144,7 +147,7 @@
     <section id="collection" class="pt-6 pb-24 relative z-10 w-full">
         <div class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 sm:px-8 pb-10 hide-scrollbar" style="scroll-padding-left: 1.5rem;">
             
-            <!-- カード 1 -->
+            <!-- カード 1 (愛) -->
             <div class="card snap-center flex-none w-[80vw] max-w-[340px] relative glass-panel p-5 sm:p-6 flex flex-col rounded-2xl border border-[#2a2315] hover:border-[#C5A059]/50 transition-colors duration-500">
                 <div class="flex justify-between items-center mb-5 relative z-20">
                     <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-gold drop-shadow-sm">本日の一字</h2>
@@ -163,9 +166,13 @@
                         </div>
                     </div>
                 </div>
-                <!-- 1枚目: サイズを80%に縮小し、中央配置（top-[10%] left-[10%]） -->
+                <!-- 枠の背景 -->
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <img src="ai.PNG" alt="本日の一字" class="absolute top-[10%] left-[10%] w-[80%] h-[80%] object-contain transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
+                    <!-- カード内専用の金粉キャンバス（透過PNGの後ろに配置） z-0 -->
+                    <canvas class="card-dust-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
+                    
+                    <!-- 透過PNG画像（z-indexでキラキラの上に配置） z-10 -->
+                    <img src="ai.PNG" alt="本日の一字" class="relative z-10 absolute top-[10%] left-[10%] w-[80%] h-[80%] object-contain transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">漢字練習帳</p>
@@ -175,7 +182,7 @@
                 </div>
             </div>
 
-            <!-- カード 2 -->
+            <!-- カード 2 (風景) ※画像の上にキラキラ -->
             <div class="card snap-center flex-none w-[80vw] max-w-[340px] relative glass-panel p-5 sm:p-6 flex flex-col rounded-2xl border border-[#2a2315] hover:border-[#C5A059]/50 transition-colors duration-500">
                 <div class="flex justify-between items-center mb-5 relative z-20">
                     <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-gold drop-shadow-sm">本日の一景</h2>
@@ -194,9 +201,13 @@
                         </div>
                     </div>
                 </div>
-                <!-- 2枚目: そのまま -->
+                <!-- 枠の背景 -->
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <img src="kei.jpg" alt="本日の一景" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
+                    <!-- 風景画像（z-0 で奥に配置） -->
+                    <img src="kei.jpg" alt="本日の一景" class="relative z-0 absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
+                    
+                    <!-- カード内専用の金粉キャンバス（画像の手前に配置） z-10 -->
+                    <canvas class="card-dust-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-10"></canvas>
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">歴史の授業</p>
@@ -206,7 +217,7 @@
                 </div>
             </div>
 
-            <!-- カード 3 -->
+            <!-- カード 3 (紋章) -->
             <div class="card snap-center flex-none w-[80vw] max-w-[340px] relative glass-panel p-5 sm:p-6 flex flex-col rounded-2xl border border-[#2a2315] hover:border-[#C5A059]/50 transition-colors duration-500">
                 <div class="flex justify-between items-center mb-5 relative z-20">
                     <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-gold drop-shadow-sm">本日の一作</h2>
@@ -225,9 +236,13 @@
                         </div>
                     </div>
                 </div>
-                <!-- 3枚目: ginn.PNG に変更（2枚目と同じ設定） -->
+                <!-- 枠の背景 -->
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <img src="ginn.PNG" alt="本日の一作" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
+                    <!-- カード内専用の金粉キャンバス（透過PNGの後ろに配置） z-0 -->
+                    <canvas class="card-dust-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
+                    
+                    <!-- 透過PNG画像（z-indexでキラキラの上に配置） z-10 -->
+                    <img src="ginn.PNG" alt="本日の一作" class="relative z-10 absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">図工室</p>
@@ -237,6 +252,7 @@
                 </div>
             </div>
             
+            <!-- スクロール用の余白 -->
             <div class="snap-center flex-none w-2 sm:w-4"></div>
         </div>
     </section>
@@ -352,27 +368,18 @@
                 });
             });
 
-            // --- 金粉アニメーション (Canvas) ---
-            const canvas = document.getElementById('gold-dust-canvas');
-            const ctx = canvas.getContext('2d');
-            let width, height;
-            let particles = [];
-
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
+            // --- 金粉アニメーション（複数Canvas対応版） ---
+            
             class Particle {
-                constructor() {
+                constructor(w, h) {
+                    this.w = w;
+                    this.h = h;
                     this.reset();
-                    this.y = Math.random() * height; 
+                    this.y = Math.random() * this.h; 
                 }
                 reset() {
-                    this.x = Math.random() * width;
-                    this.y = height + Math.random() * 20;
+                    this.x = Math.random() * this.w;
+                    this.y = this.h + Math.random() * 20;
                     this.size = Math.random() * 1.5 + 0.5;
                     const baseLightness = 50 + Math.random() * 30;
                     this.color = `hsla(45, 80%, ${baseLightness}%, ${Math.random() * 0.6 + 0.2})`;
@@ -388,10 +395,10 @@
                     this.angle += this.spin;
                     this.twinkleTimer++;
                     if (this.y < -10) this.reset();
-                    if (this.x < -10) this.x = width + 10;
-                    if (this.x > width + 10) this.x = -10;
+                    if (this.x < -10) this.x = this.w + 10;
+                    if (this.x > this.w + 10) this.x = -10;
                 }
-                draw() {
+                draw(ctx) {
                     ctx.save();
                     ctx.translate(this.x, this.y);
                     ctx.rotate(this.angle);
@@ -412,17 +419,62 @@
                 }
             }
 
-            const particleCount = Math.min(Math.floor(window.innerWidth / 8), 150);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle());
+            class DustCanvas {
+                constructor(canvas, isCard = false) {
+                    this.canvas = canvas;
+                    this.ctx = canvas.getContext('2d');
+                    this.particles = [];
+                    this.isCard = isCard;
+                    this.resize();
+                }
+                resize() {
+                    let width, height, density;
+                    if (!this.isCard) {
+                        width = window.innerWidth;
+                        height = window.innerHeight;
+                        density = 8;
+                    } else {
+                        const rect = this.canvas.parentElement.getBoundingClientRect();
+                        width = rect.width || 300;
+                        height = rect.height || 300;
+                        density = 15; 
+                    }
+                    
+                    this.canvas.width = width;
+                    this.canvas.height = height;
+                    
+                    const maxParticles = this.isCard ? 40 : 150;
+                    const count = Math.min(Math.floor(width / density), maxParticles);
+                    
+                    this.particles = [];
+                    for (let i = 0; i < count; i++) {
+                        this.particles.push(new Particle(width, height));
+                    }
+                }
+                render() {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.particles.forEach(p => {
+                        p.update();
+                        p.draw(this.ctx);
+                    });
+                }
             }
 
+            const canvasInstances = [];
+            
+            const bgCanvas = document.getElementById('gold-dust-canvas');
+            if (bgCanvas) canvasInstances.push(new DustCanvas(bgCanvas, false));
+            
+            document.querySelectorAll('.card-dust-canvas').forEach(c => {
+                canvasInstances.push(new DustCanvas(c, true));
+            });
+
+            window.addEventListener('resize', () => {
+                canvasInstances.forEach(c => c.resize());
+            });
+
             function animate() {
-                ctx.clearRect(0, 0, width, height);
-                particles.forEach(p => {
-                    p.update();
-                    p.draw();
-                });
+                canvasInstances.forEach(c => c.render());
                 requestAnimationFrame(animate);
             }
             animate();
