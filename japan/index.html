@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FHW - FUNKYな日本</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Oswald:wght@300;400;700&display=swap" rel="stylesheet">
     
     <style>
-        /* 基本設定：墨色背景 */
         body {
             font-family: 'Noto Serif JP', serif;
             background-color: #0c0c0c;
@@ -22,12 +19,10 @@
             overflow-x: hidden;
         }
 
-        /* 英語用のフォント */
         .font-en {
             font-family: 'Oswald', sans-serif;
         }
         
-        /* 金箔風グラデーションテキスト */
         .text-gold {
             background: linear-gradient(135deg, #C5A059 0%, #FDF4D2 25%, #C5A059 50%, #FDF4D2 75%, #A17B34 100%);
             -webkit-background-clip: text;
@@ -42,7 +37,6 @@
             to { background-position: 200% center; }
         }
 
-        /* 背景キャンバス */
         #gold-dust-canvas {
             position: fixed;
             top: 0;
@@ -53,7 +47,6 @@
             pointer-events: none;
         }
         
-        /* すりガラス風パネル */
         .glass-panel {
             background: rgba(15, 15, 15, 0.6);
             backdrop-filter: blur(8px);
@@ -61,25 +54,47 @@
             border: 1px solid rgba(197, 160, 89, 0.15);
         }
 
-        /* カード画像のホバーエフェクト用 */
         .card-image-container {
             overflow: hidden;
         }
-        .card-image-container .bg-overlay {
-            transition: all 0.7s ease;
-        }
-        .card:hover .card-image-container .bg-overlay {
+        
+        /* 1枚目・2枚目用のホバー時ズーム */
+        .zoom-on-hover:hover {
             transform: scale(1.05);
-            background-color: rgba(197, 160, 89, 0.2);
         }
 
-        /* 全体の縦スクロールバー */
+        /* 3枚目（ガチャ）用のスタイル */
+        .gacha-container {
+            cursor: pointer; /* クリックできることを示す */
+        }
+        
+        /* ガチャ画像の初期状態（強いぼかしと暗転） */
+        .gacha-image {
+            filter: blur(15px) brightness(0.2);
+            transition: filter 2s ease-in-out, transform 2s ease-in-out; /* 変化を2秒かける */
+        }
+        
+        /* ガチャキャンバスの初期状態（透明） */
+        .gacha-canvas {
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        /* ガチャ解放後のスタイル（JavaScriptでこのクラスを付与する） */
+        .gacha-revealed .gacha-image {
+            filter: blur(0px) brightness(1); /* ぼかしと暗転を解除 */
+            transform: scale(1.05); /* 少しズームさせる */
+        }
+        
+        .gacha-revealed .gacha-canvas {
+            opacity: 1; /* キラキラを表示 */
+        }
+
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0c0c0c; }
         ::-webkit-scrollbar-thumb { background: #5a4b2c; }
         ::-webkit-scrollbar-thumb:hover { background: #8b7345; }
 
-        /* コレクション部分の横スクロールバーを非表示にする */
         .hide-scrollbar {
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -99,10 +114,8 @@
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             
             <div class="flex items-center">
-                <!-- ロゴ -->
                 <div class="text-2xl sm:text-3xl font-bold tracking-[0.2em] text-gold font-en">FHW</div>
                 
-                <!-- 2段構成のカウントダウンタイマー -->
                 <div class="flex flex-col justify-center ml-3 sm:ml-4">
                     <div class="text-[10px] sm:text-xs text-gray-400 tracking-[0.4em] opacity-80 pl-5 sm:pl-6 mb-[-2px]">終刻</div>
                     <div class="text-sm sm:text-base text-gray-400 opacity-80 flex items-baseline space-x-1.5 drop-shadow-md">
@@ -118,7 +131,6 @@
                 </div>
             </div>
             
-            <!-- 🍙リンク -->
             <a href="https://funkyhotdog.com/world" class="text-2xl sm:text-3xl hover:scale-110 transition-transform duration-300" title="World">
                 🍙
             </a>
@@ -132,7 +144,6 @@
                 FUNKYな日本
             </h1>
             
-            <!-- 専用の透過PNG枠を使ったボタン -->
             <a href="#collection" class="relative inline-flex flex-col items-center justify-center w-[280px] h-[130px] sm:w-[320px] sm:h-[150px] group transition-all duration-500">
                 <img src="waku.PNG" alt="枠" class="absolute inset-0 w-full h-full object-contain pointer-events-none transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(229,211,179,0.6)] translate-y-[5%]">
                 <div class="relative z-10 flex flex-col items-center">
@@ -166,13 +177,11 @@
                         </div>
                     </div>
                 </div>
-                <!-- 枠の背景 -->
-                <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <!-- カード内専用の金粉キャンバス（透過PNGの後ろに配置） z-0 -->
+                <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808] group">
+                    <!-- z-0 で奥にキラキラ -->
                     <canvas class="card-dust-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
-                    
-                    <!-- 透過PNG画像（z-indexでキラキラの上に配置） z-10 -->
-                    <img src="ai.PNG" alt="本日の一字" class="relative z-10 absolute top-[10%] left-[10%] w-[80%] h-[80%] object-contain transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
+                    <!-- z-10 で手前に画像。ホバーズームは維持 -->
+                    <img src="ai.PNG" alt="本日の一字" class="relative z-10 absolute top-[10%] left-[10%] w-[80%] h-[80%] object-contain transition-transform duration-500 zoom-on-hover opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">漢字練習帳</p>
@@ -182,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- カード 2 (風景) ※画像の上にキラキラ -->
+            <!-- カード 2 (風景) ※キラキラなし -->
             <div class="card snap-center flex-none w-[80vw] max-w-[340px] relative glass-panel p-5 sm:p-6 flex flex-col rounded-2xl border border-[#2a2315] hover:border-[#C5A059]/50 transition-colors duration-500">
                 <div class="flex justify-between items-center mb-5 relative z-20">
                     <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-gold drop-shadow-sm">本日の一景</h2>
@@ -201,13 +210,8 @@
                         </div>
                     </div>
                 </div>
-                <!-- 枠の背景 -->
-                <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <!-- 風景画像（z-0 で奥に配置） -->
-                    <img src="kei.jpg" alt="本日の一景" class="relative z-0 absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
-                    
-                    <!-- カード内専用の金粉キャンバス（画像の手前に配置） z-10 -->
-                    <canvas class="card-dust-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-10"></canvas>
+                <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808] group">
+                    <img src="kei.jpg" alt="本日の一景" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 zoom-on-hover opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">歴史の授業</p>
@@ -217,7 +221,7 @@
                 </div>
             </div>
 
-            <!-- カード 3 (紋章) -->
+            <!-- カード 3 (紋章 - ガチャギミック付き) -->
             <div class="card snap-center flex-none w-[80vw] max-w-[340px] relative glass-panel p-5 sm:p-6 flex flex-col rounded-2xl border border-[#2a2315] hover:border-[#C5A059]/50 transition-colors duration-500">
                 <div class="flex justify-between items-center mb-5 relative z-20">
                     <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-gold drop-shadow-sm">本日の一作</h2>
@@ -236,14 +240,17 @@
                         </div>
                     </div>
                 </div>
-                <!-- 枠の背景 -->
-                <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <!-- カード内専用の金粉キャンバス（透過PNGの後ろに配置） z-0 -->
-                    <canvas class="card-dust-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
+                
+                <!-- ガチャコンテナ (id="gacha-box" を付与) -->
+                <!-- 初期状態ではホバーズーム効果（zoom-on-hover）は外しておく -->
+                <div id="gacha-box" class="gacha-container card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
+                    <!-- キラキラキャンバス（初期状態は透明） -->
+                    <canvas class="card-dust-canvas gacha-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
                     
-                    <!-- 透過PNG画像（z-indexでキラキラの上に配置） z-10 -->
-                    <img src="ginn.PNG" alt="本日の一作" class="relative z-10 absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100">
+                    <!-- 紋章画像（初期状態はぼかし＆暗転） -->
+                    <img src="ginn.PNG" alt="本日の一作" class="gacha-image relative z-10 absolute inset-0 w-full h-full object-cover">
                 </div>
+                
                 <div class="text-center flex flex-col flex-grow justify-end">
                     <p class="text-white text-lg font-bold tracking-[0.2em] mb-6 drop-shadow-md">図工室</p>
                     <a href="#" class="inline-block w-full py-3 border border-[#5a4b2c] text-[#C5A059] text-sm tracking-[0.3em] font-bold rounded-full transition-all duration-300">
@@ -252,7 +259,6 @@
                 </div>
             </div>
             
-            <!-- スクロール用の余白 -->
             <div class="snap-center flex-none w-2 sm:w-4"></div>
         </div>
     </section>
@@ -268,7 +274,29 @@
     <!-- スクリプト -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- JST 日本時間 カウントダウンタイマー処理（赤色発光・点滅ギミック追加） ---
+            
+            // --- ガチャギミックの処理 ---
+            const gachaBox = document.getElementById('gacha-box');
+            let isRevealed = false; // すでに開けたかどうかのフラグ
+
+            if (gachaBox) {
+                gachaBox.addEventListener('click', () => {
+                    // すでに開けていたら何もしない
+                    if (isRevealed) return;
+                    
+                    isRevealed = true; // フラグを立てる
+                    gachaBox.style.cursor = 'default'; // カーソルを元に戻す
+
+                    // 1秒間（1000ms）のタメを作る
+                    setTimeout(() => {
+                        // gacha-revealed クラスを付与し、CSSのtransitionで2秒かけて変化させる
+                        gachaBox.classList.add('gacha-revealed');
+                    }, 1000);
+                });
+            }
+
+
+            // --- JST 日本時間 カウントダウンタイマー処理 ---
             function updateCountdown() {
                 const now = new Date();
                 const jstOffset = 9 * 60 * 60 * 1000;
@@ -368,8 +396,7 @@
                 });
             });
 
-            // --- 金粉アニメーション（複数Canvas対応版） ---
-            
+            // --- 金粉アニメーション ---
             class Particle {
                 constructor(w, h) {
                     this.w = w;
