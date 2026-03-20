@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>AICHI ★01 - FHW</title>
+  <title>GUNMA ★02 - FHW</title>
   
   <!-- OGP & Twitter Card 設定 -->
-  <meta property="og:title" content="AICHI ★01 - FHW">
-  <meta property="og:description" content="Because in Aichi, it's miso-katsu. / 愛知と言えば、味噌カツだて。">
-  <meta property="og:image" content="https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg">
-  <meta property="og:url" content="https://funkyhotdog.com/comic/japan-gp/aichi-01">
+  <meta property="og:title" content="GUNMA ★02 - FHW">
+  <meta property="og:description" content="Because in Gunma, it's daruma. / 群馬と言えば、ダルマだて。">
+  <meta property="og:image" content="toge.jpg">
+  <meta property="og:url" content="https://funkyhotdog.com/comic/japan-gp/gunma-02">
   <meta property="og:type" content="article">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AICHI ★01 - FHW">
-  <meta name="twitter:description" content="Because in Aichi, it's miso-katsu. / 愛知と言えば、味噌カツだて。">
-  <meta name="twitter:image" content="https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg">
+  <meta name="twitter:title" content="GUNMA ★02 - FHW">
+  <meta name="twitter:description" content="Because in Gunma, it's daruma. / 群馬と言えば、ダルマだて。">
+  <meta name="twitter:image" content="toge.jpg">
 
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -139,6 +139,7 @@
   <!-- ヘッダー -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-black/60 backdrop-blur-md border-b border-[#222222] flex items-center justify-between px-3 h-14 w-full">
     <div class="relative z-20 flex items-center justify-start w-12">
+      <!-- ヘッダー左アイコン -->
       <img src="icon.PNG" alt="Logo" onerror="this.src='https://via.placeholder.com/100x40?text=LOGO'" class="absolute top-[-30px] left-[0px] w-[100px] max-w-none rotate-[-5deg] transition-all duration-200 active:scale-110 active:rotate-[-12deg] cursor-pointer select-none origin-center drop-shadow-lg">
     </div>
     <!-- ヘッダー中央文字 -->
@@ -195,7 +196,8 @@
         <div class="relative w-full px-2 mb-12 cursor-pointer transition-transform active:scale-[0.98]" onclick="showImageModal()">
           <div class="absolute inset-2 bg-[#ccff00] blur-[20px] opacity-20 rounded-lg"></div>
           <div class="relative aspect-[9/16] bg-[#0a0a0a] border border-[#222] rounded-sm flex flex-col justify-center items-center overflow-hidden z-10">
-            <img src="https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg" alt="AICHI Comic" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x711?text=COMIC+IMAGE'">
+            <!-- 漫画画像 -->
+            <img src="toge.jpg" alt="GUNMA Comic" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x711?text=COMIC+IMAGE'">
           </div>
         </div>
 
@@ -245,6 +247,7 @@
           <!-- CRAFTED IN JAPAN -->
           <div class="relative mt-2 pt-6 mb-4"> 
             <div class="absolute right-[5%] top-[-35px] z-20 pointer-events-none">
+              <!-- ハンコ画像 -->
               <img src="icon2.PNG" alt="Stamp" onerror="this.src='https://via.placeholder.com/80?text=STAMP'" class="w-[80px] h-[80px] object-contain transform rotate-[-8deg] opacity-90 drop-shadow-md">
             </div>
             <div class="font-impact relative flex justify-center items-center tracking-[0.6em] pl-[0.6em] text-[#e5e5e5] text-[20px]">
@@ -263,11 +266,11 @@
         <div class="font-impact">
           <!-- LOCAL ROOTS (マップと車) -->
           <div class="relative w-full h-[280px] mb-10 px-2 mt-6 z-30">
-            <!-- 愛知県マップ -->
+            <!-- 群馬県マップ (シルエット) -->
             <div class="absolute top-[-125px] left-[-110px] w-[150%] h-[150%] z-10 pointer-events-none">
-              <img src="aj.PNG" alt="Aichi Map" onerror="this.src='https://via.placeholder.com/400x400?text=MAP'" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
+              <img src="guma.PNG" alt="Gunma Map" onerror="this.src='https://via.placeholder.com/400x400?text=MAP'" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
             </div>
-            <!-- 愛知県 スナイパーボタン -->
+            <!-- スナイパーボタン -->
             <div class="absolute top-[0px] left-[0px] w-[60%] h-[70%] z-40 cursor-pointer" onclick="startLocating()"></div>
 
             <!-- 赤ターゲットマーク -->
@@ -289,12 +292,12 @@
 
             <!-- 車 -->
             <div class="absolute bottom-[-10px] right-[-80px] w-[90%] h-[130%] z-30 pointer-events-none flex items-end justify-end">
-               <img src="maru.PNG" alt="Car" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
+               <img src="GUNMA.PNG" alt="Car" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
             </div>
             <!-- 車ボタン -->
             <div class="absolute bottom-[-10px] right-[-30px] w-[50%] h-[60%] z-40 cursor-pointer" onclick="showModal('buy-modal')"></div>
 
-            <!-- 左下: AICHI JAPAN (GUNMA JAPANに変更) -->
+            <!-- 左下: GUNMA JAPAN -->
             <div class="absolute bottom-[-15px] left-4 z-40 flex items-center gap-2 pointer-events-none">
               <span class="text-[#888] text-2xl tracking-wider">GUNMA</span><span class="text-xl font-sans">🇯🇵</span><span class="text-[#888] text-2xl tracking-wider">JAPAN</span>
             </div>
@@ -331,7 +334,6 @@
               <a href="https://funkyhotdog.com/world" class="block w-full bg-black border border-[#333] py-5 text-center outline-none">
                 <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact">BACK TO WORLD MAP</span>
               </a>
-              <!-- 変更箇所4: 最下部左のラインをライムイエローに -->
               <button class="gimmick-next-btn w-full bg-black border border-[#333] border-l-[3px] border-l-[#ccff00] py-5 flex justify-center items-center outline-none transition-colors">
                 <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact text-normal">NEXT FUNKY ★03</span>
                 <span class="text-[#f00] tracking-widest text-[26px] uppercase font-blackops text-active hidden">STILL TUNING...</span>
@@ -364,7 +366,7 @@
   <!-- 画像拡大モーダル -->
   <div id="image-modal" class="fixed inset-0 z-[100] bg-black hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300">
     <div class="absolute top-4 right-4 text-white text-4xl font-blackops z-[110] cursor-pointer drop-shadow-md px-4 py-2" onclick="hideImageModal()">×</div>
-    <img id="modal-img" src="https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg" onerror="this.src='https://via.placeholder.com/800x1200?text=COMIC'" alt="AICHI Comic Full" class="max-w-full max-h-screen object-contain transition-transform duration-200 origin-center cursor-move select-none" draggable="false">
+    <img id="modal-img" src="toge.jpg" onerror="this.src='https://via.placeholder.com/800x1200?text=COMIC'" alt="GUNMA Comic Full" class="max-w-full max-h-screen object-contain transition-transform duration-200 origin-center cursor-move select-none" draggable="false">
   </div>
 
   <!-- クルマモーダル -->
@@ -372,7 +374,7 @@
     <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       
       <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
-        <img src="maru.PNG" alt="Machine" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] -translate-x-4">
+        <img src="GUNMA.PNG" alt="Machine" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] -translate-x-4">
       </div>
 
       <div class="flex flex-col items-center mt-auto mb-10 w-full">
@@ -380,7 +382,7 @@
           THIS MACHINE IS<br>NOT FOR SALE.
         </h3>
         <div class="font-mono text-[#888] text-[14px] text-center tracking-widest mb-4 leading-[1.8]">
-          BUILT FOR AICHI GP.<br>ONLY ONE EXISTS.
+          BUILT FOR GUNMA GP.<br>ONLY ONE EXISTS.
         </div>
         <div class="font-mono text-[#888] text-[14px] text-center tracking-widest leading-[1.8]">
           YET.
@@ -393,15 +395,15 @@
     </div>
   </div>
 
-  <!-- 愛知WARPモーダル -->
+  <!-- WARPモーダル -->
   <div id="warp-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
     <div class="relative bg-black border-[3px] border-[#00e5ff] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(0,229,255,0.3)] overflow-hidden">
       
       <div class="relative w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center">
-        <img src="aj.PNG" alt="Aichi Map" onerror="this.src='https://via.placeholder.com/300x300?text=MAP'" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.32]">
+        <img src="guma.PNG" alt="Gunma Map" onerror="this.src='https://via.placeholder.com/300x300?text=MAP'" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.32]">
         
         <h3 class="absolute inset-0 flex items-center justify-center font-impact text-[32px] text-white tracking-widest text-center leading-tight uppercase whitespace-nowrap z-10" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.8), 0 0 5px #000;">
-          WARP TO AICHI<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
+          WARP TO GUNMA<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
         </h3>
       </div>
       
@@ -410,7 +412,7 @@
       </div>
       
       <div class="w-full flex flex-col items-center gap-4">
-        <button class="w-[90%] border-[2px] border-[#00e5ff] py-3 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/35.1850,136.8997', '_blank')">
+        <button class="w-[90%] border-[2px] border-[#00e5ff] py-3 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/36.3911,139.0608', '_blank')">
           <span class="font-impact text-[#00e5ff] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">GO</span>
         </button>
         <button class="w-[90%] border-[2px] border-[#f00] py-3 text-center outline-none transition-colors active:bg-[#f00] group" onclick="warpToTomato()">
@@ -609,7 +611,7 @@
     window.addEventListener('mouseup', () => isDrag = false);
 
     // --- シェア & 言語機能 ---
-    const shareUrl = 'https://funkyhotdog.com/comic/japan-gp/aichi-01';
+    const shareUrl = 'https://funkyhotdog.com/comic/japan-gp/gunma-02';
     function triggerClick(btn) {
       btn.classList.add('is-clicked');
       const svg = btn.querySelector('svg'), spans = btn.querySelectorAll('span');
@@ -624,7 +626,7 @@
     
     function shareX(btn) {
       triggerClick(btn);
-      const text = (isEnglish ? "Because in Aichi, it's miso-katsu.\n\nAICHI ★01\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW\n\n" : "愛知と言えば、味噌カツだて。\n愛知 ★01\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW\n\n") + shareUrl;
+      const text = (isEnglish ? "Because in Gunma, it's daruma.\n\nGUNMA ★02\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW\n\n" : "群馬と言えば、ダルマだて。\n群馬 ★02\nJAPAN GP 🇯🇵\n\nToo fast. Too stupid. Too Funky.\n\n#FHW\n\n") + shareUrl;
       setTimeout(() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank'), 100);
     }
     function shareCopyLink(btn) {
@@ -639,7 +641,7 @@
     }
     function sharePinterest(btn) {
       triggerClick(btn);
-      setTimeout(() => window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent('https://funkyhotdog.com/comic/japan-gp/AICHI.jpeg')}&description=${encodeURIComponent(isEnglish ? "AICHI ★01 - FHW" : "愛知 ★01 - FHW")}`, '_blank'), 100);
+      setTimeout(() => window.open(`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&media=${encodeURIComponent('https://funkyhotdog.com/comic/japan-gp/toge.jpg')}&description=${encodeURIComponent(isEnglish ? "GUNMA ★02 - FHW" : "群馬 ★02 - FHW")}`, '_blank'), 100);
     }
 
     let isEnglish = true;
