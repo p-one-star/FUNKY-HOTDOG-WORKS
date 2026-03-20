@@ -28,6 +28,7 @@
     }
 
     body {
+        /* リングの外側（下界）をグレーに設定 */
         background-color: #222222; 
         color: var(--c-white);
         font-family: "Helvetica Neue", Arial, sans-serif;
@@ -59,6 +60,7 @@
         pointer-events: auto; 
     }
 
+    /* 放牧の柵（巨大なネオンフラフープ） */
     #border-wrapper {
         position: absolute;
         top: 50%; 
@@ -70,6 +72,7 @@
         box-shadow: 0 0 80px rgba(0, 255, 255, 0.1), 0 0 80px rgba(255, 0, 255, 0.1);
     }
 
+    /* グラデーションで色が変わる回転リング */
     .ring-gradient {
         position: absolute;
         top: 0; left: 0; 
@@ -83,6 +86,7 @@
         animation: spinRing 60s linear infinite;
     }
 
+    /* リングの内側（真っ黒な床） */
     .ring-inner {
         position: absolute;
         top: 15px; left: 15px; right: 15px; bottom: 15px;
@@ -317,22 +321,20 @@
         
         display: flex;
         flex-direction: column;
-        justify-content: center; /* 通常の???は中央寄せ */
+        justify-content: center; 
     }
 
-    /* 詳細バッジモードの時のサイズ拡張 */
     #modal-content.is-badge-mode {
         width: 90vw;
         max-width: 400px;
         height: 85vh; 
         max-height: 700px;
         padding: 20px;
-        justify-content: flex-start; /* 上詰め */
+        justify-content: flex-start; 
     }
 
     #modal-overlay.hidden #modal-content { transform: scale(0.8); }
 
-    /* --- 通常の???モード用 --- */
     #modal-type-mystery {
         display: flex;
         justify-content: center;
@@ -348,7 +350,6 @@
         text-align: center;
     }
 
-    /* --- 画像バッジ詳細モード用 --- */
     #modal-type-badge {
         display: flex;
         flex-direction: column;
@@ -422,7 +423,6 @@
     }
 
     /* --- テーマカラー連動 --- */
-    /* シアンベース */
     .modal-theme-cyan .modal-text-mystery,
     .modal-theme-cyan .modal-info-title, .modal-theme-cyan .modal-info-subtitle {
         text-shadow: 0 0 2px var(--c-cyan), 0 0 5px var(--c-cyan), 0 0 10px var(--c-cyan);
@@ -434,7 +434,6 @@
     }
     .modal-theme-cyan .modal-btn:active { background-color: rgba(0, 255, 255, 0.2); }
 
-    /* ライムベース */
     .modal-theme-lime .modal-text-mystery,
     .modal-theme-lime .modal-info-title, .modal-theme-lime .modal-info-subtitle {
         text-shadow: 0 0 2px var(--c-lime), 0 0 5px var(--c-lime), 0 0 10px var(--c-lime);
@@ -446,7 +445,6 @@
     }
     .modal-theme-lime .modal-btn:active { background-color: rgba(204, 255, 0, 0.2); }
 
-    /* ピンクベース（※画像バッジでは使わず、???でのみ使用） */
     .modal-theme-pink .modal-text-mystery {
         text-shadow: 0 0 2px var(--c-pink), 0 0 5px var(--c-pink), 0 0 10px var(--c-pink);
     }
@@ -473,7 +471,7 @@
         color: var(--c-white);
         font-size: 28px;
         text-align: center;
-        white-space: pre-wrap; /* JSの\nで改行させるため */
+        white-space: pre-wrap; 
         line-height: 1.5;
         letter-spacing: 2px;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -502,7 +500,6 @@
 
     <div id="map-fg" class="map-layer"></div>
 
-    <!-- モーダル画面 -->
     <div id="modal-overlay" class="hidden">
         <div id="modal-content">
             
@@ -514,11 +511,11 @@
             <!-- 画像バッジ詳細モード -->
             <div id="modal-type-badge" class="hidden">
                 <div class="modal-image-area">
-                    <img src="01BADGE.PNG" alt="Badge">
+                    <img id="badge-image" src="" alt="Badge">
                 </div>
                 <div class="modal-info-area">
-                    <div class="modal-info-title">AICHI ★ 01</div>
-                    <div class="modal-info-subtitle">MISO KATSU</div>
+                    <div id="badge-title" class="modal-info-title"></div>
+                    <div id="badge-subtitle" class="modal-info-subtitle"></div>
                     <div class="modal-info-desc">YOUR PRIZE IS OUT THERE.</div>
                 </div>
                 <div class="modal-action-area">
@@ -531,7 +528,6 @@
         </div>
     </div>
 
-    <!-- トランジション（画面遷移）用オーバーレイ -->
     <div id="transition-overlay" class="hidden">
         <div id="transition-text"></div>
     </div>
@@ -552,7 +548,10 @@
     const TOTAL_EMOJIS = 20; 
     
     let objectData = []; 
-    let badgeOpenCount = 0; // バッジを開いた回数（色を切り替えるため）
+    let badgeOpenCount = 0; 
+    
+    let currentClaimUrl = '';
+    let currentContinueUrl = '';
 
     function generateMapData() {
         const titleRect = {
@@ -622,7 +621,7 @@
                 shakePattern: shakePattern,
                 isCaught: false,
                 isImage: false, 
-                imageUrl: '',
+                badgeData: null,
                 element: null 
             });
         }
@@ -685,12 +684,36 @@
     if (objectData.length === 0) {
         generateMapData();
 
-        // ノーマルサイズで逃げないメダルの中から1匹だけ画像バッジにする
+        // ★ 進化するバッジのリスト
+        const evolutionList = [
+            {
+                url: '01BADGE.PNG',
+                title: 'AICHI ★ 01',
+                subtitle: 'MISO KATSU',
+                claimUrl: 'https://funkyhotdog.com/wild-tomato',
+                continueUrl: 'https://funkyhotdog.com/comic/japan-gp/aichi-01'
+            },
+            {
+                url: 'gume.PNG',
+                title: 'GUNMA ★ 02', 
+                subtitle: 'DARUMA',       
+                claimUrl: 'https://funkyhotdog.com/wild-tomato', 
+                continueUrl: 'https://funkyhotdog.com/comic/japan-gp/gunma-02'
+            }
+        ];
+
         let normalCandidates = objectData.filter(m => m.type === 'medal' && m.sizeClass === 'normal' && !m.isEscaper);
-        if (normalCandidates.length > 0) {
-            let luckyOne = normalCandidates[Math.floor(Math.random() * normalCandidates.length)];
-            luckyOne.isImage = true;
-            luckyOne.imageUrl = '01BADGE.PNG'; 
+        
+        for (let i = 0; i < evolutionList.length; i++) {
+            if (normalCandidates.length > 0) {
+                let randomIndex = Math.floor(Math.random() * normalCandidates.length);
+                let luckyOne = normalCandidates[randomIndex];
+                
+                luckyOne.isImage = true;
+                luckyOne.badgeData = evolutionList[i]; 
+                
+                normalCandidates.splice(randomIndex, 1);
+            }
         }
     }
 
@@ -707,7 +730,7 @@
             el.className = `medal color-${obj.color} size-${obj.sizeClass} shake-pattern-${obj.shakePattern}`;
             
             if (obj.isImage) {
-                el.innerHTML = `<img src="${obj.imageUrl}" class="medal-image" alt="badge">`;
+                el.innerHTML = `<img src="${obj.badgeData.url}" class="medal-image" alt="badge">`;
             } else {
                 el.innerHTML = '<span>?</span>';
             }
@@ -969,7 +992,6 @@
             medalEl.classList.remove('shaking');
             
             if (m.isEscaper) {
-                // 逃げるヤツ
                 m.isCaught = false; 
                 m.baseSpeed = 15; 
                 m.angle = Math.random() * 2 * Math.PI; 
@@ -981,18 +1003,22 @@
                 }, 3000);
 
             } else {
-                // 捕まえた
                 m.isCaught = false; 
                 
-                modalContent.className = ''; // クラスリセット
+                modalContent.className = ''; 
 
                 if (m.isImage) {
-                    // ★ 画像バッジの場合
                     modalTypeMystery.classList.add('hidden');
                     modalTypeBadge.classList.remove('hidden');
                     modalContent.classList.add('is-badge-mode');
 
-                    // 色はシアンとライムを交互にループ（ピンクなし）
+                    document.getElementById('badge-image').src = m.badgeData.url;
+                    document.getElementById('badge-title').textContent = m.badgeData.title;
+                    document.getElementById('badge-subtitle').textContent = m.badgeData.subtitle;
+                    
+                    currentClaimUrl = m.badgeData.claimUrl;
+                    currentContinueUrl = m.badgeData.continueUrl;
+
                     if (badgeOpenCount % 2 === 0) {
                         modalContent.classList.add('modal-theme-cyan');
                     } else {
@@ -1001,12 +1027,10 @@
                     badgeOpenCount++;
 
                 } else {
-                    // ★ 通常の???の場合
                     modalTypeMystery.classList.remove('hidden');
                     modalTypeBadge.classList.add('hidden');
                     modalContent.classList.remove('is-badge-mode');
 
-                    // 色はメダルの色に依存
                     if (medalEl.classList.contains('color-cyan')) modalContent.classList.add('modal-theme-cyan');
                     if (medalEl.classList.contains('color-lime')) modalContent.classList.add('modal-theme-lime');
                     if (medalEl.classList.contains('color-pink')) modalContent.classList.add('modal-theme-pink');
@@ -1017,7 +1041,6 @@
         }, 800); 
     }
 
-    // 閉じる処理
     function closeModal() {
         modalOverlay.classList.add('hidden');
     }
@@ -1033,7 +1056,7 @@
         transitionText.textContent = "YOUR PRIZE IS OUT THERE.\nGO FIND IT.";
         transitionOverlay.classList.remove('hidden');
         setTimeout(() => {
-            window.location.href = 'https://funkyhotdog.com/wild-tomato';
+            window.location.href = currentClaimUrl;
         }, 2000);
     });
 
@@ -1042,7 +1065,7 @@
         transitionText.textContent = "FOLLOW THE STORY.";
         transitionOverlay.classList.remove('hidden');
         setTimeout(() => {
-            window.location.href = 'https://funkyhotdog.com/comic/japan-gp/aichi-01';
+            window.location.href = currentContinueUrl;
         }, 2000);
     });
 
