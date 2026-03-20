@@ -266,8 +266,8 @@
         <div class="font-impact">
           <!-- LOCAL ROOTS (マップと車) -->
           <div class="relative w-full h-[280px] mb-10 px-2 mt-6 z-30">
-            <!-- 群馬県マップ (シルエット) - サイズを70%程度に縮小 -->
-            <div class="absolute top-[-80px] left-[-75px] w-[105%] h-[105%] z-10 pointer-events-none">
+            <!-- 群馬県マップ (シルエット) - ★ サイズを60%程度に縮小 (w-[90%] h-[90%]) -->
+            <div class="absolute top-[-60px] left-[-50px] w-[90%] h-[90%] z-10 pointer-events-none">
               <img src="guma.PNG" alt="Gunma Map" onerror="this.src='https://via.placeholder.com/400x400?text=MAP'" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
             </div>
             <!-- スナイパーボタン -->
@@ -374,7 +374,8 @@
     <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       
       <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
-        <img src="GUNMA.PNG" alt="Machine" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] -translate-x-4">
+        <!-- ★ 車の位置を元の場所(-16px左)から「10px右(-6px)」「20px下」に移動 -->
+        <img src="GUNMA.PNG" alt="Machine" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] translate-x-[-6px] translate-y-[20px]">
       </div>
 
       <div class="flex flex-col items-center mt-auto mb-10 w-full">
