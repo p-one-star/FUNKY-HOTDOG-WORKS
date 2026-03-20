@@ -173,7 +173,6 @@
             </div>
           </div>
 
-          <!-- CRAFTED IN JAPAN -->
           <div class="flex flex-col items-center justify-center w-full mt-10 font-black uppercase text-slate-900 dark:text-white drop-shadow-lg leading-none">
             <div class="w-[85vw] max-w-[320px] sm:max-w-[420px] flex flex-col items-stretch">
               <div class="flex justify-between w-full text-4xl sm:text-5xl mb-2"><span>C</span><span>R</span><span>A</span><span>F</span><span>T</span><span>E</span><span>D</span></div>
@@ -202,7 +201,7 @@
 
         <div id="comic-scroll-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 pb-4 hide-scrollbar pt-4 relative z-10" style="scroll-behavior: smooth;">
           
-          <!-- ★01 NASCAR -->
+          <!-- ★01 NASCAR (シアン) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep1" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-cyan-400 overflow-hidden flex flex-col group bg-black shadow-lg" style="transform-style: preserve-3d;">
               <div class="px-4 py-1.5 flex-shrink-0 flex justify-between items-center bg-black relative z-30 font-stencil">
@@ -237,10 +236,10 @@
             </div>
           </div>
 
-          <!-- ★02 MONSTER -->
+          <!-- ★02 MONSTER (ライム) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep2" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-[#ccff00] overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg" style="transform-style: preserve-3d;">
-              <div id="ep2-header" class="px-4 py-1.5 flex-shrink-0 flex justify-between items-center bg-black relative z-30 font-stencil">
+              <div class="px-4 py-1 flex-shrink-0 flex justify-between items-center bg-black relative z-30 font-stencil">
                 <span class="font-black uppercase tracking-wider text-white flex items-baseline gap-1.5">
                   <span data-i18n="comic.header2" class="text-[26px] tracking-widest leading-none mt-1">FUNKY</span>
                   <span class="text-2xl text-cyan-400">★02</span>
@@ -275,12 +274,12 @@
             </div>
           </div>
 
-          <!-- ★03 愛知★01 -->
+          <!-- ★03 愛知★01 (シアン) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep3" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-cyan-400 overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg">
               <div class="px-4 py-1 flex-shrink-0 flex justify-between items-center bg-black relative z-30">
                 <span class="font-black uppercase tracking-wider text-white flex items-baseline gap-1.5">
-                  <span id="t-card3-header-text" data-font-switch="true" class="text-[26px] font-stencil tracking-widest leading-none mt-1">AICHI</span>
+                  <span id="t-card3-header-text" data-i18n="comic.header3" data-font-switch="true" class="text-[26px] font-stencil tracking-widest leading-none mt-1">AICHI</span>
                   <span class="text-2xl font-stencil text-[#ccff00]">★01</span>
                 </span>
                 <div class="relative share-container" data-episode="ep3" data-url="https://funkyhotdog.com/comic/japan-gp/aichi-01" data-color="cyan">
@@ -309,7 +308,7 @@
             </div>
           </div>
 
-          <!-- ★04 群馬★02 -->
+          <!-- ★04 群馬★02 (ライム) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep4" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-[#ccff00] overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg">
               <div class="px-4 py-1.5 flex-shrink-0 flex justify-between items-center bg-black relative z-30">
@@ -325,13 +324,15 @@
                 <div class="w-full flex-shrink-0 flex flex-col items-center justify-start pt-1">
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                   <div class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
-                    <img src="02ab.PNG" alt="Episode 4" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=02ab.PNG'" />
+                    <!-- ★画像のファイル名を chika.PNG に変更 -->
+                    <img src="chika.PNG" alt="Episode 4" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=chika.PNG'" />
                   </div>
                   <div class="w-[85%] mx-auto mt-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                 </div>
                 <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1">
                   <div class="flex-1 flex items-center justify-center w-full">
-                    <div data-i18n="comic.phrase4" data-i18n-italic="true" class="text-outline-lime-glow text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">WANNA GO<br>FASTER?</div>
+                    <!-- ★フレーズの改行を取り、1行に変更 -->
+                    <div data-i18n="comic.phrase4" data-i18n-italic="true" class="text-outline-lime-glow text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">WANNA GO FASTER?</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
                     <a href="#" onclick="turnPageAndReturn(event, 'card-ep4', 'https://funkyhotdog.com/comic/japan-gp/gunma-02')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-cyan-400 font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(0,243,255,0.8)] active:scale-95 group cursor-pointer">
@@ -466,7 +467,7 @@
       ep2: { url: 'https://p-one-star.github.io/FUNKY-02/', xTextEn: "A stupid illusion, but he's dead serious.\nFUNKY ★02.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "おバカな勘違い、でも彼は本気だ。\nFUNKY ★02.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/f02e.jpg', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/f02j.jpg' },
       ep3: { url: 'https://funkyhotdog.com/comic/japan-gp/aichi-01', xTextEn: "THE ORIGIN OF FHW.\nAICHI ★01.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "FHW発祥の地。\n愛知 ★01.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/01ab.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/01ab.PNG' },
       // ★04 (群馬) のデータを追加
-      ep4: { url: 'https://funkyhotdog.com/comic/japan-gp/gunma-02', xTextEn: "Wanna go faster?\nGUNMA ★02.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "近道、教えてやるよ。\n群馬 ★02.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/02ab.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/02ab.PNG' },
+      ep4: { url: 'https://funkyhotdog.com/comic/japan-gp/gunma-02', xTextEn: "Wanna go faster?\nGUNMA ★02.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "近道、教えてやるよ。\n群馬 ★02.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/chika.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/chika.PNG' },
       // ★05 (FUNKY 05) のデータを追加
       ep5: { url: 'https://funkyhotdog.com/comic/japan-gp/aichi-03', xTextEn: "STILL BREWING...\nFUNKY ★05.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "準備中だぜ。\nFUNKY ★05.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/03ab.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/03ab.PNG' }
     };
@@ -475,13 +476,13 @@
     const translations = {
       en: {
         hero: { welcome: "Welcome", toThe: "To The", madGarage: "MAD GARAGE.", loud1: "Machines are", loud2: "LOUD", stupid1: "Stories are", stupid2: "STUPID", funky1: "And everything is", funky2: "FUNKY" },
-        comic: { title: "Too Funky Comic", subtitle: "Wild & Crazy Machines", from: "UNLIMITED DIFFUSION", swipe: "SWIPE", more: "THE GARAGE NEVER SLEEPS.<br>NEXT MACHINE IS BREWING... ∞", read: "PROCEED IF YOU DARE.", header1: "FUNKY", phrase1: "WHO’S FASTER<br>THAN ME?", header2: "FUNKY", phrase2: "THIS ROAD<br>IS MINE.", header3: "AICHI", phrase3: "THE ORIGIN OF<br>FHW", header4: "GUNMA", phrase4: "WANNA GO<br>FASTER?", header5: "FUNKY", phrase5: "STILL<br>BREWING...", shareCopy: "Copy Link", sharePin: "Share on Pinterest", shareX: "Share on X" },
+        comic: { title: "Too Funky Comic", subtitle: "Wild & Crazy Machines", from: "UNLIMITED DIFFUSION", swipe: "SWIPE", more: "THE GARAGE NEVER SLEEPS.<br>NEXT MACHINE IS BREWING... ∞", read: "PROCEED IF YOU DARE.", phrase1: "WHO’S FASTER<br>THAN ME?", phrase2: "THIS ROAD<br>IS MINE.", header3: "AICHI", phrase3: "THE ORIGIN OF<br>FHW", header4: "GUNMA", phrase4: "WANNA GO FASTER?", header5: "FUNKY", phrase5: "STILL<br>BREWING...", shareCopy: "Copy Link", sharePin: "Share on Pinterest", shareX: "Share on X" },
         details: { title1: "Building the ", title2: "impossible", title3: " since 20XX", desc: "Deep in the neon-lit alleys of Japan, we wrench on the wildest, most surreal machines known to humanity. It doesn't have to make sense. It just has to be FUNKY.", btn: "Join the Garage", back: "BACK TO FHW" },
         toast: "STILL BREWING IN THE GARAGE... 🎥"
       },
       ja: {
         hero: { welcome: "ようこそ", toThe: "狂気の", madGarage: "ガレージへ。", loud1: "マシンは", loud2: "爆音", stupid1: "ストーリーは", stupid2: "何でもあり", funky1: "And everything is", funky2: "FUNKY" },
-        comic: { title: "最高にファンキーなコミック", subtitle: "ワイルドでクレイジーなマシン", from: "止められるもんなら<br>止めてみな！", swipe: "スワイプ", more: "ガレージは眠らない。<br>次のバケモノを仕込み中... ∞", read: "心して進め。", header1: "FUNKY", phrase1: "俺より速いやついる？", header2: "FUNKY", phrase2: "この道は俺のもんだ。", header3: "愛知", phrase3: "FHW発祥の地", header4: "群馬", phrase4: "近道、<br>教えてやるよ。", header5: "FUNKY", phrase5: "準備中だぜ。", shareCopy: "リンクをコピー", sharePin: "Pinterestでシェア", shareX: "Xでシェア" },
+        comic: { title: "最高にファンキーなコミック", subtitle: "ワイルドでクレイジーなマシン", from: "止められるもんなら<br>止めてみな！", swipe: "スワイプ", more: "ガレージは眠らない。<br>次のバケモノを仕込み中... ∞", read: "心して進め。", phrase1: "俺より速いやついる？", phrase2: "この道は俺のもんだ。", header3: "愛知", phrase3: "FHW発祥の地", header4: "群馬", phrase4: "近道、教えてやるよ。", header5: "FUNKY", phrase5: "準備中だぜ。", shareCopy: "リンクをコピー", sharePin: "Pinterestでシェア", shareX: "Xでシェア" },
         details: { title1: "不可能を", title2: "創り出す ", title3: "20XX年から", desc: "ネオン輝く日本の路地裏深くで、人類が知る限り最もワイルドで超現実的なマシンを組み立てている。意味なんてなくていい。ただファンキーであればいいんだ。", btn: "ガレージに参加する", back: "BACK TO FHW" },
         toast: "まだガレージでバケモノを仕込み中だぜ... 🎥"
       }
@@ -619,6 +620,7 @@
       closeAllShareMenus();
     }
 
+    // シェアメニューの開閉
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('.btn-share');
       if (btn) {
@@ -675,6 +677,7 @@
       }, 700);
     }
 
+    // ★ ページめくり＆ジャンプ関数
     function turnPageAndReturn(e, cardId, targetUrl) {
       e.preventDefault(); document.body.style.overflow = 'hidden';
       const card = document.getElementById(cardId);
