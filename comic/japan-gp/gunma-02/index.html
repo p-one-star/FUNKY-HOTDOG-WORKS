@@ -266,8 +266,8 @@
         <div class="font-impact">
           <!-- LOCAL ROOTS (マップと車) -->
           <div class="relative w-full h-[280px] mb-10 px-2 mt-6 z-30">
-            <!-- 群馬県マップ (シルエット) -->
-            <div class="absolute top-[-125px] left-[-110px] w-[150%] h-[150%] z-10 pointer-events-none">
+            <!-- 群馬県マップ (シルエット) - サイズを70%程度に縮小 -->
+            <div class="absolute top-[-80px] left-[-75px] w-[105%] h-[105%] z-10 pointer-events-none">
               <img src="guma.PNG" alt="Gunma Map" onerror="this.src='https://via.placeholder.com/400x400?text=MAP'" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
             </div>
             <!-- スナイパーボタン -->
@@ -284,10 +284,10 @@
 
             <!-- 右上: 座標 -->
             <div class="absolute top-[-15px] right-8 z-20 pr-2 flex flex-col items-end pointer-events-none">
-              <div class="text-[#888] text-[16px] tracking-wider font-bold text-right leading-tight">35.1850°N</div>
-              <div class="text-[#888] text-[16px] tracking-wider font-bold text-right leading-tight">136.8997°E</div>
+              <div class="text-[#888] text-[16px] tracking-wider font-bold text-right leading-tight">36.4576°N</div>
+              <div class="text-[#888] text-[16px] tracking-wider font-bold text-right leading-tight">138.8964°E</div>
               <div class="w-full h-[1.5px] bg-[#666] my-1 opacity-80"></div>
-              <div class="text-[#666] text-xs tracking-widest font-bold text-right">LOCAL ROOTS</div>
+              <div class="text-[#666] text-xs tracking-widest font-bold text-right">TOUGE ZONE</div>
             </div>
 
             <!-- 車 -->
@@ -400,7 +400,8 @@
     <div class="relative bg-black border-[3px] border-[#00e5ff] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(0,229,255,0.3)] overflow-hidden">
       
       <div class="relative w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center">
-        <img src="guma.PNG" alt="Gunma Map" onerror="this.src='https://via.placeholder.com/300x300?text=MAP'" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.32]">
+        <!-- シルエットサイズを70%程度に縮小 -->
+        <img src="guma.PNG" alt="Gunma Map" onerror="this.src='https://via.placeholder.com/300x300?text=MAP'" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[0.9]">
         
         <h3 class="absolute inset-0 flex items-center justify-center font-impact text-[32px] text-white tracking-widest text-center leading-tight uppercase whitespace-nowrap z-10" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.8), 0 0 5px #000;">
           WARP TO GUNMA<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
@@ -412,7 +413,7 @@
       </div>
       
       <div class="w-full flex flex-col items-center gap-4">
-        <button class="w-[90%] border-[2px] border-[#00e5ff] py-3 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/36.3911,139.0608', '_blank')">
+        <button class="w-[90%] border-[2px] border-[#00e5ff] py-3 text-center outline-none transition-colors active:bg-[#00e5ff] group" onclick="window.open('https://earth.google.com/web/search/36.4576,138.8964', '_blank')">
           <span class="font-impact text-[#00e5ff] group-active:text-black text-[22px] tracking-widest uppercase transition-colors">GO</span>
         </button>
         <button class="w-[90%] border-[2px] border-[#f00] py-3 text-center outline-none transition-colors active:bg-[#f00] group" onclick="warpToTomato()">
