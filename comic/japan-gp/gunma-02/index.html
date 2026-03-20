@@ -266,7 +266,7 @@
         <div class="font-impact">
           <!-- LOCAL ROOTS (マップと車) -->
           <div class="relative w-full h-[280px] mb-10 px-2 mt-6 z-30">
-            <!-- 群馬県マップ (シルエット) - ★ サイズを60%程度に縮小 (w-[90%] h-[90%]) -->
+            <!-- 群馬県マップ (シルエット) - サイズを60%程度に縮小 (w-[90%] h-[90%]) -->
             <div class="absolute top-[-60px] left-[-50px] w-[90%] h-[90%] z-10 pointer-events-none">
               <img src="guma.PNG" alt="Gunma Map" onerror="this.src='https://via.placeholder.com/400x400?text=MAP'" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
             </div>
@@ -292,7 +292,8 @@
 
             <!-- 車 -->
             <div class="absolute bottom-[-10px] right-[-80px] w-[90%] h-[130%] z-30 pointer-events-none flex items-end justify-end">
-               <img src="GUNMA.PNG" alt="Car" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
+               <!-- ★ 車の位置を30px右に移動 -->
+               <img src="GUNMA.PNG" alt="Car" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl transform translate-x-[30px]">
             </div>
             <!-- 車ボタン -->
             <div class="absolute bottom-[-10px] right-[-30px] w-[50%] h-[60%] z-40 cursor-pointer" onclick="showModal('buy-modal')"></div>
@@ -374,8 +375,8 @@
     <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       
       <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
-        <!-- ★ 車の位置を元の場所(-16px左)から「10px右(-6px)」「20px下」に移動 -->
-        <img src="GUNMA.PNG" alt="Machine" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] translate-x-[-6px] translate-y-[20px]">
+        <!-- ★ 車の位置を「30px右」「60px下」に移動 -->
+        <img src="GUNMA.PNG" alt="Machine" onerror="this.src='https://via.placeholder.com/300x200?text=CAR'" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] translate-x-[30px] translate-y-[60px]">
       </div>
 
       <div class="flex flex-col items-center mt-auto mb-10 w-full">
