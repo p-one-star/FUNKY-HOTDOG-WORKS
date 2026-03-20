@@ -72,35 +72,26 @@
       100% { background-position: 0% center; }
     }
 
-    /* ★ 修正: BADGE周りの光エフェクト (5秒周期 = 4秒停止 + 1秒回転) ★ */
+    /* BADGE周りの光エフェクト (5秒周期 = 4秒停止 + 1秒回転) */
     .badge-glow {
       position: absolute;
       top: 50%;
       left: 50%;
-      /* 1.14倍に微調整 */
       width: 114%; 
       height: 114%;
       border-radius: 50%;
-      /* 光をさらに薄く上品に調整 */
       background: conic-gradient(from 0deg, transparent 0%, transparent 60%, rgba(255, 255, 255, 0.15) 80%, rgba(255, 255, 255, 0.6) 100%);
-      
-      /* 中心が強く、外側に向かって弱くなるマスク */
       -webkit-mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 80%);
       mask-image: radial-gradient(circle, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 80%);
-      
-      /* ブラーを少し抑えて光の芯を作る */
       filter: blur(6px);
       z-index: 0;
       pointer-events: none;
       animation: badge-spin 5.0s linear infinite;
     }
     @keyframes badge-spin {
-      /* 0%〜80% (4秒間): 非表示で停止 */
       0%, 80% { transform: translate(-50%, -50%) rotate(0deg); opacity: 0; }
-      /* 少しフェードインしながら回転開始 */
       82% { opacity: 1; }
       98% { opacity: 1; }
-      /* 100% (1秒経過): 1周完了して消える */
       100% { transform: translate(-50%, -50%) rotate(360deg); opacity: 0; }
     }
 
@@ -113,10 +104,8 @@
     .panel-btn {
       background-color: rgba(0, 0, 0, 0.5); border: 3px solid #00e5ff;
       box-shadow: 0 0 15px rgba(0,229,255,0.4), inset 0 0 15px rgba(0,229,255,0.4);
-      color: #00e5ff; transition: all 0.2s ease; cursor: pointer;
+      color: #00e5ff; transition: all 0.2s ease; cursor: pointer; text-decoration: none;
     }
-    .panel-btn .text-normal { display: block; color: inherit; transition: color 0.2s ease; }
-    .panel-btn .text-active { display: none; color: #ff0000; }
 
     .panel-btn:active:not(.is-alert) {
       background-color: #00e5ff; color: black; box-shadow: 0 0 30px rgba(0,229,255,1), inset 0 0 15px rgba(0,229,255,0.8);
@@ -126,14 +115,6 @@
         background-color: #00e5ff; color: black; box-shadow: 0 0 30px rgba(0,229,255,1), inset 0 0 15px rgba(0,229,255,0.8);
       }
     }
-
-    /* ギミック発動時 */
-    .gimmick-next-btn.is-alert {
-      background-color: rgba(0, 0, 0, 0.5) !important; border-color: #ff0000 !important;
-      box-shadow: 0 0 25px rgba(255,0,0,0.8), inset 0 0 25px rgba(255,0,0,0.8) !important;
-    }
-    .gimmick-next-btn.is-alert .text-normal { display: none !important; }
-    .gimmick-next-btn.is-alert .text-active { display: block !important; color: #ff0000 !important; }
 
     .share-btn { transition: all 0.2s ease; }
     .share-btn:active { transform: scale(0.97); }
@@ -176,7 +157,7 @@
             BACK FOR<br>MORE<span class="font-blackops inline-block transform -translate-y-[4px] scale-[1.1] ml-1">?</span>
           </h2>
           <a href="https://p-one-star.github.io/FUNKY-02/" class="panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center">
-              <span class="font-blackops text-[26px] tracking-widest uppercase text-normal text-center w-full whitespace-nowrap">PREV FUNKY</span>
+              <span class="font-blackops text-[26px] tracking-widest uppercase text-center w-full whitespace-nowrap">PREV FUNKY</span>
           </a>
           <div class="font-impact text-[#888] text-sm tracking-widest uppercase">SWIPE LEFT TO CANCEL →</div>
         </div>
@@ -336,13 +317,13 @@
 
             <!-- ナビゲーションボタン -->
             <div class="flex flex-col gap-3 w-full">
-              <a href="https://funkyhotdog.com/world" class="block w-full bg-black border border-[#333] py-5 text-center outline-none">
+              <a href="https://funkyhotdog.com/world" class="block w-full bg-black border border-[#333] py-5 text-center outline-none no-underline">
                 <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact">BACK TO WORLD MAP</span>
               </a>
-              <button class="gimmick-next-btn w-full bg-black border border-[#333] border-l-[3px] border-l-[#00e5ff] py-5 flex justify-center items-center outline-none transition-colors">
-                <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact text-normal">NEXT FUNKY ★02</span>
-                <span class="text-[#f00] tracking-widest text-[26px] uppercase font-blackops text-active hidden">STILL TUNING...</span>
-              </button>
+              <!-- ★ リンクに変更 ★ -->
+              <a href="https://funkyhotdog.com/comic/japan-gp/gunma-02" class="w-full bg-black border border-[#333] border-l-[3px] border-l-[#00e5ff] py-5 flex justify-center items-center outline-none transition-colors no-underline">
+                <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact">NEXT FUNKY ★02</span>
+              </a>
             </div>
           </div>
         </div> 
@@ -356,10 +337,10 @@
           <h2 class="font-impact text-[42px] tracking-wider mb-6 text-center leading-[0.9] h2-glow">
             READY FOR<br>MORE MADNESS<span class="font-blackops inline-block transform -translate-y-[4px] scale-[1.1] ml-1">?</span>
           </h2>
-          <button class="gimmick-next-btn panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center">
-              <span class="font-blackops text-[26px] tracking-widest uppercase text-normal text-center w-full whitespace-nowrap">NEXT FUNKY</span>
-              <span class="text-[#f00] tracking-widest text-[26px] uppercase font-blackops text-active text-center w-full whitespace-nowrap hidden">STILL TUNING...</span>
-          </button>
+          <!-- ★ リンクに変更 ★ -->
+          <a href="https://funkyhotdog.com/comic/japan-gp/gunma-02" class="panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center no-underline">
+              <span class="font-blackops text-[26px] tracking-widest uppercase text-center w-full whitespace-nowrap">NEXT FUNKY</span>
+          </a>
           <div class="font-impact text-[#888] text-sm tracking-widest uppercase">← SWIPE RIGHT TO CANCEL</div>
         </div>
       </div>
@@ -380,7 +361,7 @@
   <div id="buy-modal" class="fixed inset-0 z-[200] bg-black/90 hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300 px-4">
     <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       
-      <!-- 画像 (scale-[1.035] で0.9倍に縮小, -translate-x-4 で少し左に移動) -->
+      <!-- 画像 -->
       <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
         <img src="maru.PNG" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] -translate-x-4">
       </div>
@@ -413,7 +394,7 @@
       
       <!-- シルエット＆WARP文字 -->
       <div class="relative w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center">
-        <!-- シルエット画像 (scale-[1.32] でさらに拡大) -->
+        <!-- シルエット画像 -->
         <img src="aj.PNG" alt="Aichi Map" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.32]">
         
         <!-- 重ねるテキスト -->
@@ -463,10 +444,10 @@
           <div class="font-impact text-[26px] text-white tracking-widest text-center mb-4 leading-tight uppercase" style="text-shadow: 0 0 8px rgba(255,255,255,0.4);">YOU EARNED THIS.</div>
           
           <div class="w-[280px] h-[280px] mb-6 flex flex-col items-center justify-center relative z-10">
-            <!-- ★ 追記: 光のエフェクト (4秒待機, 1秒で1周, サイズ1.14倍, 光を薄く調整) ★ -->
+            <!-- ★ 光のエフェクト ★ -->
             <div class="badge-glow"></div>
             
-            <!-- バッジ画像本体 (上に被せるために relative z-10 を追加) -->
+            <!-- バッジ画像本体 -->
             <img src="01BADGE.PNG" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl transform scale-[1.2] relative z-10">
           </div>
         </div>
@@ -674,14 +655,7 @@
       document.getElementById('icon-jp').classList.replace(isEnglish ? 'opacity-100':'opacity-30', isEnglish ? 'opacity-30':'opacity-100');
     }
 
-    // --- その他 (ボタンエフェクト・カルーセル) ---
-    document.querySelectorAll('.gimmick-next-btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault(); if(this.classList.contains('is-alert')) return;
-        this.classList.add('is-alert'); setTimeout(() => this.classList.remove('is-alert'), 2000);
-      });
-    });
-
+    // --- その他 (カルーセル) ---
     const initCarousel = document.getElementById('carousel');
     if(initCarousel) { initCarousel.scrollLeft = window.innerWidth; initCarousel.style.visibility = 'visible'; }
     window.addEventListener('load', () => { if(initCarousel) initCarousel.scrollLeft = window.innerWidth; });
