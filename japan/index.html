@@ -86,8 +86,10 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            transition: transform 1.5s ease-in-out; /* 回転のスピード */
-            transform-style: preserve-3d; /* 3D空間を保持 */
+            transform-style: preserve-3d;
+            
+            /* 【変更点】回転は2秒間。ただしキリが晴れ始めてから1秒後に開始する（delay 1s） */
+            transition: transform 2s ease-in-out 1s; 
         }
 
         /* 表面と裏面の共通設定 */
@@ -95,49 +97,46 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            -webkit-backface-visibility: hidden; /* 裏側を隠す */
+            -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
         }
 
-        /* 【初期状態】
-           表面（ランダム画像）：最初から180度回転させて裏返しておく 
-        */
+        /* 【初期状態】表面（ランダム画像）：最初から180度回転させて裏返しておく */
         .gacha-front {
             transform: rotateY(180deg);
         }
 
-        /* 【初期状態】
-           裏面（ura.PNG）：こちらが手前を向いており、強いぼかしと暗転がかかっている 
-        */
+        /* 【初期状態】裏面（ura.PNG）：こちらが手前を向いており、強いぼかしと暗転がかかっている */
         .gacha-back {
             filter: blur(15px) brightness(0.2);
-            transition: filter 1.5s ease-in-out, transform 1.5s ease-in-out;
+            /* 【変更点】キリが晴れるアニメーションは2秒間。すぐに開始。 */
+            transition: filter 2s ease-in-out;
         }
 
-        /* ガチャキャンバスの初期状態（透明） */
+        /* ガチャキャンバス（キラキラ）の初期状態（透明） */
         .gacha-canvas {
             opacity: 0;
-            transition: opacity 1.5s ease-in-out;
-            transition-delay: 0.5s; /* 回転の中盤からキラキラを出し始める */
+            /* 表面が見え始める頃（回転の中盤）からジワッと光らせる */
+            transition: opacity 1s ease-in-out 1.5s; 
         }
 
-        /* 【解放状態（JSで gacha-revealed クラスが付与された後）】
-        */
-        /* コンテナ全体を180度回転させる */
+        /* 【解放状態（JSで gacha-revealed クラスが付与された後）】 */
+        
+        /* コンテナ全体を180度回転させ、少しズーム */
         .gacha-revealed .gacha-flip-inner {
-            transform: rotateY(180deg) scale(1.05); /* 回転しながら少しズーム */
+            transform: rotateY(180deg) scale(1.05);
         }
 
-        /* 裏面（ura.PNG）のぼかしを解除し始める（回転しながら見えなくなる） */
+        /* 【変更点】裏面のぼかしを完全にクリアにする。
+           これによって、回転するまでの1秒間で裏面がくっきり見えます。 */
         .gacha-revealed .gacha-back {
-            filter: blur(2px) brightness(0.8); /* 完全クリアにする前に裏返る */
+            filter: blur(0px) brightness(1);
         }
 
         /* キラキラを表示 */
         .gacha-revealed .gacha-canvas {
             opacity: 1;
         }
-
         /* ========================================= */
 
         ::-webkit-scrollbar { width: 8px; }
@@ -401,7 +400,7 @@
                     isRevealed = true;
                     gachaBox.style.cursor = 'default';
 
-                    // 1秒間の「間（タメ）」のあとにクラス付与して回転開始
+                    // 1秒間の「間（タメ）」のあとにクラス付与してアニメーション開始
                     setTimeout(() => {
                         gachaBox.classList.add('gacha-revealed');
                     }, 1000);
