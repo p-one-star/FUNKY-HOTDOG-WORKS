@@ -64,6 +64,7 @@
         /* カード画像のホバーエフェクト用 */
         .card-image-container {
             overflow: hidden;
+            perspective: 1000px; /* 3D回転のための遠近感 */
         }
         
         /* 1枚目・2枚目用のホバー時ズーム */
@@ -71,32 +72,73 @@
             transform: scale(1.05);
         }
 
-        /* 3枚目（ガチャ）用のスタイル */
+        /* =========================================
+           カード③（ガチャ＆フリップ）用のスタイル
+           ========================================= */
         .gacha-container {
             cursor: pointer;
+            position: relative;
         }
-        
-        /* ガチャ画像の初期状態（強いぼかしと暗転） */
-        .gacha-image {
+
+        /* フリップ（回転）を管理するインナーコンテナ */
+        .gacha-flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 1.5s ease-in-out; /* 回転のスピード */
+            transform-style: preserve-3d; /* 3D空間を保持 */
+        }
+
+        /* 表面と裏面の共通設定 */
+        .gacha-front, .gacha-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden; /* 裏側を隠す */
+            backface-visibility: hidden;
+        }
+
+        /* 【初期状態】
+           表面（ランダム画像）：最初から180度回転させて裏返しておく 
+        */
+        .gacha-front {
+            transform: rotateY(180deg);
+        }
+
+        /* 【初期状態】
+           裏面（ura.PNG）：こちらが手前を向いており、強いぼかしと暗転がかかっている 
+        */
+        .gacha-back {
             filter: blur(15px) brightness(0.2);
-            transition: filter 2s ease-in-out, transform 2s ease-in-out;
+            transition: filter 1.5s ease-in-out, transform 1.5s ease-in-out;
         }
-        
+
         /* ガチャキャンバスの初期状態（透明） */
         .gacha-canvas {
             opacity: 0;
-            transition: opacity 2s ease-in-out;
+            transition: opacity 1.5s ease-in-out;
+            transition-delay: 0.5s; /* 回転の中盤からキラキラを出し始める */
         }
 
-        /* ガチャ解放後のスタイル */
-        .gacha-revealed .gacha-image {
-            filter: blur(0px) brightness(1);
-            transform: scale(1.05);
+        /* 【解放状態（JSで gacha-revealed クラスが付与された後）】
+        */
+        /* コンテナ全体を180度回転させる */
+        .gacha-revealed .gacha-flip-inner {
+            transform: rotateY(180deg) scale(1.05); /* 回転しながら少しズーム */
         }
-        
+
+        /* 裏面（ura.PNG）のぼかしを解除し始める（回転しながら見えなくなる） */
+        .gacha-revealed .gacha-back {
+            filter: blur(2px) brightness(0.8); /* 完全クリアにする前に裏返る */
+        }
+
+        /* キラキラを表示 */
         .gacha-revealed .gacha-canvas {
             opacity: 1;
         }
+
+        /* ========================================= */
 
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0c0c0c; }
@@ -187,7 +229,6 @@
                 </div>
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808] group">
                     <canvas class="card-dust-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
-                    <!-- srcはJavaScriptで日替わりセットされます -->
                     <img id="card1-img" src="" alt="本日の一字" class="relative z-10 absolute top-[10%] left-[10%] w-[80%] h-[80%] object-contain transition-transform duration-500 zoom-on-hover opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
@@ -198,7 +239,7 @@
                 </div>
             </div>
 
-            <!-- カード 2 (一景) ※キラキラなし -->
+            <!-- カード 2 (一景) -->
             <div class="card snap-center flex-none w-[80vw] max-w-[340px] relative glass-panel p-5 sm:p-6 flex flex-col rounded-2xl border border-[#2a2315] hover:border-[#C5A059]/50 transition-colors duration-500">
                 <div class="flex justify-between items-center mb-5 relative z-20">
                     <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-gold drop-shadow-sm">本日の一景</h2>
@@ -218,7 +259,6 @@
                     </div>
                 </div>
                 <div class="card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808] group">
-                    <!-- srcはJavaScriptで日替わりセットされます -->
                     <img id="card2-img" src="" alt="本日の一景" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 zoom-on-hover opacity-90 group-hover:opacity-100">
                 </div>
                 <div class="text-center flex flex-col flex-grow justify-end">
@@ -229,7 +269,7 @@
                 </div>
             </div>
 
-            <!-- カード 3 (一作 - ガチャギミック付き) -->
+            <!-- カード 3 (一作 - 3Dフリップ＆ガチャギミック) -->
             <div class="card snap-center flex-none w-[80vw] max-w-[340px] relative glass-panel p-5 sm:p-6 flex flex-col rounded-2xl border border-[#2a2315] hover:border-[#C5A059]/50 transition-colors duration-500">
                 <div class="flex justify-between items-center mb-5 relative z-20">
                     <h2 class="text-xl sm:text-2xl font-bold tracking-widest text-gold drop-shadow-sm">本日の一作</h2>
@@ -249,10 +289,22 @@
                     </div>
                 </div>
                 
-                <div id="gacha-box" class="gacha-container card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 relative bg-[#080808]">
-                    <canvas class="card-dust-canvas gacha-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
-                    <!-- srcはJavaScriptで本日の画像が自動でセットされます -->
-                    <img id="gacha-result-img" src="" alt="本日の一作" class="gacha-image relative z-10 absolute inset-0 w-full h-full object-cover">
+                <!-- ガチャコンテナ（3Dフリップ構造） -->
+                <div id="gacha-box" class="gacha-container card-image-container w-full aspect-square rounded-xl border border-[#2a2315] mb-6 bg-[#080808]">
+                    <!-- 回転するインナーコンテナ -->
+                    <div class="gacha-flip-inner">
+                        <!-- 裏面（初期に見えているぼかし画像） -->
+                        <div class="gacha-back">
+                            <img src="ura.PNG" alt="裏面" class="w-full h-full object-cover opacity-90">
+                        </div>
+                        
+                        <!-- 表面（JSでセットされる本日の抽選画像） -->
+                        <div class="gacha-front">
+                            <!-- キラキラキャンバス（表面と一緒に回る） -->
+                            <canvas class="card-dust-canvas gacha-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
+                            <img id="gacha-result-img" src="" alt="本日の一作" class="relative z-10 w-full h-full object-cover opacity-90">
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="text-center flex flex-col flex-grow justify-end">
@@ -280,7 +332,6 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             // --- 全カード共通：日替わり抽選ロジック ---
-            // 各カードの画像リスト（今後ここに追加していけばOKです）
             const card1Images = [
                 "sake.PNG",
                 "ai.PNG" 
@@ -288,10 +339,10 @@
             
             const card2Images = [
                 "kei.jpg"
-                // 今後風景画像が増えたらここに追加
             ];
             
             const card3Images = [
+                "ginn.PNG",
                 "Bronze.PNG",
                 "Lime.PNG",
                 "NAVY.PNG",
@@ -299,16 +350,20 @@
                 "cyan.PNG",
                 "kin.PNG",
                 "orange.PNG",
-                "pink.PNG"
+                "pink.PNG",
+                "01FUNKY.PNG",
+                "69FUNKY.PNG",
+                "666FUNKY.PNG",
+                "777FUNKY.PNG",
+                "888FUNKY.PNG",
+                "999FUNKY.PNG"
             ];
 
-            // 今日の日付(JST)を取得してベースのシード文字列を作成
             const now = new Date();
             const jstOffset = 9 * 60 * 60 * 1000;
             const jstNow = new Date(now.getTime() + now.getTimezoneOffset() * 60000 + jstOffset);
             const dateStr = `${jstNow.getFullYear()}-${jstNow.getMonth() + 1}-${jstNow.getDate()}`;
 
-            // ハッシュ計算関数（日付＋カード固有の文字列を混ぜて一意にする）
             function getDailyIndex(baseStr, salt, arrayLength) {
                 let hash = 0;
                 const str = baseStr + salt;
@@ -319,7 +374,6 @@
                 return Math.abs(hash) % arrayLength;
             }
 
-            // 各カードの今日の画像を決定してセット
             const card1ImgEl = document.getElementById('card1-img');
             if (card1ImgEl && card1Images.length > 0) {
                 card1ImgEl.src = card1Images[getDailyIndex(dateStr, "card1", card1Images.length)];
@@ -336,7 +390,7 @@
             }
 
 
-            // --- カード③のガチャ開示アクション ---
+            // --- カード③のガチャ開示（3Dフリップ）アクション ---
             const gachaBox = document.getElementById('gacha-box');
             let isRevealed = false; 
 
@@ -347,7 +401,7 @@
                     isRevealed = true;
                     gachaBox.style.cursor = 'default';
 
-                    // 1秒間の「間（タメ）」のあとにクラス付与して演出開始
+                    // 1秒間の「間（タメ）」のあとにクラス付与して回転開始
                     setTimeout(() => {
                         gachaBox.classList.add('gacha-revealed');
                     }, 1000);
