@@ -252,7 +252,7 @@
         <div class="font-impact">
           <!-- LOCAL ROOTS (マップと車) -->
           <div class="relative w-full h-[280px] mb-10 px-2 mt-6 z-30">
-            <!-- シルエットマップ: topとleftを10pxずつマイナス方向へ移動 (top: -60px -> -70px, left: -40px -> -50px) -->
+            <!-- シルエットマップ -->
             <div class="absolute top-[-70px] left-[-50px] w-[105%] h-[105%] z-10 pointer-events-none">
               <img src="Hiroshima.PNG" onerror="this.src='https://placehold.co/600x600/111/444?text=MAP'" alt="Hiroshima Map" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
             </div>
@@ -276,9 +276,9 @@
               <div class="text-[#666] text-xs tracking-widest font-bold text-right">LOCAL ROOTS</div>
             </div>
 
-            <!-- 車: rightを-80pxから-90pxに変更して10px右に移動 -->
+            <!-- 車: 1.1倍に拡大 (scale-[1.1] 追加。origin-bottom-right で位置ズレ防止) -->
             <div class="absolute bottom-[-10px] right-[-90px] w-[90%] h-[130%] z-30 pointer-events-none flex items-end justify-end">
-               <img src="lemon.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
+               <img src="lemon.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl transform scale-[1.1] origin-bottom-right">
             </div>
             <!-- 車ボタン -->
             <div class="absolute bottom-[-10px] right-[-30px] w-[50%] h-[60%] z-40 cursor-pointer" onclick="showModal('buy-modal')"></div>
@@ -358,8 +358,8 @@
     <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       <!-- 画像 -->
       <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
-        <!-- 変更：-translate-x-4 (左へ16px) から translate-x-[4px] translate-y-[30px] (元の位置から右へ20px、下へ30px) に変更 -->
-        <img src="lemon.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] translate-x-[4px] translate-y-[30px]">
+        <!-- 変更：1.1倍に拡大 (元のscale-[1.035]から約1.1倍となる scale-[1.14] に変更) -->
+        <img src="lemon.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.14] translate-x-[4px] translate-y-[30px]">
       </div>
 
       <!-- テキスト群 -->
