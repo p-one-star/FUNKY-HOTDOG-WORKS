@@ -253,9 +253,8 @@
         <div class="font-impact">
           <!-- LOCAL ROOTS (マップと車) -->
           <div class="relative w-full h-[280px] mb-10 px-2 mt-6 z-30">
-            <!-- シルエットマップ -->
-            <div class="absolute top-[-125px] left-[-110px] w-[150%] h-[150%] z-10 pointer-events-none">
-              <!-- 変更：Hiroshima.PNG -->
+            <!-- シルエットマップ: サイズを元の70%程度に縮小 (w-150% -> w-105%) -->
+            <div class="absolute top-[-60px] left-[-40px] w-[105%] h-[105%] z-10 pointer-events-none">
               <img src="Hiroshima.PNG" onerror="this.src='https://placehold.co/600x600/111/444?text=MAP'" alt="Hiroshima Map" class="w-full h-full object-contain object-left-top opacity-80 drop-shadow-xl">
             </div>
             <!-- スナイパーボタン -->
@@ -280,15 +279,15 @@
 
             <!-- 車 -->
             <div class="absolute bottom-[-10px] right-[-80px] w-[90%] h-[130%] z-30 pointer-events-none flex items-end justify-end">
-               <!-- 変更：LEMON.PNG -->
-               <img src="LEMON.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
+               <!-- 変更：lemon.PNG (小文字に変更) -->
+               <img src="lemon.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-full object-contain object-right-bottom drop-shadow-2xl">
             </div>
             <!-- 車ボタン -->
             <div class="absolute bottom-[-10px] right-[-30px] w-[50%] h-[60%] z-40 cursor-pointer" onclick="showModal('buy-modal')"></div>
 
-            <!-- 左下: AICHI JAPAN (※テキストはそのまま残しています) -->
+            <!-- 左下: HIROSHIMA JAPAN (文字サイズを調整して収まるように変更) -->
             <div class="absolute bottom-[-15px] left-4 z-40 flex items-center gap-2 pointer-events-none">
-              <span class="text-[#888] text-2xl tracking-wider">AICHI</span><span class="text-xl font-sans">🇯🇵</span><span class="text-[#888] text-2xl tracking-wider">JAPAN</span>
+              <span class="text-[#888] text-[20px] tracking-wider">HIROSHIMA</span><span class="text-xl font-sans">🇯🇵</span><span class="text-[#888] text-[20px] tracking-wider">JAPAN</span>
             </div>
           </div>
 
@@ -353,7 +352,6 @@
   <!-- 画像拡大モーダル -->
   <div id="image-modal" class="fixed inset-0 z-[100] bg-black hidden flex-col items-center justify-center opacity-0 transition-opacity duration-300">
     <div class="absolute top-4 right-4 text-white text-4xl font-blackops z-[110] cursor-pointer drop-shadow-md px-4 py-2" onclick="hideImageModal()">×</div>
-    <!-- 変更：Hiroshima03.jpg -->
     <img id="modal-img" src="Hiroshima03.jpg" onerror="this.src='https://placehold.co/600x1066/1a1a1a/00e5ff?text=COMIC+PAGE'" alt="HIROSHIMA Comic Full" class="max-w-full max-h-screen object-contain transition-transform duration-200 origin-center cursor-move select-none" draggable="false">
   </div>
 
@@ -362,8 +360,8 @@
     <div class="relative bg-black border-[3px] border-[#f00] px-4 py-8 w-full max-w-[340px] min-h-[620px] flex flex-col items-center justify-between shadow-[0_0_15px_rgba(255,0,0,0.3)] overflow-hidden">
       <!-- 画像 -->
       <div class="w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center relative">
-        <!-- 変更：LEMON.PNG -->
-        <img src="LEMON.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] -translate-x-4">
+        <!-- 変更：lemon.PNG (小文字に変更) -->
+        <img src="lemon.PNG" onerror="this.src='https://placehold.co/400x300/111/f00?text=MACHINE'" alt="Machine" class="w-full h-auto max-h-[340px] object-contain drop-shadow-2xl transform scale-[1.035] -translate-x-4">
       </div>
 
       <!-- テキスト群 -->
@@ -392,12 +390,12 @@
       
       <!-- シルエット＆WARP文字 -->
       <div class="relative w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center">
-        <!-- シルエット画像 変更：Hiroshima.PNG -->
-        <img src="Hiroshima.PNG" onerror="this.src='https://placehold.co/600x600/111/444?text=MAP'" alt="Hiroshima Map" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[1.32]">
+        <!-- シルエット画像：元の画像の大きさを考慮して少しスケールダウン (scale-[0.9]) -->
+        <img src="Hiroshima.PNG" onerror="this.src='https://placehold.co/600x600/111/444?text=MAP'" alt="Hiroshima Map" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[0.9]">
         
         <!-- 重ねるテキスト -->
         <h3 class="absolute inset-0 flex items-center justify-center font-impact text-[32px] text-white tracking-widest text-center leading-tight uppercase whitespace-nowrap z-10" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.8), 0 0 5px #000;">
-          WARP TO AICHI<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
+          WARP TO HIROSHIMA<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
         </h3>
       </div>
       
