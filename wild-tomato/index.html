@@ -212,11 +212,13 @@
             objData.push({ type: 'e', id: gId++, char: emojis[i%4], x: p.x, y: p.y, r: 45, inv: 2, spd, a, vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, caught: false, el: null });
         }
 
+        // ==========================================
         // 3. 特殊画像の生成 (4個)
+        // ※もし画像が表示されない場合は、実際のファイル名（大文字・小文字、.pngか.jpgか等）と一致しているか確認してください！
+        // ==========================================
         const spImgs = ['001900.png', 'ura.PNG', 'ginn.PNG', '999FUNKY.PNG'];
         spImgs.forEach(src => {
             let spd = 0.4 + Math.random()*0.5, a = Math.random() * Math.PI*2, p = getPos(45);
-            // ★ 停止フラグ（isPaused）を追加
             objData.push({ type: 'sp', id: gId++, src: src, x: p.x, y: p.y, r: 45, inv: 2, spd, normalSpd: spd, a, vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, caught: false, triggered: false, bounceCount: 0, isPaused: false, el: null });
         });
 
@@ -272,7 +274,6 @@
         objData.forEach(o => {
             if(o.caught) return;
             
-            // ★ 停止中の場合は自力では動かない（推進力0）
             if(!o.isPaused) {
                 o.a += (Math.random() - 0.5) * (o.fast ? 0.15 : 0.08);
                 o.vx += (Math.cos(o.a) * o.spd - o.vx) * 0.05; 
@@ -364,26 +365,50 @@
     function tapMedal(el) {
         let o = objData.find(d => d.id == el.dataset.id && d.type === 'm');
         if(!o || o.caught) return;
+
         o.caught = true; el.classList.add('shaking');
+
         setTimeout(() => {
             el.classList.remove('shaking');
-            if(o.esc) {
+            
+            if (o.esc) {
                 o.caught = false; o.spd = 15; o.a = Math.random()*Math.PI*2; o.vx = Math.cos(o.a)*o.spd; o.vy = Math.sin(o.a)*o.spd;
                 setTimeout(() => o.spd = o.fast ? 2+Math.random() : 0.3+Math.random()*0.4, 3000);
             } else {
-                o.caught = false; mCnt.className = '';
-                if(o.isImg) {
-                    typeM.classList.add('hidden'); typeB.classList.remove('hidden'); mCnt.classList.add('is-badge');
-                    document.getElementById('b-img').src = o.bData.url; document.getElementById('b-title').textContent = o.bData.t; document.getElementById('b-sub').textContent = o.bData.sub;
-                    curClaim = o.bData.cUrl; curCont = o.bData.coUrl;
-                    mCnt.classList.add(Math.random() < 0.5 ? 'th-cyan' : 'th-white'); badgeCnt++;
+                o.caught = false; mCnt.className = ''; 
+
+                if (o.isImg) {
+                    modalTypeMystery.classList.add('hidden');
+                    modalTypeBadge.classList.remove('hidden');
+                    modalContent.classList.add('is-badge');
+
+                    document.getElementById('b-img').src = o.bData.url;
+                    document.getElementById('b-title').textContent = o.bData.t;
+                    document.getElementById('b-sub').textContent = o.bData.sub;
+                    
+                    curClaim = o.bData.cUrl;
+                    curCont = o.bData.coUrl;
+
+                    if (badgeCnt % 2 === 0) {
+                        modalContent.classList.add('th-cyan');
+                    } else {
+                        modalContent.classList.add('th-white');
+                    }
+                    badgeCnt++;
+
                 } else {
-                    typeM.classList.remove('hidden'); typeB.classList.add('hidden'); mCnt.classList.remove('is-badge');
-                    mCnt.classList.add(`th-${o.c}`);
+                    modalTypeMystery.classList.remove('hidden');
+                    modalTypeBadge.classList.add('hidden');
+                    modalContent.classList.remove('is-badge');
+
+                    if (el.classList.contains('col-cyan')) modalContent.classList.add('th-cyan');
+                    if (el.classList.contains('col-lime')) modalContent.classList.add('th-lime');
+                    if (el.classList.contains('col-pink')) modalContent.classList.add('th-pink');
                 }
+
                 mOvl.classList.remove('hidden');
             }
-        }, 800);
+        }, 800); 
     }
 
     function tapSpImg(el) {
@@ -391,12 +416,12 @@
         if(!o || o.triggered) return;
         
         o.triggered = true; 
-        o.isPaused = true; // ★ タップした瞬間にピタッと停止する
+        o.isPaused = true; 
         o.vx = 0; 
         o.vy = 0;
         
         setTimeout(() => {
-            o.isPaused = false; // ★ 1.5秒後に停止解除
+            o.isPaused = false; 
             o.spd = 20; 
             o.bounceCount = 3; 
             o.a = Math.random() * Math.PI * 2;
