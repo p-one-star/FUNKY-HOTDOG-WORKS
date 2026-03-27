@@ -156,7 +156,6 @@
           <h2 class="font-impact text-[42px] tracking-wider mb-6 text-center leading-[0.9] h2-glow">
             BACK FOR<br>MORE<span class="font-blackops inline-block transform -translate-y-[4px] scale-[1.1] ml-1">?</span>
           </h2>
-          <!-- リンク先を GUNMA 02 に変更 -->
           <a href="https://funkyhotdog.com/comic/japan-gp/gunma-02" class="panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center no-underline">
               <span class="font-blackops text-[26px] tracking-widest uppercase text-center w-full whitespace-nowrap">PREV FUNKY</span>
           </a>
@@ -321,8 +320,8 @@
               <a href="https://funkyhotdog.com/world" class="block w-full bg-black border border-[#333] py-5 text-center outline-none no-underline">
                 <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact">BACK TO WORLD MAP</span>
               </a>
-              <!-- 押すと STILL TUNING に変わるギミックボタン -->
-              <button onclick="showStillTuning(this)" class="w-full bg-black border border-[#333] border-l-[3px] border-l-[#00e5ff] py-5 flex justify-center items-center outline-none transition-all duration-300 cursor-pointer">
+              <!-- 押すと STILL TUNING に変わるギミックボタン（メイン下部用） -->
+              <button onclick="showStillTuningMain(this)" class="w-full bg-black border border-[#333] border-l-[3px] border-l-[#00e5ff] py-5 flex justify-center items-center outline-none transition-all duration-300 cursor-pointer">
                 <span class="text-[#ccc] tracking-widest text-[22px] uppercase font-impact">NEXT FUNKY ★04</span>
               </button>
             </div>
@@ -338,10 +337,10 @@
           <h2 class="font-impact text-[42px] tracking-wider mb-6 text-center leading-[0.9] h2-glow">
             READY FOR<br>MORE MADNESS<span class="font-blackops inline-block transform -translate-y-[4px] scale-[1.1] ml-1">?</span>
           </h2>
-          <!-- 最初から STILL TUNING ボタンに変更 -->
-          <div class="border-[3px] border-[#f00] bg-[rgba(20,0,0,0.5)] shadow-[0_0_15px_rgba(255,0,0,0.4),inset_0_0_15px_rgba(255,0,0,0.4)] px-4 py-5 mb-8 w-[320px] flex justify-center items-center cursor-not-allowed">
-              <span class="font-blackops text-[24px] text-[#f00] tracking-widest uppercase text-center w-full whitespace-nowrap" style="text-shadow: 0 0 10px #f00;">STILL TUNING...</span>
-          </div>
+          <!-- 押すと STILL TUNING に変わるギミックボタン（右パネル用） -->
+          <button onclick="showStillTuningPanel(this)" class="panel-btn backdrop-blur-sm px-4 py-5 mb-8 w-[320px] flex justify-center items-center outline-none">
+              <span class="font-blackops text-[26px] tracking-widest uppercase text-center w-full whitespace-nowrap">NEXT FUNKY</span>
+          </button>
           <div class="font-impact text-[#888] text-sm tracking-widest uppercase">← SWIPE RIGHT TO CANCEL</div>
         </div>
       </div>
@@ -390,10 +389,9 @@
       
       <!-- シルエット＆WARP文字 -->
       <div class="relative w-[calc(100%+32px)] -mx-4 -mt-8 flex justify-center items-center">
-        <!-- 変更：シルエットをさらに10px下に移動 (translate-y-[10px]) -->
         <img src="Hiroshima.PNG" onerror="this.src='https://placehold.co/600x600/111/444?text=MAP'" alt="Hiroshima Map" class="w-full h-auto max-h-[340px] object-contain opacity-70 drop-shadow-xl transform scale-[0.9] translate-y-[10px]">
         
-        <!-- 変更：文字サイズを32pxから26pxに縮小 -->
+        <!-- 重ねるテキスト -->
         <h3 class="absolute inset-0 flex items-center justify-center font-impact text-[26px] text-white tracking-widest text-center leading-tight uppercase whitespace-nowrap z-10" style="text-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0,229,255,0.8), 0 0 5px #000;">
           WARP TO HIROSHIMA<span class="font-blackops inline-block transform -translate-y-[2px] scale-[1.1] ml-1">?</span>
         </h3>
@@ -480,12 +478,33 @@
       setTimeout(() => { m.classList.add('hidden'); m.classList.remove('flex'); }, 300);
     }
 
-    // --- STILL TUNING ギミック ---
-    function showStillTuning(btn) {
+    // --- STILL TUNING ギミック関数共通化 ---
+    function applyStillTuning(btn, activeClassName) {
+      if (btn.dataset.tuning === "true") return;
+      btn.dataset.tuning = "true";
+      const oHtml = btn.innerHTML;
+      const oClass = btn.className;
+
       btn.innerHTML = '<span class="font-blackops text-[24px] text-[#f00] tracking-widest uppercase text-center w-full whitespace-nowrap" style="text-shadow: 0 0 10px #f00;">STILL TUNING...</span>';
-      btn.className = 'w-full bg-[rgba(20,0,0,0.5)] border-[3px] border-[#f00] py-5 flex justify-center items-center outline-none cursor-not-allowed shadow-[0_0_15px_rgba(255,0,0,0.4),inset_0_0_15px_rgba(255,0,0,0.4)] transition-all duration-300';
-      btn.onclick = null; // クリックは1回のみ有効にする
+      btn.className = activeClassName;
+      
+      setTimeout(() => {
+        btn.innerHTML = oHtml;
+        btn.className = oClass;
+        btn.dataset.tuning = "false";
+      }, 2000);
     }
+
+    // メイン画面下部のボタン用
+    function showStillTuningMain(btn) {
+      applyStillTuning(btn, 'w-full bg-[rgba(20,0,0,0.5)] border-[3px] border-[#f00] py-5 flex justify-center items-center outline-none shadow-[0_0_15px_rgba(255,0,0,0.4),inset_0_0_15px_rgba(255,0,0,0.4)] transition-all duration-300 cursor-pointer');
+    }
+
+    // 右パネルのボタン用
+    function showStillTuningPanel(btn) {
+      applyStillTuning(btn, 'border-[3px] border-[#f00] bg-[rgba(20,0,0,0.5)] shadow-[0_0_15px_rgba(255,0,0,0.4),inset_0_0_15px_rgba(255,0,0,0.4)] px-4 py-5 mb-8 w-[320px] flex justify-center items-center outline-none transition-all duration-300 cursor-pointer');
+    }
+
 
     // --- PRIZE ギミック ---
     function initPrizeModal() {
