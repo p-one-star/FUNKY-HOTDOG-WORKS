@@ -440,7 +440,7 @@
             <div class="badge-glow"></div>
             
             <!-- バッジ画像本体 -->
-            <img src="01BADGE.PNG" onerror="this.src='https://placehold.co/300x300/transparent/fff?text=BADGE'" alt="01 BADGE" class="w-full h-full object-contain drop-shadow-2xl transform scale-[1.2] relative z-10">
+            <img src="03BADGE.PNG" onerror="this.src='https://placehold.co/300x300/transparent/fff?text=BADGE'" alt="03 BADGE" class="w-full h-full object-contain drop-shadow-2xl transform scale-[1.2] relative z-10">
           </div>
         </div>
 
@@ -528,7 +528,7 @@
       }
     }
 
-    // --- 愛知県スナイパー ギミック ---
+    // --- 広島県スナイパー ギミック ---
     let isLocating = false;
     function startLocating() {
       if(isLocating) return;
@@ -539,7 +539,14 @@
       text.innerText = 'LOCATING...';
       text.classList.remove('opacity-0'); text.classList.add('animate-locating'); text.style.opacity = '';
       
-      const steps = [{t:'18%',l:'24%'}, {t:'26%',l:'12%'}, {t:'14%',l:'20%'}, {t:'20%',l:'10%'}, {t:'8%',l:'2%'}];
+      // 最終位置を top:55%, left:12% 付近(原爆ドーム想定)に調整
+      const steps = [
+        {t:'30%',l:'25%'}, 
+        {t:'15%',l:'10%'}, 
+        {t:'40%',l:'30%'}, 
+        {t:'60%',l:'15%'}, 
+        {t:'55%',l:'12%'}
+      ];
       let i = 0;
       const interval = setInterval(() => {
         if (i < steps.length) {
@@ -551,6 +558,7 @@
             setTimeout(() => {
               text.style.opacity = ''; text.classList.add('opacity-0');
               showModal('warp-modal');
+              // モーダル表示後に初期位置へリセット
               setTimeout(() => { target.style.top = '20%'; target.style.left = '20%'; isLocating = false; }, 500);
             }, 800);
           }, 200);
