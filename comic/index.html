@@ -5,25 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FUNKY HOTDOG WORKS</title>
   
-  <!-- Tailwind CSS を読み込む -->
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Google Fonts: Black Ops One, Inter, Noto Sans JP -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@900&display=swap" rel="stylesheet">
   
-  <!-- Tailwind のダークモード設定 -->
+  <!-- Tailwind Config -->
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'Noto Sans JP', 'sans-serif'],
-          }
-        }
-      }
+      theme: { extend: { fontFamily: { sans: ['Inter', 'Noto Sans JP', 'sans-serif'], } } }
     }
   </script>
 
@@ -57,6 +51,7 @@
     .text-outline-cyan { color: #ffffff; text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0px 2px 0 #000, 0 0 12px rgba(0, 243, 255, 1), 0 0 24px rgba(0, 243, 255, 0.8); }
     .text-outline-lime-glow { color: #ffffff; text-shadow: -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000, -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000, 0px 2px 0 #000, 0 0 12px rgba(204, 255, 0, 1), 0 0 24px rgba(204, 255, 0, 0.8); }
 
+    /* 文字色アニメーション (iOSバグ対策に -webkit-text-fill-color 指定) */
     @keyframes firefly-sweep {
       0% { background-position: 150% center; filter: drop-shadow(0 0 2px rgba(0, 243, 255, 0.2)); }
       50% { filter: drop-shadow(0 0 12px rgba(0, 243, 255, 1)); }
@@ -201,7 +196,7 @@
 
         <div id="comic-scroll-container" class="flex overflow-x-auto snap-x snap-mandatory gap-6 px-6 pb-4 hide-scrollbar pt-4 relative z-10" style="scroll-behavior: smooth;">
           
-          <!-- ★01 NASCAR (シアン) -->
+          <!-- ★01 FUNKY ★01 (奇数/シアン) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep1" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-cyan-400 overflow-hidden flex flex-col group bg-black shadow-lg" style="transform-style: preserve-3d;">
               <div class="px-4 py-1.5 flex-shrink-0 flex justify-between items-center bg-black relative z-30 font-stencil">
@@ -215,6 +210,7 @@
               </div>
               <div class="relative w-full flex-1 flex flex-col bg-black pb-1.5 sm:pb-2">
                 <div class="w-full flex-shrink-0 flex flex-col items-center justify-start pt-1">
+                  <!-- 奇数は上下線ライム (#ccff00) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-[#ccff00] to-transparent"></div>
                   <div id="ep1-img-container" class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)] transition-all duration-300">
                     <img src="303.jpg" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=303.jpg'" />
@@ -224,9 +220,11 @@
                 </div>
                 <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1">
                   <div class="flex-1 flex items-center justify-center w-full">
+                    <!-- 奇数は文字シアン -->
                     <div data-i18n="comic.phrase1" data-i18n-italic="true" class="text-outline-cyan text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">WHO’S FASTER<br>THAN ME?</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
+                    <!-- 奇数はボタン枠・ホバー・シャドウがライム (#ccff00)、テキストはシアン発光(btn-text-glow) -->
                     <a href="#" onclick="nascarDriveByAndGo(event, 'card-ep1', 'https://p-one-star.github.io/FUNKY-01/')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-[#ccff00] font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-[#ccff00] hover:shadow-[0_0_15px_rgba(204,255,0,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
@@ -236,10 +234,10 @@
             </div>
           </div>
 
-          <!-- ★02 MONSTER (ライム) -->
+          <!-- ★02 FUNKY ★02 (偶数/ライム) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep2" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-[#ccff00] overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg" style="transform-style: preserve-3d;">
-              <div class="px-4 py-1 flex-shrink-0 flex justify-between items-center bg-black relative z-30 font-stencil">
+              <div id="ep2-header" class="px-4 py-1 flex-shrink-0 flex justify-between items-center bg-black relative z-30 font-stencil">
                 <span class="font-black uppercase tracking-wider text-white flex items-baseline gap-1.5">
                   <span data-i18n="comic.header2" class="text-[26px] tracking-widest leading-none mt-1">FUNKY</span>
                   <span class="text-2xl text-cyan-400">★02</span>
@@ -250,6 +248,7 @@
               </div>
               <div class="relative w-full flex-1 flex flex-col bg-black pb-1.5 sm:pb-2">
                 <div class="w-full flex-shrink-0 flex flex-col items-center justify-start pt-1 z-10">
+                  <!-- 偶数は上下線シアン (cyan-400) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                   <div id="ep2-img-container" class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)] transition-all duration-300">
                     <img src="02r.jpg" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=02r.jpg'" />
@@ -260,11 +259,13 @@
                   </div>
                   <div class="w-[85%] mx-auto mt-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                 </div>
-                <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1 z-20">
+                <div id="ep2-text-area" class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1 z-20">
                   <div class="flex-1 flex items-center justify-center w-full">
+                    <!-- 偶数は文字ライム -->
                     <div data-i18n="comic.phrase2" data-i18n-italic="true" class="text-outline-lime-glow text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">THIS ROAD<br>IS MINE.</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
+                    <!-- 偶数はボタン枠・ホバー・シャドウがシアン (cyan-400)、テキストはライム発光(btn-text-glow-lime) -->
                     <a href="#" onclick="monsterSmashAndReturn(event, 'card-ep2', 'https://p-one-star.github.io/FUNKY-02/')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-cyan-400 font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(0,243,255,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow-lime transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
@@ -274,7 +275,7 @@
             </div>
           </div>
 
-          <!-- ★03 愛知★01 (シアン) -->
+          <!-- ★03 愛知 ★01 (奇数/シアン) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep3" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-cyan-400 overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg">
               <div class="px-4 py-1 flex-shrink-0 flex justify-between items-center bg-black relative z-30">
@@ -288,6 +289,7 @@
               </div>
               <div class="relative w-full flex-1 flex flex-col bg-black pb-1.5 sm:pb-2">
                 <div class="w-full flex-shrink-0 flex flex-col items-center justify-start pt-1">
+                  <!-- 奇数は上下線ライム (#ccff00) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-[#ccff00] to-transparent"></div>
                   <div class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
                     <img src="01ab.PNG" alt="Episode 3" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=01ab.PNG'" />
@@ -296,9 +298,11 @@
                 </div>
                 <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1">
                   <div class="flex-1 flex items-center justify-center w-full">
+                    <!-- 奇数は文字シアン -->
                     <div data-i18n="comic.phrase3" data-i18n-italic="true" class="text-outline-cyan text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">THE ORIGIN OF<br>FHW</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
+                    <!-- 奇数はボタンライム、文字シアン -->
                     <a href="#" onclick="turnPageAndReturn(event, 'card-ep3', 'https://funkyhotdog.com/comic/japan-gp/aichi-01')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-[#ccff00] font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-[#ccff00] hover:shadow-[0_0_15px_rgba(204,255,0,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
@@ -308,7 +312,7 @@
             </div>
           </div>
 
-          <!-- ★04 群馬★02 (ライム) -->
+          <!-- ★04 群馬 ★02 (偶数/ライム) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep4" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-[#ccff00] overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg">
               <div class="px-4 py-1.5 flex-shrink-0 flex justify-between items-center bg-black relative z-30">
@@ -322,17 +326,20 @@
               </div>
               <div class="relative w-full flex-1 flex flex-col bg-black pb-1.5 sm:pb-2">
                 <div class="w-full flex-shrink-0 flex flex-col items-center justify-start pt-1">
+                  <!-- 偶数は上下線シアン (cyan-400) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                   <div class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
-                    <img src="miyogi.PNG" alt="Episode 4" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=miyogi.PNG'" />
+                    <img src="miyo.PNG" alt="Episode 4" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=miyo.PNG'" />
                   </div>
                   <div class="w-[85%] mx-auto mt-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                 </div>
                 <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1">
                   <div class="flex-1 flex items-center justify-center w-full">
+                    <!-- 偶数は文字ライム -->
                     <div data-i18n="comic.phrase4" data-i18n-italic="true" class="text-outline-lime-glow text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">WANNA GO FASTER?</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
+                    <!-- 偶数はボタンシアン、文字ライム -->
                     <a href="#" onclick="turnPageAndReturn(event, 'card-ep4', 'https://funkyhotdog.com/comic/japan-gp/gunma-02')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-cyan-400 font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(0,243,255,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow-lime transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
@@ -342,7 +349,7 @@
             </div>
           </div>
 
-          <!-- ★05 広島★03 (シアン) -->
+          <!-- ★05 広島 ★03 (奇数/シアン) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep5" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-cyan-400 overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg">
               <div class="px-4 py-1 flex-shrink-0 flex justify-between items-center bg-black relative z-30">
@@ -356,6 +363,7 @@
               </div>
               <div class="relative w-full flex-1 flex flex-col bg-black pb-1.5 sm:pb-2">
                 <div class="w-full flex-shrink-0 flex flex-col items-center justify-start pt-1">
+                  <!-- 奇数は上下線ライム (#ccff00) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-[#ccff00] to-transparent"></div>
                   <div class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
                     <img src="hiro03.PNG" alt="Episode 5" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=hiro03.PNG'" />
@@ -364,9 +372,11 @@
                 </div>
                 <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1">
                   <div class="flex-1 flex items-center justify-center w-full">
+                    <!-- 奇数は文字シアン -->
                     <div data-i18n="comic.phrase5" data-i18n-italic="true" class="text-outline-cyan text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">STILL<br>BREWING...</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
+                    <!-- 奇数はボタンライム、文字シアン -->
                     <a href="#" onclick="turnPageAndReturn(event, 'card-ep5', 'https://funkyhotdog.com/comic/japan-gp/hiroshima-03')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-[#ccff00] font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-[#ccff00] hover:shadow-[0_0_15px_rgba(204,255,0,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
@@ -376,13 +386,13 @@
             </div>
           </div>
 
-          <!-- ★06 FUNKY★04 (ライム) -->
+          <!-- ★06 FUNKY ★04 (偶数/ライム) -->
           <div style="perspective: 2500px;" class="flex-shrink-0 snap-center">
             <div id="card-ep6" class="relative w-[80vw] sm:w-[340px] aspect-[4/5] rounded-[2rem] border-4 border-[#ccff00] overflow-hidden flex flex-col group bg-black transition-colors duration-500 shadow-lg">
               <div class="px-4 py-1.5 flex-shrink-0 flex justify-between items-center bg-black relative z-30 font-stencil">
                 <span class="font-black uppercase tracking-wider text-white flex items-baseline gap-1.5">
                   <span data-i18n="comic.header6" class="text-[26px] tracking-widest leading-none mt-1">FUNKY</span>
-                  <span class="text-2xl font-stencil text-cyan-400">★04</span>
+                  <span class="text-2xl text-cyan-400">★04</span>
                 </span>
                 <div class="relative share-container" data-episode="ep6" data-url="#" data-color="lime">
                   <button class="btn-share text-white hover:text-cyan-400 transition-colors p-1"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
@@ -390,6 +400,7 @@
               </div>
               <div class="relative w-full flex-1 flex flex-col bg-black pb-1.5 sm:pb-2">
                 <div class="w-full flex-shrink-0 flex flex-col items-center justify-start pt-1">
+                  <!-- 偶数は上下線シアン (cyan-400) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                   <div class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
                     <img src="04ab.PNG" alt="Episode 6" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=04ab.PNG'" />
@@ -398,9 +409,11 @@
                 </div>
                 <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1">
                   <div class="flex-1 flex items-center justify-center w-full">
+                    <!-- 偶数は文字ライム -->
                     <div data-i18n="comic.phrase6" data-i18n-italic="true" class="text-outline-lime-glow text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">STILL<br>BREWING...</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
+                    <!-- 偶数はボタンシアン、文字ライム -->
                     <a href="#" onclick="turnPageAndReturn(event, 'card-ep6')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-cyan-400 font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(0,243,255,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow-lime transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
@@ -500,7 +513,6 @@
       ep3: { url: 'https://funkyhotdog.com/comic/japan-gp/aichi-01', xTextEn: "THE ORIGIN OF FHW.\nAICHI ★01.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "FHW発祥の地。\n愛知 ★01.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/01p.jpg', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/01p.jpg' },
       ep4: { url: 'https://funkyhotdog.com/comic/japan-gp/gunma-02', xTextEn: "Wanna go faster?\nGUNMA ★02.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "近道、教えてやるよ。\n群馬 ★02.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/02p.jpg', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/02p.jpg' },
       ep5: { url: 'https://funkyhotdog.com/comic/japan-gp/hiroshima-03', xTextEn: "STILL BREWING...\nHIROSHIMA ★03.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "準備中だぜ。\n広島 ★03.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/hiro03.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/hiro03.PNG' },
-      // ★06 (FUNKY 04) のデータを追加
       ep6: { url: 'https://funkyhotdog.com/comic/japan-gp/funky-04', xTextEn: "STILL BREWING...\nFUNKY ★04.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "準備中だぜ。\nFUNKY ★04.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/04ab.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/04ab.PNG' }
     };
 
@@ -530,14 +542,20 @@
         const keys = el.getAttribute('data-i18n').split('.');
         let value = t;
         keys.forEach(k => value = value ? value[k] : "");
-        if(value) el.innerHTML = value;
+        if(value) {
+            el.innerHTML = value;
+            // WebKit (iOS Safari) background-clip:text の再描画バグ対策
+            el.style.display = 'none';
+            el.offsetHeight; 
+            el.style.display = '';
+        }
       });
 
       document.querySelectorAll('[data-i18n-italic="true"]').forEach(el => {
         currentLang === 'en' ? el.classList.add('italic') : el.classList.remove('italic');
       });
 
-      // 地域名のフォント切り替え（愛知・群馬など）
+      // 地域名のフォント切り替え
       document.querySelectorAll('[data-font-switch="true"]').forEach(el => {
         if (currentLang === 'ja') {
           el.className = "text-[26px] font-aichi tracking-widest leading-none mt-1";
