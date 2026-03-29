@@ -4,11 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>FHW WILD ZONE</title>
+<!-- Black Ops One フォントを読み込み -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&display=swap" rel="stylesheet">
 <style>
-    /* === 1. 全体設定 & CSS変数 === */
+    /* ==========================================
+       全体・ベース設定
+       ========================================== */
     :root {
         --c-black: #000000;
         --c-cyan: #00ffff; --rgb-cyan: 0, 255, 255;
@@ -18,400 +21,1115 @@
         --c-gray: #888888;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
     body {
-        background-color: #222222; color: var(--c-white); font-family: "Helvetica Neue", Arial, sans-serif;
-        overflow: hidden; overscroll-behavior: none; touch-action: none; user-select: none; -webkit-user-select: none;
+        background-color: #222222; 
+        color: var(--c-white);
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
     }
 
-    .map-layer { position: absolute; top: 0; left: 0; width: 3000px; height: 3000px; transform-origin: 0 0; will-change: transform; }
+    /* ==========================================
+       マップレイヤーの共通設定
+       ========================================== */
+    .map-layer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3000px;
+        height: 3000px;
+        transform-origin: 0 0;
+        will-change: transform;
+    }
 
-    /* === 2. 背景・フラフープ === */
-    #map-bg { z-index: 10; pointer-events: auto; }
+    /* ==========================================
+       層1：一番奥のマップ背景 (Z: 10)
+       ========================================== */
+    #map-bg {
+        z-index: 10;
+        pointer-events: auto; 
+    }
+
     #border-wrapper {
-        position: absolute; top: 50%; left: 50%; width: 2000px; height: 2000px;
-        transform: translate(-50%, -50%); border-radius: 50%;
+        position: absolute;
+        top: 50%; 
+        left: 50%;
+        width: 2000px; 
+        height: 2000px;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
         box-shadow: 0 0 80px rgba(0, 255, 255, 0.1), 0 0 80px rgba(255, 0, 255, 0.1);
     }
+
     .ring-gradient {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%;
-        background: conic-gradient(var(--c-cyan), var(--c-lime), var(--c-pink), var(--c-cyan), var(--c-lime), var(--c-pink), var(--c-cyan));
+        position: absolute;
+        top: 0; left: 0; 
+        width: 100%; height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(
+            var(--c-cyan), var(--c-lime), var(--c-pink),
+            var(--c-cyan), var(--c-lime), var(--c-pink),
+            var(--c-cyan)
+        );
         animation: spinRing 60s linear infinite;
     }
+
     .ring-inner {
-        position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px;
-        background-color: var(--c-black); border-radius: 50%;
+        position: absolute;
+        top: 15px; left: 15px; right: 15px; bottom: 15px;
+        background-color: var(--c-black);
+        border-radius: 50%;
     }
-    @keyframes spinRing { 100% { transform: rotate(360deg); } }
 
-    /* === 3. タイトル UI === */
-    #ui-layer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 20; }
+    @keyframes spinRing {
+        100% { transform: rotate(360deg); }
+    }
+
+    /* ==========================================
+       層2：中間のタイトルUI (Z: 20)
+       ========================================== */
+    #ui-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none; 
+        z-index: 20; 
+    }
+
     .neon-title-base {
-        position: absolute; left: 50%; font-family: 'Black Ops One', cursive; font-weight: normal; 
-        text-align: center; line-height: 1.0; letter-spacing: 2px; color: var(--c-black); width: 100%;
+        position: absolute;
+        left: 50%;
+        font-family: 'Black Ops One', cursive; 
+        font-weight: normal; 
+        text-align: center;
+        line-height: 1.0;
+        letter-spacing: 2px;
+        color: var(--c-black); 
+        width: 100%;
     }
-    .title-top { top: 80px; transform: translateX(-50%); }
-    .title-center { top: 50%; transform: translate(-50%, -50%); }
+
+    .title-top {
+        top: 80px;
+        transform: translateX(-50%);
+    }
     
-    .n-txt { text-shadow: 0 0 4px var(--t-c), 0 0 8px var(--t-c), 0 0 12px var(--t-c); }
-    .c-cyan { --t-c: var(--c-cyan); } .c-lime { --t-c: var(--c-lime); } .c-pink { --t-c: var(--c-pink); }
-    .c-gray { --t-c: var(--c-gray); display: block; margin-top: 10px; }
+    .title-center {
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .c-cyan { text-shadow: 0 0 4px var(--c-cyan), 0 0 8px var(--c-cyan), 0 0 12px var(--c-cyan); }
+    .c-lime { text-shadow: 0 0 4px var(--c-lime), 0 0 8px var(--c-lime), 0 0 12px var(--c-lime); }
+    .c-pink { text-shadow: 0 0 4px var(--c-pink), 0 0 8px var(--c-pink), 0 0 12px var(--c-pink); }
+    .c-gray { text-shadow: 0 0 4px var(--c-gray), 0 0 8px var(--c-gray), 0 0 12px var(--c-gray); }
+
     .title-top span { font-size: min(28vw, 150px); }
-    .title-center span { font-size: min(24vw, 130px); }
-
-    /* === 4. メダル・絵文字・特殊画像・スパーク === */
-    #map-fg { z-index: 30; pointer-events: none; }
-    
-    .spark { position: absolute; pointer-events: none; z-index: 50; }
-    .spark-inner { position: absolute; transform: translate(-50%, -50%) rotate(20deg); animation: spkAnim 0.3s ease-out forwards; }
-    .spark-inner::before, .spark-inner::after {
-        content: ''; position: absolute; top: 50%; left: 50%; background-color: var(--c-white);
-        box-shadow: 0 0 5px var(--c-white), 0 0 10px var(--c-cyan); transform: translate(-50%, -50%); border-radius: 50%;
+    .title-center span {
+        display: block;
+        margin-top: 10px;
+        font-size: min(24vw, 130px);
     }
-    .spark-inner::before { width: 3px; height: 30px; } .spark-inner::after { width: 30px; height: 3px; }
-    @keyframes spkAnim { 0% { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 1; } 30% { transform: translate(-50%, -50%) rotate(20deg) scale(1.2); opacity: 1; } 100% { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 0; } }
 
-    .emoji-item { position: absolute; display: flex; justify-content: center; align-items: center; font-size: 80px; transform: translate(-50%, -50%); pointer-events: none; will-change: left, top; z-index: 25; }
-    
+    /* ==========================================
+       層3：一番手前のメダル・絵文字・スパーク (Z: 30)
+       ========================================== */
+    #map-fg {
+        z-index: 30;
+        pointer-events: none; 
+    }
+
+    .spark {
+        position: absolute;
+        pointer-events: none;
+        z-index: 50; 
+    }
+
+    .spark-inner {
+        position: absolute;
+        transform: translate(-50%, -50%) rotate(20deg); 
+        animation: sparkAnim 0.3s ease-out forwards;
+    }
+
+    .spark-inner::before,
+    .spark-inner::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background-color: var(--c-white);
+        box-shadow: 0 0 5px var(--c-white), 0 0 10px var(--c-cyan);
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+    }
+
+    .spark-inner::before { width: 3px; height: 30px; }
+    .spark-inner::after { width: 30px; height: 3px; }
+
+    @keyframes sparkAnim {
+        0%   { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 1; }
+        30%  { transform: translate(-50%, -50%) rotate(20deg) scale(1.2); opacity: 1; }
+        100% { transform: translate(-50%, -50%) rotate(20deg) scale(0); opacity: 0; }
+    }
+
+    .emoji-item {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 80px; 
+        transform: translate(-50%, -50%);
+        pointer-events: none; 
+        will-change: left, top;
+        z-index: 25;
+    }
+
+    /* 特殊画像（謎の絵）用のスタイル */
     .sp-img-item {
-        position: absolute; width: 90px; height: 90px; transform: translate(-50%, -50%);
-        display: flex; justify-content: center; align-items: center;
-        will-change: left, top; z-index: 25; pointer-events: auto; cursor: pointer;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 90px;
+        height: 90px;
+        transform: translate(-50%, -50%);
+        pointer-events: auto; /* タップ可能に */
+        cursor: pointer;
+        will-change: left, top;
+        z-index: 25;
     }
-    .sp-img-item img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+    .sp-img-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        pointer-events: none; 
+    }
 
     .medal {
-        position: absolute; border-radius: 50%; background-color: var(--c-black); border: 3px solid var(--c-white);
-        box-shadow: 0 0 10px var(--c-white), inset 0 0 10px var(--c-white); display: flex; justify-content: center; align-items: center; overflow: hidden; 
-        font-family: 'Black Ops One', cursive; color: var(--c-black); 
-        transform: translate(-50%, -50%) scale(1); transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-        animation: pulse 3s infinite alternate; pointer-events: auto; will-change: left, top;
+        position: absolute;
+        border-radius: 50%;
+        background-color: var(--c-black);
+        border: 3px solid var(--c-white);
+        box-shadow: 0 0 10px var(--c-white), inset 0 0 10px var(--c-white);
+        
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden; 
+        
+        font-family: 'Black Ops One', cursive;
+        color: var(--c-black); 
+        
+        transform: translate(-50%, -50%) scale(1);
+        transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        
+        animation: pulse 3s infinite alternate;
+        pointer-events: auto; 
+        will-change: left, top;
     }
-    .col-cyan { --m-c: var(--c-cyan); --s-c: var(--c-lime); }
-    .col-lime { --m-c: var(--c-lime); --s-c: var(--c-pink); }
-    .col-pink { --m-c: var(--c-pink); --s-c: var(--c-cyan); }
-    .medal span { text-shadow: 0 0 2px var(--m-c), 0 0 4px var(--m-c), 0 0 6px var(--m-c), 0 0 8px var(--m-c); }
-    
-    .medal-image { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; pointer-events: none; }
 
-    .sz-small  { width: 70px; height: 70px; font-size: 36px; } .sz-small span { margin: 3px 0 0 1px; }
-    .sz-normal { width: 100px; height: 100px; font-size: 54px; } .sz-normal span { margin: 4px 0 0 2px; }
-    .sz-large  { width: 140px; height: 140px; font-size: 76px; } .sz-large span { margin: 6px 0 0 3px; }
-    .sz-huge   { width: 200px; height: 200px; font-size: 108px; } .sz-huge span { margin: 10px 0 0 5px; }
+    .medal-image {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        pointer-events: none;
+    }
 
-    @keyframes pulse { 0%,100% { box-shadow: 0 0 5px var(--c-white), inset 0 0 5px var(--c-white); opacity: 0.8; } 50% { box-shadow: 0 0 15px var(--c-white), inset 0 0 12px var(--c-white); opacity: 1; } }
+    .medal.size-small  { width: 70px; height: 70px; font-size: 36px; }
+    .medal.size-normal { width: 100px; height: 100px; font-size: 54px; }
+    .medal.size-large  { width: 140px; height: 140px; font-size: 76px; }
+    .medal.size-huge   { width: 200px; height: 200px; font-size: 108px; }
 
-    .medal.shaking { border-color: var(--s-c) !important; box-shadow: 0 0 25px var(--s-c), inset 0 0 25px var(--s-c) !important; z-index: 40; }
-    .sk-1.shaking { animation: sk1 0.1s infinite !important; } .sk-2.shaking { animation: sk2 0.15s infinite !important; } .sk-3.shaking { animation: sk3 0.2s infinite !important; }
-    @keyframes sk1 { 0%,100% { transform: translate(calc(-50% + 4px), calc(-50% + 4px)) scale(1.15); } 25% { transform: translate(calc(-50% - 4px), calc(-50% + 4px)) scale(1.15); } 50% { transform: translate(calc(-50% - 4px), calc(-50% - 4px)) scale(1.15); } 75% { transform: translate(calc(-50% + 4px), calc(-50% - 4px)) scale(1.15); } }
-    @keyframes sk2 { 0%,100% { transform: translate(calc(-50% - 15px), -50%) scale(1.15); } 50% { transform: translate(calc(-50% + 15px), -50%) scale(1.15); } }
-    @keyframes sk3 { 0%,100% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); } 50% { transform: translate(-50%, -50%) scale(0.9) rotate(15deg); } }
+    .medal.color-cyan span { text-shadow: 0 0 2px var(--c-cyan), 0 0 4px var(--c-cyan), 0 0 6px var(--c-cyan), 0 0 8px var(--c-cyan); }
+    .medal.color-lime span { text-shadow: 0 0 2px var(--c-lime), 0 0 4px var(--c-lime), 0 0 6px var(--c-lime), 0 0 8px var(--c-lime); }
+    .medal.color-pink span { text-shadow: 0 0 2px var(--c-pink), 0 0 4px var(--c-pink), 0 0 6px var(--c-pink), 0 0 8px var(--c-pink); }
 
-    /* === 5. モーダル (ポップアップ) === */
-    #modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 1; transition: opacity 0.3s ease; }
-    #modal-overlay.hidden { opacity: 0; pointer-events: none; }
+    .medal.size-small span  { margin-top: 3px; margin-left: 1px; }
+    .medal.size-normal span { margin-top: 4px; margin-left: 2px; }
+    .medal.size-large span  { margin-top: 6px; margin-left: 3px; }
+    .medal.size-huge span   { margin-top: 10px; margin-left: 5px; }
+
+    @keyframes pulse {
+        0%   { box-shadow: 0 0 5px var(--c-white), inset 0 0 5px var(--c-white); opacity: 0.8; }
+        50%  { box-shadow: 0 0 15px var(--c-white), inset 0 0 12px var(--c-white); opacity: 1; }
+        100% { box-shadow: 0 0 5px var(--c-white), inset 0 0 5px var(--c-white); opacity: 0.8; }
+    }
+
+    .medal.color-cyan.shaking {
+        border-color: var(--c-lime) !important;
+        box-shadow: 0 0 25px var(--c-lime), inset 0 0 25px var(--c-lime) !important;
+        z-index: 40;
+    }
+    .medal.color-lime.shaking {
+        border-color: var(--c-pink) !important;
+        box-shadow: 0 0 25px var(--c-pink), inset 0 0 25px var(--c-pink) !important;
+        z-index: 40;
+    }
+    .medal.color-pink.shaking {
+        border-color: var(--c-cyan) !important;
+        box-shadow: 0 0 25px var(--c-cyan), inset 0 0 25px var(--c-cyan) !important;
+        z-index: 40;
+    }
+
+    .medal.shake-pattern-1.shaking { animation: shakeAnim1 0.1s infinite !important; }
+    .medal.shake-pattern-2.shaking { animation: shakeAnim2 0.15s infinite !important; }
+    .medal.shake-pattern-3.shaking { animation: shakeAnim3 0.2s infinite !important; }
+
+    @keyframes shakeAnim1 {
+        0% { transform: translate(calc(-50% + 4px), calc(-50% + 4px)) scale(1.15); }
+        25% { transform: translate(calc(-50% - 4px), calc(-50% + 4px)) scale(1.15); }
+        50% { transform: translate(calc(-50% - 4px), calc(-50% - 4px)) scale(1.15); }
+        75% { transform: translate(calc(-50% + 4px), calc(-50% - 4px)) scale(1.15); }
+        100% { transform: translate(calc(-50% + 4px), calc(-50% + 4px)) scale(1.15); }
+    }
+    @keyframes shakeAnim2 {
+        0% { transform: translate(calc(-50% - 15px), -50%) scale(1.15); }
+        50% { transform: translate(calc(-50% + 15px), -50%) scale(1.15); }
+        100% { transform: translate(calc(-50% - 15px), -50%) scale(1.15); }
+    }
+    @keyframes shakeAnim3 {
+        0% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); }
+        50% { transform: translate(-50%, -50%) scale(0.9) rotate(15deg); }
+        100% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); }
+    }
+
+
+    /* ==========================================
+       層4：進化したポップアップ モーダル (Z: 100)
+       ========================================== */
+    #modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, 0.85);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+
+    #modal-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+
     #modal-content {
-        background-color: var(--c-black); border: 2px solid var(--c-white); box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
-        border-radius: 16px; transform: scale(1); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; justify-content: center; 
+        background-color: var(--c-black);
+        border: 2px solid var(--c-white);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4), inset 0 0 10px rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        transform: scale(1);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        
+        display: flex;
+        flex-direction: column;
+        justify-content: center; 
     }
-    #modal-content.is-badge { width: 90vw; max-width: 400px; height: 85vh; max-height: 700px; padding: 20px; justify-content: flex-start; }
+
+    #modal-content.is-badge-mode {
+        width: 90vw;
+        max-width: 400px;
+        height: 85vh; 
+        max-height: 700px;
+        padding: 20px;
+        justify-content: flex-start; 
+    }
+
     #modal-overlay.hidden #modal-content { transform: scale(0.8); }
 
-    .th-cyan { --th-c: var(--c-cyan); --th-rgb: var(--rgb-cyan); } .th-lime { --th-c: var(--c-lime); --th-rgb: var(--rgb-lime); } .th-pink { --th-c: var(--c-pink); --th-rgb: var(--rgb-pink); } .th-white{ --th-c: var(--c-white); --th-rgb: var(--rgb-white); }
-    #m-mystery { display: flex; justify-content: center; align-items: center; padding: 50px 80px; }
-    .m-txt-mystery { font-family: 'Black Ops One', cursive; color: var(--c-black); font-size: 48px; letter-spacing: 8px; text-align: center; text-shadow: 0 0 2px var(--th-c), 0 0 5px var(--th-c), 0 0 10px var(--th-c); }
-
-    #m-badge { display: flex; flex-direction: column; height: 100%; } .hidden { display: none !important; }
-    .m-img-area { flex: 1; min-height: 0; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; } .m-img-area img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 50%; box-shadow: 0 0 30px rgba(255, 255, 255, 0.3); }
-    .m-info-area { text-align: center; margin-bottom: 20px; font-family: 'Black Ops One', cursive; color: var(--c-black); }
-    .m-info-title, .m-info-sub { text-shadow: 0 0 2px var(--th-c), 0 0 5px var(--th-c), 0 0 10px var(--th-c); }
-    .m-info-title { font-size: 24px; letter-spacing: 2px; margin-bottom: 4px; } .m-info-sub { font-size: 32px; letter-spacing: 4px; margin-bottom: 10px; } .m-info-desc { font-family: "Helvetica Neue", Arial, sans-serif; color: var(--c-white); font-size: 14px; font-weight: bold; letter-spacing: 1px; }
-
-    .m-action-area { display: flex; flex-direction: column; gap: 10px; }
-    .m-btn {
-        background-color: var(--c-black); border: 2px solid var(--th-c); border-radius: 8px; padding: 14px; font-family: 'Black Ops One', cursive; font-size: 16px; letter-spacing: 1px; color: var(--c-white); cursor: pointer; transition: all 0.2s ease;
-        box-shadow: 0 0 10px rgba(var(--th-rgb), 0.3), inset 0 0 10px rgba(var(--th-rgb), 0.3); text-shadow: 0 0 5px var(--th-c);
+    #modal-type-mystery {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 50px 80px;
     }
-    .m-btn:active { background-color: rgba(var(--th-rgb), 0.2); }
 
-    /* === 6. トランジション === */
-    #trans-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: var(--c-black); z-index: 200; display: flex; justify-content: center; align-items: center; opacity: 1; transition: opacity 0.3s ease; }
-    #trans-overlay.hidden { opacity: 0; pointer-events: none; }
-    #trans-text { font-family: 'Black Ops One', cursive; color: var(--c-white); font-size: 28px; text-align: center; white-space: pre-wrap; line-height: 1.5; letter-spacing: 2px; text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+    .modal-text-mystery {
+        font-family: 'Black Ops One', cursive; 
+        color: var(--c-black);
+        font-size: 48px;
+        letter-spacing: 8px;
+        text-align: center;
+    }
+
+    #modal-type-badge {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    #modal-type-mystery.hidden,
+    #modal-type-badge.hidden {
+        display: none !important;
+    }
+
+    .modal-image-area {
+        flex: 1; 
+        min-height: 0; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .modal-image-area img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; 
+        border-radius: 50%;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+    }
+
+    .modal-info-area {
+        text-align: center;
+        margin-bottom: 20px;
+        font-family: 'Black Ops One', cursive; 
+        color: var(--c-black);
+    }
+
+    .modal-info-title {
+        font-size: 24px;
+        letter-spacing: 2px;
+        margin-bottom: 4px;
+    }
+    .modal-info-subtitle {
+        font-size: 32px;
+        letter-spacing: 4px;
+        margin-bottom: 10px;
+    }
+    .modal-info-desc {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        color: var(--c-white);
+        font-size: 14px;
+        font-weight: bold;
+        letter-spacing: 1px;
+    }
+
+    .modal-action-area {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-btn {
+        background-color: var(--c-black);
+        border: 2px solid;
+        border-radius: 8px;
+        padding: 14px;
+        font-family: 'Black Ops One', cursive;
+        font-size: 16px;
+        letter-spacing: 1px;
+        color: var(--c-white);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    /* --- テーマカラー連動 --- */
+    .modal-theme-cyan .modal-text-mystery,
+    .modal-theme-cyan .modal-info-title, .modal-theme-cyan .modal-info-subtitle {
+        text-shadow: 0 0 2px var(--c-cyan), 0 0 5px var(--c-cyan), 0 0 10px var(--c-cyan);
+    }
+    .modal-theme-cyan .modal-btn {
+        border-color: var(--c-cyan);
+        box-shadow: 0 0 10px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0, 255, 255, 0.3);
+        text-shadow: 0 0 5px var(--c-cyan);
+    }
+    .modal-theme-cyan .modal-btn:active { background-color: rgba(0, 255, 255, 0.2); }
+
+    .modal-theme-lime .modal-text-mystery,
+    .modal-theme-lime .modal-info-title, .modal-theme-lime .modal-info-subtitle {
+        text-shadow: 0 0 2px var(--c-lime), 0 0 5px var(--c-lime), 0 0 10px var(--c-lime);
+    }
+    .modal-theme-lime .modal-btn {
+        border-color: var(--c-lime);
+        box-shadow: 0 0 10px rgba(204, 255, 0, 0.3), inset 0 0 10px rgba(204, 255, 0, 0.3);
+        text-shadow: 0 0 5px var(--c-lime);
+    }
+    .modal-theme-lime .modal-btn:active { background-color: rgba(204, 255, 0, 0.2); }
+
+    .modal-theme-pink .modal-text-mystery {
+        text-shadow: 0 0 2px var(--c-pink), 0 0 5px var(--c-pink), 0 0 10px var(--c-pink);
+    }
+
+    .modal-theme-white .modal-text-mystery,
+    .modal-theme-white .modal-info-title, .modal-theme-white .modal-info-subtitle {
+        text-shadow: 0 0 2px var(--c-white), 0 0 5px var(--c-white), 0 0 10px var(--c-white);
+    }
+    .modal-theme-white .modal-btn {
+        border-color: var(--c-white);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3), inset 0 0 10px rgba(255, 255, 255, 0.3);
+        text-shadow: 0 0 5px var(--c-white);
+    }
+    .modal-theme-white .modal-btn:active { background-color: rgba(255, 255, 255, 0.2); }
+
+
+    /* ==========================================
+       層5：トランジション（画面遷移用フルスクリーン） (Z: 200)
+       ========================================== */
+    #transition-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background-color: var(--c-black);
+        z-index: 200;
+        display: flex; justify-content: center; align-items: center;
+        opacity: 1; transition: opacity 0.3s ease;
+    }
+
+    #transition-overlay.hidden {
+        opacity: 0; pointer-events: none;
+    }
+
+    #transition-text {
+        font-family: 'Black Ops One', cursive;
+        color: var(--c-white);
+        font-size: 28px;
+        text-align: center;
+        white-space: pre-wrap; 
+        line-height: 1.5;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
 </style>
 </head>
 <body>
 
-    <div id="map-bg" class="map-layer"><div id="border-wrapper"><div class="ring-gradient"></div><div class="ring-inner"></div></div></div>
-    <div id="ui-layer">
-        <div class="neon-title-base title-top"><span class="n-txt c-cyan">F</span><span class="n-txt c-lime">H</span><span class="n-txt c-pink">W</span></div>
-        <div class="neon-title-base title-center"><span class="n-txt c-gray">WILD</span><span class="n-txt c-gray">ZONE</span></div>
+    <div id="map-bg" class="map-layer">
+        <div id="border-wrapper">
+            <div class="ring-gradient"></div>
+            <div class="ring-inner"></div>
+        </div>
     </div>
+
+    <div id="ui-layer">
+        <div class="neon-title-base title-top">
+            <span class="c-cyan">F</span><span class="c-lime">H</span><span class="c-pink">W</span>
+        </div>
+        <div class="neon-title-base title-center">
+            <span class="c-gray text-wild">WILD</span>
+            <span class="c-gray text-zone">ZONE</span>
+        </div>
+    </div>
+
     <div id="map-fg" class="map-layer"></div>
 
     <div id="modal-overlay" class="hidden">
         <div id="modal-content">
-            <div id="m-mystery"><div class="m-txt-mystery">???</div></div>
-            <div id="m-badge" class="hidden">
-                <div class="m-img-area"><img id="b-img" src="" alt="Badge"></div>
-                <div class="m-info-area">
-                    <div id="b-title" class="m-info-title"></div>
-                    <div id="b-sub" class="m-info-sub"></div>
-                    <div class="m-info-desc">YOUR PRIZE IS OUT THERE.</div>
+            
+            <div id="modal-type-mystery">
+                <div class="modal-text-mystery">???</div>
+            </div>
+
+            <div id="modal-type-badge" class="hidden">
+                <div class="modal-image-area">
+                    <img id="badge-image" src="" alt="Badge">
                 </div>
-                <div class="m-action-area">
-                    <button class="m-btn" id="claim-btn">CLAIM YOUR PRIZE</button>
-                    <button class="m-btn" id="continue-btn">CONTINUE STORY</button>
-                    <button class="m-btn" id="close-btn">CLOSE</button>
+                <div class="modal-info-area">
+                    <div id="badge-title" class="modal-info-title"></div>
+                    <div id="badge-subtitle" class="modal-info-subtitle"></div>
+                    <div class="modal-info-desc">YOUR PRIZE IS OUT THERE.</div>
+                </div>
+                <div class="modal-action-area">
+                    <button class="modal-btn" id="claim-btn">CLAIM YOUR PRIZE</button>
+                    <button class="modal-btn" id="continue-btn">CONTINUE STORY</button>
+                    <button class="modal-btn" id="modal-close-btn">CLOSE</button>
                 </div>
             </div>
+
         </div>
     </div>
-    <div id="trans-overlay" class="hidden"><div id="trans-text"></div></div>
+
+    <div id="transition-overlay" class="hidden">
+        <div id="transition-text"></div>
+    </div>
 
 <script>
-    const MAP_SIZE = 3000, CX = 1500, CY = 1500, B_RAD = 1000;
-    let objData = [], badgeCnt = 0, curClaim = '', curCont = '', gId = 0;
+    /* ==========================================
+       1. 設定値とデータ構造
+       ========================================== */
+    const MAP_WIDTH = 3000;
+    const MAP_HEIGHT = 3000;
+    const CENTER_X = MAP_WIDTH / 2; // 1500
+    const CENTER_Y = MAP_HEIGHT / 2; // 1500
+    
+    const BORDER_RADIUS = 1000; 
+    
+    const TOTAL_MEDALS = 63;
+    const EMOJI_LIST = ['🍙', '🍅', '🧅', '🫑'];
+    const TOTAL_EMOJIS = 16; 
+    
+    let objectData = []; 
+    let currentId = 1; // 一意のIDを管理
+    
+    let curClaimUrl = '';
+    let curContinueUrl = '';
 
-    function generateMap() {
-        const tRect = { minX: CX - 350, maxX: CX + 350, minY: CY - 450, maxY: CY + 150 };
-        const cols = Array(21).fill('cyan').concat(Array(21).fill('lime'), Array(21).fill('pink'));
-        const sizes = Array(47).fill('normal').concat(Array(13).fill('large'), ['small'], Array(2).fill('huge')).sort(() => Math.random() - 0.5);
-        const rMap = { small: 35, normal: 50, large: 70, huge: 100 }, mMap = { small: 0.5, normal: 1, large: 2.5, huge: 6 };
-        
-        let mConfigs = cols.map((c, i) => ({ c, s: sizes[i], fast: false, str: false }));
-        [0, 21, 42].forEach(off => {
-            mConfigs[off + Math.floor(Math.random()*21)].fast = true;
-            mConfigs[off + Math.floor(Math.random()*21)].str = true;
-        });
-        mConfigs.sort(() => Math.random() - 0.5);
-
-        const getPos = (r) => {
-            let x, y, val = false, att = 0;
-            while(!val && att < 3000) {
-                let sr = (B_RAD - r - 10) * Math.pow(Math.random(), 0.8), ang = Math.random() * Math.PI * 2;
-                x = CX + sr * Math.cos(ang); y = CY + sr * Math.sin(ang);
-                if(x > tRect.minX && x < tRect.maxX && y > tRect.minY && y < tRect.maxY) { att++; continue; }
-                val = !objData.some(o => Math.hypot(x - o.x, y - o.y) < r + o.r + 10);
-                att++;
-            }
-            return { x, y };
+    function generateMapData() {
+        const titleRect = {
+            minX: CENTER_X - 350,
+            maxX: CENTER_X + 350,
+            minY: CENTER_Y - 450, 
+            maxY: CENTER_Y + 150       
         };
 
-        // 1. メダル生成 (63個)
-        mConfigs.forEach(cfg => {
-            let r = rMap[cfg.s], m = cfg.str ? mMap[cfg.s] * 15 : mMap[cfg.s], spd = cfg.fast ? 2 + Math.random() : 0.3 + Math.random()*0.4, a = Math.random() * Math.PI*2, p = getPos(r);
-            objData.push({ type: 'm', id: gId++, x: p.x, y: p.y, c: cfg.c, s: cfg.s, r, mass: m, inv: 1/m, spd, a, vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, fast: cfg.fast, esc: Math.random() < 0.2, sk: Math.floor(Math.random()*3)+1, caught: false, isImg: false, bData: null, el: null });
-        });
+        let colors = [];
+        for(let i=0; i<21; i++) colors.push('cyan');
+        for(let i=0; i<21; i++) colors.push('lime');
+        for(let i=0; i<21; i++) colors.push('pink');
 
-        // 2. 絵文字生成 (16個)
-        const emojis = ['🍙', '🍅', '🧅', '🫑'];
-        for(let i=0; i<16; i++) {
-            let spd = 0.4 + Math.random()*0.5, a = Math.random() * Math.PI*2, p = getPos(45);
-            objData.push({ type: 'e', id: gId++, char: emojis[i%4], x: p.x, y: p.y, r: 45, inv: 2, spd, a, vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, caught: false, el: null });
+        let sizes = [];
+        for(let i=0; i<47; i++) sizes.push('normal');
+        for(let i=0; i<13; i++) sizes.push('large');
+        sizes.push('small');
+        for(let i=0; i<2; i++)  sizes.push('huge');
+        sizes.sort(() => Math.random() - 0.5); 
+
+        let medalConfigs = [];
+        for(let i=0; i<63; i++) {
+            medalConfigs.push({ color: colors[i], size: sizes[i], isFast: false, isStrong: false });
         }
 
-        // 3. 特殊画像の生成 (4個)
+        function assignSpecial(startIndex) {
+            let fastIdx = startIndex + Math.floor(Math.random() * 21);
+            let strongIdx = startIndex + Math.floor(Math.random() * 21);
+            medalConfigs[fastIdx].isFast = true;
+            medalConfigs[strongIdx].isStrong = true;
+        }
+        assignSpecial(0); assignSpecial(21); assignSpecial(42);
+        medalConfigs.sort(() => Math.random() - 0.5);
+
+        const radiusMap = { 'small': 35, 'normal': 50, 'large': 70, 'huge': 100 };
+        const massMap = { 'small': 0.5, 'normal': 1, 'large': 2.5, 'huge': 6 };
+
+        // --- メダル生成 ---
+        for (let i = 0; i < TOTAL_MEDALS; i++) {
+            let config = medalConfigs[i];
+            let radius = radiusMap[config.size];
+            let mass = massMap[config.size];
+            let baseSpeed = config.isFast ? (2.0 + Math.random() * 1.0) : (0.3 + Math.random() * 0.4);
+            
+            if (config.isStrong) { mass *= 15; }
+
+            let isEscaper = Math.random() < 0.2; 
+            let shakePattern = Math.floor(Math.random() * 3) + 1;
+
+            let pos = findValidSpawnPosition(radius, titleRect);
+            const initialAngle = Math.random() * 2 * Math.PI;
+
+            objectData.push({
+                type: 'medal',
+                id: currentId++,
+                x: pos.x, y: pos.y,
+                color: config.color,
+                sizeClass: config.size,
+                radius: radius,
+                mass: mass, invMass: 1 / mass,
+                baseSpeed: baseSpeed,
+                angle: initialAngle,
+                vx: Math.cos(initialAngle) * baseSpeed,
+                vy: Math.sin(initialAngle) * baseSpeed,
+                isFast: config.isFast,
+                isEscaper: isEscaper,
+                shakePattern: shakePattern,
+                isCaught: false,
+                isImage: false, 
+                badgeData: null,
+                element: null 
+            });
+        }
+
+        // --- 絵文字生成 ---
+        for (let i = 0; i < TOTAL_EMOJIS; i++) {
+            let char = EMOJI_LIST[i % EMOJI_LIST.length];
+            let radius = 45; 
+            let mass = 0.5;  
+            let baseSpeed = 0.4 + Math.random() * 0.5; 
+            
+            let pos = findValidSpawnPosition(radius, titleRect);
+            const initialAngle = Math.random() * 2 * Math.PI;
+
+            objectData.push({
+                type: 'emoji',
+                id: currentId++,
+                char: char,
+                x: pos.x, y: pos.y,
+                radius: radius,
+                mass: mass, invMass: 1 / mass,
+                baseSpeed: baseSpeed,
+                angle: initialAngle,
+                vx: Math.cos(initialAngle) * baseSpeed,
+                vy: Math.sin(initialAngle) * baseSpeed,
+                isCaught: false, 
+                element: null
+            });
+        }
+
+        // --- 特殊画像の生成 (4個) ---
         const spImgs = ['001900.png', 'ura.PNG', 'ginn.PNG', '999FUNKY.PNG'];
         spImgs.forEach(src => {
-            let spd = 0.4 + Math.random()*0.5, a = Math.random() * Math.PI*2, p = getPos(45);
-            objData.push({ type: 'sp', id: gId++, src: src, x: p.x, y: p.y, r: 45, inv: 2, spd, normalSpd: spd, a, vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, caught: false, triggered: false, bounceCount: 0, isPaused: false, el: null });
+            let spd = 0.4 + Math.random()*0.5;
+            let a = Math.random() * Math.PI*2;
+            let p = findValidSpawnPosition(45, titleRect);
+            objectData.push({ 
+                type: 'sp', 
+                id: currentId++, 
+                src: src, 
+                x: p.x, y: p.y, 
+                radius: 45, 
+                mass: 0.5, invMass: 2, 
+                baseSpeed: spd, normalSpd: spd, 
+                angle: a, 
+                vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, 
+                caught: false, triggered: false, bounceCount: 0, isPaused: false, 
+                element: null 
+            });
         });
+    }
 
-        // ★ バッジ画像への進化（3種類に増えました）
-        const evos = [
-            { url: '01BADGE.PNG', t: 'AICHI ★ 01', sub: 'MISO KATSU', cUrl: 'https://funkyhotdog.com/wild-tomato', coUrl: 'https://funkyhotdog.com/comic/japan-gp/aichi-01' },
-            { url: 'gume.PNG', t: 'GUNMA ★ 02', sub: 'DARUMA', cUrl: 'https://funkyhotdog.com/wild-tomato', coUrl: 'https://funkyhotdog.com/comic/japan-gp/gunma-02' },
-            { url: '03BADGE.PNG', t: 'SPECIAL BADGE 03', sub: 'SECRET', cUrl: 'https://funkyhotdog.com/wild-tomato', coUrl: 'https://funkyhotdog.com/comic/japan-gp' } // ★ 3つ目を追加！仮文字です
+    function findValidSpawnPosition(radius, titleRect) {
+        let x, y;
+        let isValid = false;
+        let attempts = 0;
+        const spawnMaxRadius = BORDER_RADIUS - radius - 10;
+
+        while (!isValid && attempts < 3000) {
+            const spawnRadius = spawnMaxRadius * Math.pow(Math.random(), 0.8); 
+            const angle = Math.random() * 2 * Math.PI;
+            x = CENTER_X + spawnRadius * Math.cos(angle);
+            y = CENTER_Y + spawnRadius * Math.sin(angle);
+
+            if (x > titleRect.minX && x < titleRect.maxX && y > titleRect.minY && y < titleRect.maxY) {
+                attempts++; continue;
+            }
+
+            isValid = true;
+            for (const existingObj of objectData) {
+                const dx = x - existingObj.x;
+                const dy = y - existingObj.y;
+                const minDistance = radius + existingObj.radius + 10;
+                if (Math.sqrt(dx*dx + dy*dy) < minDistance) {
+                    isValid = false; break;
+                }
+            }
+            attempts++;
+        }
+        return { x: Math.round(x), y: Math.round(y) };
+    }
+
+    if (objectData.length === 0) {
+        generateMapData();
+
+        // ★ 進化するバッジリスト（3種類）
+        const evolutionList = [
+            {
+                url: '01BADGE.PNG',
+                title: 'AICHI ★ 01',
+                subtitle: 'MISO KATSU',
+                claimUrl: 'https://funkyhotdog.com/wild-tomato',
+                continueUrl: 'https://funkyhotdog.com/comic/japan-gp/aichi-01'
+            },
+            {
+                url: 'gume.PNG',
+                title: 'GUNMA ★ 02', 
+                subtitle: 'DARUMA',       
+                claimUrl: 'https://funkyhotdog.com/wild-tomato', 
+                continueUrl: 'https://funkyhotdog.com/comic/japan-gp/gunma-02'
+            },
+            {
+                url: '03BADGE.PNG',
+                title: 'SPECIAL BADGE 03', 
+                subtitle: 'SECRET',       
+                claimUrl: 'https://funkyhotdog.com/wild-tomato', 
+                continueUrl: 'https://funkyhotdog.com/comic/japan-gp' // 仮のURL
+            }
         ];
-        let nCand = objData.filter(o => o.type === 'm' && o.s === 'normal' && !o.esc);
-        evos.forEach(evo => {
-            if(nCand.length > 0) {
-                let targetIdx = Math.floor(Math.random() * nCand.length);
-                let luckyOne = nCand.splice(targetIdx, 1)[0];
-                luckyOne.isImg = true; luckyOne.bData = evo;
+
+        let normalCandidates = objectData.filter(m => m.type === 'medal' && m.sizeClass === 'normal' && !m.isEscaper);
+        
+        for (let i = 0; i < evolutionList.length; i++) {
+            if (normalCandidates.length > 0) {
+                let randomIndex = Math.floor(Math.random() * normalCandidates.length);
+                let luckyOne = normalCandidates[randomIndex];
+                
+                luckyOne.isImage = true;
+                luckyOne.badgeData = evolutionList[i]; 
+                
+                normalCandidates.splice(randomIndex, 1);
             }
-        });
+        }
     }
 
-    function initDOM() {
-        const fg = document.getElementById('map-fg'), frag = document.createDocumentFragment();
-        objData.forEach(o => {
-            let el = document.createElement('div'); el.dataset.id = o.id;
-            if(o.type === 'm') {
-                el.className = `medal col-${o.c} sz-${o.s} sk-${o.sk}`;
-                el.innerHTML = o.isImg ? `<img src="${o.bData.url}" class="medal-image">` : '<span>?</span>';
-                el.style.animationDelay = `${Math.random()*3}s`;
-            } else if(o.type === 'e') {
-                el.className = 'emoji-item'; el.textContent = o.char;
-                if(o.char === '🍙') { el.style.pointerEvents = 'auto'; el.style.cursor = 'pointer'; }
-            } else if(o.type === 'sp') {
-                el.className = 'sp-img-item';
-                el.innerHTML = `<img src="${o.src}">`;
-            }
-            el.style.left = `${o.x}px`; el.style.top = `${o.y}px`;
-            o.el = el; frag.appendChild(el);
-        });
-        fg.appendChild(frag);
-    }
+    /* ==========================================
+       2. DOM生成と描画
+       ========================================== */
+    const mapFg = document.getElementById('map-fg');
+    const fragment = document.createDocumentFragment();
 
+    objectData.forEach(obj => {
+        const el = document.createElement('div');
+        
+        if (obj.type === 'medal') {
+            el.className = `medal color-${obj.color} size-${obj.sizeClass} shake-pattern-${obj.shakePattern}`;
+            if (obj.isImage) {
+                el.innerHTML = `<img src="${obj.badgeData.url}" class="medal-image" alt="badge">`;
+            } else {
+                el.innerHTML = '<span>?</span>';
+            }
+            el.style.animationDelay = `${Math.random() * 3}s`;
+            el.dataset.id = obj.id;
+        } else if (obj.type === 'emoji') {
+            el.className = 'emoji-item';
+            el.textContent = obj.char;
+            el.dataset.id = obj.id;
+            
+            if (obj.char === '🍙') {
+                el.style.pointerEvents = 'auto';
+                el.style.cursor = 'pointer';
+            }
+        } else if (obj.type === 'sp') {
+            el.className = 'sp-img-item';
+            el.innerHTML = `<img src="${obj.src}">`;
+            el.dataset.id = obj.id;
+        }
+        
+        el.style.left = `${obj.x}px`;
+        el.style.top = `${obj.y}px`;
+        
+        obj.element = el;
+        fragment.appendChild(el);
+    });
+
+    mapFg.appendChild(fragment);
+
+    /* ==========================================
+       3. 物理演算とアニメーション
+       ========================================== */
     function checkSpBounce(o) {
-        if(o.type === 'sp' && o.bounceCount > 0) {
+        if (o.type === 'sp' && o.bounceCount > 0) {
             o.bounceCount--;
-            if(o.bounceCount <= 0) {
-                o.spd = o.normalSpd;
-                o.vx = Math.cos(o.a) * o.spd;
-                o.vy = Math.sin(o.a) * o.spd;
+            if (o.bounceCount <= 0) {
+                o.baseSpeed = o.normalSpd; // spdではなくbaseSpeedを使用
+                o.vx = Math.cos(o.angle) * o.baseSpeed;
+                o.vy = Math.sin(o.angle) * o.baseSpeed;
                 o.triggered = false; 
             }
         }
     }
 
-    function animLoop() {
-        objData.forEach(o => {
-            if(o.caught) return;
+    function animateObjects() {
+        for (let i = 0; i < objectData.length; i++) {
+            let m = objectData[i];
             
-            if(!o.isPaused) {
-                o.a += (Math.random() - 0.5) * (o.fast ? 0.15 : 0.08);
-                o.vx += (Math.cos(o.a) * o.spd - o.vx) * 0.05; 
-                o.vy += (Math.sin(o.a) * o.spd - o.vy) * 0.05;
-            } else {
-                o.vx = 0; 
-                o.vy = 0;
-            }
+            if (m.isCaught) continue; 
             
-            o.x += o.vx; o.y += o.vy;
-
-            let dx = o.x - CX, dy = o.y - CY, dist = Math.hypot(dx, dy);
-            
-            if(dist + o.r > B_RAD) {
-                let over = dist + o.r - B_RAD, nx = dx/dist, ny = dy/dist;
-                o.x -= nx*over; o.y -= ny*over;
-                let dot = o.vx*nx + o.vy*ny;
-                o.vx -= 2*dot*nx; o.vy -= 2*dot*ny; o.a = Math.atan2(o.vy, o.vx);
+            if (!m.isPaused) {
+                let angleWobble = m.isFast ? 0.15 : 0.08;
+                m.angle += (Math.random() - 0.5) * angleWobble;
                 
-                let s = document.createElement('div'); s.className = 'spark'; s.style.left = `${CX + nx*B_RAD}px`; s.style.top = `${CY + ny*B_RAD}px`;
-                s.innerHTML = '<div class="spark-inner"></div>'; document.getElementById('map-fg').appendChild(s);
-                s.firstChild.addEventListener('animationend', () => s.remove());
-
-                checkSpBounce(o); 
+                let targetVx = Math.cos(m.angle) * m.baseSpeed;
+                let targetVy = Math.sin(m.angle) * m.baseSpeed;
+                
+                m.vx += (targetVx - m.vx) * 0.05;
+                m.vy += (targetVy - m.vy) * 0.05;
+            } else {
+                m.vx = 0;
+                m.vy = 0;
             }
-        });
+            
+            m.x += m.vx;
+            m.y += m.vy;
 
-        for(let i=0; i<objData.length; i++) {
-            for(let j=i+1; j<objData.length; j++) {
-                let o1 = objData[i], o2 = objData[j];
-                if(o1.caught || o2.caught) continue;
-                let dx = o2.x - o1.x, dy = o2.y - o1.y, distSq = dx*dx + dy*dy, cDist = o1.r + o2.r + 2;
-                if(distSq < cDist*cDist) {
-                    let d = Math.sqrt(distSq) || 1, nx = dx/d, ny = dy/d, over = cDist - d, sum = o1.inv + o2.inv;
-                    o1.x -= nx * over * (o1.inv/sum); o1.y -= ny * over * (o1.inv/sum);
-                    o2.x += nx * over * (o2.inv/sum); o2.y += ny * over * (o2.inv/sum);
+            let dxToCenter = m.x - CENTER_X;
+            let dyToCenter = m.y - CENTER_Y;
+            let distFromCenter = Math.sqrt(dxToCenter * dxToCenter + dyToCenter * dyToCenter);
+            
+            if (distFromCenter + m.radius > BORDER_RADIUS) {
+                let overlap = (distFromCenter + m.radius) - BORDER_RADIUS;
+                let nx = dxToCenter / distFromCenter; 
+                let ny = dyToCenter / distFromCenter;
+                
+                m.x -= nx * overlap;
+                m.y -= ny * overlap;
+                
+                let dot = m.vx * nx + m.vy * ny;
+                m.vx = m.vx - 2 * dot * nx;
+                m.vy = m.vy - 2 * dot * ny;
+                
+                m.angle = Math.atan2(m.vy, m.vx);
+
+                createSpark(nx, ny);
+                checkSpBounce(m);
+            }
+        }
+
+        for (let i = 0; i < objectData.length; i++) {
+            for (let j = i + 1; j < objectData.length; j++) {
+                let m1 = objectData[i];
+                let m2 = objectData[j];
+                
+                if (m1.isCaught || m2.isCaught) continue;
+
+                let dx = m2.x - m1.x;
+                let dy = m2.y - m1.y;
+                let distSq = dx * dx + dy * dy;
+                let collisionDist = m1.radius + m2.radius + 2; 
+
+                if (distSq < collisionDist * collisionDist) {
+                    let dist = Math.sqrt(distSq);
+                    if (dist === 0) { dx = 1; dy = 0; dist = 1; }
                     
-                    let dot = nx*(o2.vx-o1.vx) + ny*(o2.vy-o1.vy);
-                    if(dot < 0) {
-                        let imp = -1.8 * dot / sum, ix = nx*imp, iy = ny*imp;
-                        o1.vx -= ix*o1.inv; o1.vy -= iy*o1.inv; o2.vx += ix*o2.inv; o2.vy += iy*o2.inv;
-                        o1.a = Math.atan2(o1.vy, o1.vx); o2.a = Math.atan2(o2.vy, o2.vx);
+                    let nx = dx / dist;
+                    let ny = dy / dist;
+                    let overlap = collisionDist - dist;
+                    let sumInvMass = m1.invMass + m2.invMass;
+                    let push1 = overlap * (m1.invMass / sumInvMass);
+                    let push2 = overlap * (m2.invMass / sumInvMass);
+                    
+                    m1.x -= nx * push1;
+                    m1.y -= ny * push1;
+                    m2.x += nx * push2;
+                    m2.y += ny * push2;
+                    
+                    let dvx = m2.vx - m1.vx;
+                    let dvy = m2.vy - m1.vx;
+                    let dotProduct = nx * dvx + ny * dvy;
+                    
+                    if (dotProduct < 0) {
+                        let restitution = 0.8; 
+                        let impulse = -(1 + restitution) * dotProduct / sumInvMass;
+                        let impulseX = nx * impulse;
+                        let impulseY = ny * impulse;
+                        
+                        m1.vx -= impulseX * m1.invMass;
+                        m1.vy -= impulseY * m1.invMass;
+                        m2.vx += impulseX * m2.invMass;
+                        m2.vy += impulseY * m2.invMass;
+                        
+                        m1.angle = Math.atan2(m1.vy, m1.vx);
+                        m2.angle = Math.atan2(m2.vy, m2.vx);
 
-                        checkSpBounce(o1);
-                        checkSpBounce(o2);
+                        checkSpBounce(m1);
+                        checkSpBounce(m2);
                     }
                 }
             }
-            objData[i].el.style.left = `${objData[i].x}px`; objData[i].el.style.top = `${objData[i].y}px`;
         }
-        requestAnimationFrame(animLoop);
+
+        for (let i = 0; i < objectData.length; i++) {
+            let m = objectData[i];
+            m.element.style.left = `${m.x}px`;
+            m.element.style.top = `${m.y}px`;
+        }
+
+        requestAnimationFrame(animateObjects);
     }
 
-    let drag = false, moved = false, sX = 0, sY = 0, iTx = 0, iTy = 0, cTx = 0, cTy = 0;
-    const bg = document.getElementById('map-bg'), fg = document.getElementById('map-fg');
-    const setT = () => { bg.style.transform = fg.style.transform = `translate3d(${cTx}px, ${cTy}px, 0)`; };
+    function createSpark(nx, ny) {
+        const sparkX = CENTER_X + nx * BORDER_RADIUS;
+        const sparkY = CENTER_Y + ny * BORDER_RADIUS;
 
-    cTx = innerWidth/2 - CX; cTy = innerHeight/2 - CY; setT();
+        const spark = document.createElement('div');
+        spark.className = 'spark';
+        spark.style.left = `${sparkX}px`;
+        spark.style.top = `${sparkY}px`;
+        
+        const inner = document.createElement('div');
+        inner.className = 'spark-inner';
+        spark.appendChild(inner);
 
-    window.addEventListener('pointerdown', e => {
-        if(!document.getElementById('modal-overlay').classList.contains('hidden') || !document.getElementById('trans-overlay').classList.contains('hidden')) return;
-        drag = true; moved = false; sX = e.clientX; sY = e.clientY; iTx = cTx; iTy = cTy;
+        mapFg.appendChild(spark);
+
+        inner.addEventListener('animationend', () => {
+            spark.remove();
+        });
+    }
+
+    requestAnimationFrame(animateObjects);
+
+
+    /* ==========================================
+       4. パン（ドラッグ・スワイプ）操作
+       ========================================== */
+    const mapBg = document.getElementById('map-bg');
+    
+    let isDragging = false;
+    let hasMoved = false;
+    let startX = 0, startY = 0;
+    let initialTx = 0, initialTy = 0;
+    let currentTx = 0, currentTy = 0;
+
+    function initPosition() {
+        currentTx = (window.innerWidth / 2) - CENTER_X;
+        currentTy = (window.innerHeight / 2) - CENTER_Y;
+        updateTransform();
+    }
+
+    function updateTransform() {
+        mapBg.style.transform = `translate3d(${currentTx}px, ${currentTy}px, 0)`;
+        mapFg.style.transform = `translate3d(${currentTx}px, ${currentTy}px, 0)`;
+    }
+
+    window.addEventListener('pointerdown', (e) => {
+        if (!modalOverlay.classList.contains('hidden') || !transitionOverlay.classList.contains('hidden')) return;
+        isDragging = true;
+        hasMoved = false;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialTx = currentTx;
+        initialTy = currentTy;
     });
-    window.addEventListener('pointermove', e => {
-        if(!drag) return;
-        let dx = e.clientX - sX, dy = e.clientY - sY;
-        if(Math.hypot(dx, dy) > 5) moved = true;
-        let tX = iTx + dx, tY = iTy + dy, vX = innerWidth/2 - tX, vY = innerHeight/2 - tY;
-        let dist = Math.hypot(vX - CX, vY - CY), maxD = Math.max(0, B_RAD - Math.min(innerWidth, innerHeight)/2 + 50);
-        if(dist > maxD) {
-            vX = CX + (vX - CX) * (maxD/dist); vY = CY + (vY - CY) * (maxD/dist);
-            tX = innerWidth/2 - vX; tY = innerHeight/2 - vY;
+
+    window.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+            hasMoved = true;
         }
-        cTx = tX; cTy = tY; setT();
+
+        let tempTx = initialTx + dx;
+        let tempTy = initialTy + dy;
+
+        let viewX = (window.innerWidth / 2) - tempTx;
+        let viewY = (window.innerHeight / 2) - tempTy;
+
+        let distFromCenterX = viewX - CENTER_X;
+        let distFromCenterY = viewY - CENTER_Y;
+        let dist = Math.sqrt(distFromCenterX * distFromCenterX + distFromCenterY * distFromCenterY);
+
+        let maxDist = BORDER_RADIUS - Math.min(window.innerWidth, window.innerHeight) / 2 + 50;
+        if (maxDist < 0) maxDist = 0;
+
+        if (dist > maxDist) {
+            let ratio = maxDist / dist;
+            distFromCenterX *= ratio;
+            distFromCenterY *= ratio;
+            viewX = CENTER_X + distFromCenterX;
+            viewY = CENTER_Y + distFromCenterY;
+            tempTx = (window.innerWidth / 2) - viewX;
+            tempTy = (window.innerHeight / 2) - viewY;
+        }
+
+        currentTx = tempTx;
+        currentTy = tempTy;
+        updateTransform();
     });
-    window.addEventListener('pointerup', e => {
-        if(!drag) return; drag = false;
-        if(!moved) {
-            const mEl = e.target.closest('.medal'), eEl = e.target.closest('.emoji-item'), spEl = e.target.closest('.sp-img-item');
-            if(mEl) tapMedal(mEl);
-            if(eEl && eEl.textContent === '🍙') window.location.href = 'https://funkyhotdog.com/world';
-            if(spEl) tapSpImg(spEl); 
+
+    window.addEventListener('pointerup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        if (!hasMoved) {
+            const targetMedal = e.target.closest('.medal');
+            if (targetMedal) {
+                handleMedalTap(targetMedal);
+            }
+
+            const targetEmoji = e.target.closest('.emoji-item');
+            if (targetEmoji && targetEmoji.textContent === '🍙') {
+                window.location.href = 'https://funkyhotdog.com/world';
+            }
+
+            const targetSp = e.target.closest('.sp-img-item');
+            if (targetSp) {
+                handleSpTap(targetSp);
+            }
         }
     });
 
-    const mOvl = document.getElementById('modal-overlay'), mCnt = document.getElementById('modal-content');
-    const typeM = document.getElementById('m-mystery'), typeB = document.getElementById('m-badge');
+    /* ==========================================
+       5. モーダル表示＆もがく・逃げる制御
+       ========================================== */
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modalContent = document.getElementById('modal-content');
+    const modalTypeMystery = document.getElementById('modal-type-mystery');
+    const modalTypeBadge = document.getElementById('modal-type-badge');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const transitionOverlay = document.getElementById('transition-overlay');
+    const transitionText = document.getElementById('transition-text');
 
-    function tapMedal(el) {
-        let o = objData.find(d => d.id == el.dataset.id && d.type === 'm');
-        if(!o || o.caught) return;
+    function handleMedalTap(medalEl) {
+        const id = parseInt(medalEl.dataset.id);
+        const m = objectData.find(item => item.id === id && item.type === 'medal');
+        
+        if (!m || m.isCaught) return;
 
-        o.caught = true; el.classList.add('shaking');
+        m.isCaught = true;
+        medalEl.classList.add('shaking');
 
         setTimeout(() => {
-            el.classList.remove('shaking');
+            medalEl.classList.remove('shaking');
             
-            if (o.esc) {
-                o.caught = false; o.spd = 15; o.a = Math.random()*Math.PI*2; o.vx = Math.cos(o.a)*o.spd; o.vy = Math.sin(o.a)*o.spd;
-                setTimeout(() => o.spd = o.fast ? 2+Math.random() : 0.3+Math.random()*0.4, 3000);
-            } else {
-                o.caught = false; mCnt.className = ''; 
+            if (m.isEscaper) {
+                m.isCaught = false; 
+                m.baseSpeed = 15; 
+                m.angle = Math.random() * 2 * Math.PI; 
+                m.vx = Math.cos(m.angle) * m.baseSpeed;
+                m.vy = Math.sin(m.angle) * m.baseSpeed;
 
-                if (o.isImg) {
+                setTimeout(() => {
+                    m.baseSpeed = m.isFast ? (2.0 + Math.random() * 1.0) : (0.3 + Math.random() * 0.4);
+                }, 3000);
+
+            } else {
+                m.isCaught = false; 
+                
+                modalContent.className = ''; 
+
+                if (m.isImage) {
                     modalTypeMystery.classList.add('hidden');
                     modalTypeBadge.classList.remove('hidden');
-                    modalContent.classList.add('is-badge');
+                    modalContent.classList.add('is-badge-mode');
 
-                    document.getElementById('b-img').src = o.bData.url;
-                    document.getElementById('b-title').textContent = o.bData.t;
-                    document.getElementById('b-sub').textContent = o.bData.sub;
+                    document.getElementById('badge-image').src = m.badgeData.url;
+                    document.getElementById('badge-title').textContent = m.badgeData.title;
+                    document.getElementById('badge-subtitle').textContent = m.badgeData.subtitle;
                     
-                    curClaim = o.bData.cUrl;
-                    curCont = o.bData.coUrl;
+                    curClaimUrl = m.badgeData.claimUrl;
+                    curContinueUrl = m.badgeData.continueUrl;
 
-                    if (badgeCnt % 2 === 0) {
-                        modalContent.classList.add('th-cyan');
+                    if (Math.random() < 0.5) {
+                        modalContent.classList.add('modal-theme-cyan');
                     } else {
-                        modalContent.classList.add('th-white');
+                        modalContent.classList.add('modal-theme-white');
                     }
-                    badgeCnt++;
 
                 } else {
                     modalTypeMystery.classList.remove('hidden');
                     modalTypeBadge.classList.add('hidden');
-                    modalContent.classList.remove('is-badge');
+                    modalContent.classList.remove('is-badge-mode');
 
-                    if (el.classList.contains('col-cyan')) modalContent.classList.add('th-cyan');
-                    if (el.classList.contains('col-lime')) modalContent.classList.add('th-lime');
-                    if (el.classList.contains('col-pink')) modalContent.classList.add('th-pink');
+                    if (medalEl.classList.contains('color-cyan')) modalContent.classList.add('modal-theme-cyan');
+                    if (medalEl.classList.contains('color-lime')) modalContent.classList.add('modal-theme-lime');
+                    if (medalEl.classList.contains('color-pink')) modalContent.classList.add('modal-theme-pink');
                 }
 
-                mOvl.classList.remove('hidden');
+                modalOverlay.classList.remove('hidden');
             }
         }, 800); 
     }
 
-    function tapSpImg(el) {
-        let o = objData.find(d => d.id == el.dataset.id && d.type === 'sp');
-        if(!o || o.triggered) return;
+    function handleSpTap(spEl) {
+        const id = parseInt(spEl.dataset.id);
+        let o = objectData.find(item => item.id === id && item.type === 'sp');
+        
+        if (!o || o.triggered) return;
         
         o.triggered = true; 
         o.isPaused = true; 
@@ -420,26 +1138,42 @@
         
         setTimeout(() => {
             o.isPaused = false; 
-            o.spd = 20; 
+            o.baseSpeed = 20; 
             o.bounceCount = 3; 
-            o.a = Math.random() * Math.PI * 2;
-            o.vx = Math.cos(o.a) * o.spd;
-            o.vy = Math.sin(o.a) * o.spd;
+            o.angle = Math.random() * Math.PI * 2;
+            o.vx = Math.cos(o.angle) * o.baseSpeed;
+            o.vy = Math.sin(o.angle) * o.baseSpeed;
         }, 1500);
     }
 
-    const closeM = () => mOvl.classList.add('hidden');
-    document.getElementById('close-btn').addEventListener('click', closeM);
-    mOvl.addEventListener('pointerdown', e => { if(e.target === mOvl) closeM(); });
+    function closeModal() {
+        modalOverlay.classList.add('hidden');
+    }
 
-    const transTo = (url, txt) => {
-        closeM(); document.getElementById('trans-text').textContent = txt; document.getElementById('trans-overlay').classList.remove('hidden');
-        setTimeout(() => window.location.href = url, 2000);
-    };
-    document.getElementById('claim-btn').addEventListener('click', () => transTo(curClaim, "YOUR PRIZE IS OUT THERE.\nGO FIND IT."));
-    document.getElementById('continue-btn').addEventListener('click', () => transTo(curCont, "FOLLOW THE STORY."));
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('pointerdown', (e) => {
+        if (e.target === modalOverlay) closeModal();
+    });
 
-    generateMap(); initDOM(); requestAnimationFrame(animLoop);
+    document.getElementById('claim-btn').addEventListener('click', () => {
+        closeModal();
+        transitionText.textContent = "YOUR PRIZE IS OUT THERE.\nGO FIND IT.";
+        transitionOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            window.location.href = curClaimUrl;
+        }, 2000);
+    });
+
+    document.getElementById('continue-btn').addEventListener('click', () => {
+        closeModal();
+        transitionText.textContent = "FOLLOW THE STORY.";
+        transitionOverlay.classList.remove('hidden');
+        setTimeout(() => {
+            window.location.href = curContinueUrl;
+        }, 2000);
+    });
+
+    initPosition();
 
 </script>
 </body>
