@@ -88,7 +88,7 @@
             text-align: center;
             transform-style: preserve-3d;
             
-            /* 【変更点】回転は2秒間。ただしキリが晴れ始めてから1秒後に開始する（delay 1s） */
+            /* 回転は2秒間。キリが晴れ始めてから1秒後に開始する（delay 1s） */
             transition: transform 2s ease-in-out 1s; 
         }
 
@@ -109,7 +109,7 @@
         /* 【初期状態】裏面（ura.PNG）：こちらが手前を向いており、強いぼかしと暗転がかかっている */
         .gacha-back {
             filter: blur(15px) brightness(0.2);
-            /* 【変更点】キリが晴れるアニメーションは2秒間。すぐに開始。 */
+            /* キリが晴れるアニメーションは2秒間。すぐに開始。 */
             transition: filter 2s ease-in-out;
         }
 
@@ -127,8 +127,7 @@
             transform: rotateY(180deg) scale(1.05);
         }
 
-        /* 【変更点】裏面のぼかしを完全にクリアにする。
-           これによって、回転するまでの1秒間で裏面がくっきり見えます。 */
+        /* 裏面のぼかしを完全にクリアにする。 */
         .gacha-revealed .gacha-back {
             filter: blur(0px) brightness(1);
         }
@@ -299,7 +298,6 @@
                         
                         <!-- 表面（JSでセットされる本日の抽選画像） -->
                         <div class="gacha-front">
-                            <!-- キラキラキャンバス（表面と一緒に回る） -->
                             <canvas class="card-dust-canvas gacha-canvas absolute inset-0 w-full h-full rounded-xl pointer-events-none z-0"></canvas>
                             <img id="gacha-result-img" src="" alt="本日の一作" class="relative z-10 w-full h-full object-cover opacity-90">
                         </div>
@@ -355,7 +353,7 @@
                 "666FUNKY.PNG",
                 "777FUNKY.PNG",
                 "888FUNKY.PNG",
-                "999FUNKY.PNG"
+                "coin999.PNG" // 999FUNKY.PNGから変更
             ];
 
             const now = new Date();
