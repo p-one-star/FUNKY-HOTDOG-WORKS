@@ -329,7 +329,8 @@
                   <!-- 偶数は上下線シアン (cyan-400) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                   <div class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
-                    <img src="miyo.PNG" alt="Episode 4" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=miyo.PNG'" />
+                    <!-- ★画像の表示位置を元の object-center に戻し、5:4の画像を美しく表示 -->
+                    <img src="miyogi.PNG" alt="Episode 4" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=miyogi.PNG'" />
                   </div>
                   <div class="w-[85%] mx-auto mt-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                 </div>
@@ -414,7 +415,7 @@
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
                     <!-- 偶数はボタンシアン、文字ライム -->
-                    <a href="#" onclick="turnPageAndReturn(event, 'card-ep6')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-cyan-400 font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(0,243,255,0.8)] active:scale-95 group cursor-pointer">
+                    <a href="#" onclick="turnPageAndReturn(event, 'card-ep6', '#')" class="relative z-10 inline-block px-4 py-1.5 sm:px-5 sm:py-1.5 rounded-full border border-cyan-400 font-black uppercase tracking-widest text-[14px] sm:text-base transition-all duration-300 hover:bg-cyan-400 hover:shadow-[0_0_15px_rgba(0,243,255,0.8)] active:scale-95 group cursor-pointer">
                       <span data-i18n="comic.read" class="btn-text-glow-lime transition-colors duration-300">PROCEED IF YOU DARE.</span>
                     </a>
                   </div>
