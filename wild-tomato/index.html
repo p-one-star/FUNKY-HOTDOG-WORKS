@@ -202,7 +202,6 @@
 
         for (let i = 0; i < TOTAL_MEDALS; i++) {
             let c = mConfigs[i], r = rMap[c.size], m = c.isStrong ? mMap[c.size]*15 : mMap[c.size], spd = c.isFast ? 2+Math.random() : 0.3+Math.random()*0.4, ang = Math.random()*Math.PI*2, pos = findValidSpawnPosition(r, tRect);
-            // 修正ポイント：isCaught プロパティで管理
             objectData.push({ type: 'medal', id: currentId++, x: pos.x, y: pos.y, color: c.color, sizeClass: c.size, radius: r, mass: m, invMass: 1/m, baseSpeed: spd, angle: ang, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, isFast: c.isFast, isEscaper: Math.random() < 0.2, shakePattern: Math.floor(Math.random()*3)+1, isCaught: false, isImage: false, badgeData: null, element: null });
         }
 
@@ -216,10 +215,11 @@
             objectData.push({ type: 'sp', id: currentId++, src: src, x: pos.x, y: pos.y, radius: 45, mass: 0.5, invMass: 2, baseSpeed: spd, normalSpd: spd, angle: ang, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, isCaught: false, triggered: false, bounceCount: 0, isPaused: false, element: null });
         });
 
+        // ★ 3つ目のバッジの設定を更新！
         const evos = [
             { url: '01BADGE.PNG', title: 'AICHI ★ 01', subtitle: 'MISO KATSU', claimUrl: 'https://funkyhotdog.com/wild-tomato', continueUrl: 'https://funkyhotdog.com/comic/japan-gp/aichi-01' },
             { url: 'gume.PNG', title: 'GUNMA ★ 02', subtitle: 'DARUMA', claimUrl: 'https://funkyhotdog.com/wild-tomato', continueUrl: 'https://funkyhotdog.com/comic/japan-gp/gunma-02' },
-            { url: '03BADGE.PNG', title: 'SPECIAL BADGE 03', subtitle: 'SECRET', claimUrl: 'https://funkyhotdog.com/wild-tomato', continueUrl: 'https://funkyhotdog.com/comic/japan-gp' }
+            { url: '03BADGE.PNG', title: 'HIROSHIMA ★ 03', subtitle: 'SECRET', claimUrl: 'https://funkyhotdog.com/wild-tomato', continueUrl: 'https://funkyhotdog.com/comic/japan-gp/hiroshima-03' }
         ];
         let nCand = objectData.filter(o => o.type === 'medal' && o.sizeClass === 'normal' && !o.isEscaper);
         evos.forEach(evo => {
@@ -349,7 +349,6 @@
                 o.isCaught = false; o.baseSpeed = 15; o.angle = Math.random()*Math.PI*2; o.vx = Math.cos(o.angle)*o.baseSpeed; o.vy = Math.sin(o.angle)*o.baseSpeed;
                 setTimeout(() => { o.baseSpeed = o.isFast ? 2+Math.random() : 0.3+Math.random()*0.4; }, 3000);
             } else {
-                // 修正ポイント：ここがタイポで o.caught = false; になっていたのを o.isCaught = false; に修正！
                 o.isCaught = false; mCnt.className = ''; 
                 if (o.isImage) {
                     tMys.classList.add('hidden'); tBdg.classList.remove('hidden'); mCnt.classList.add('is-badge-mode');
