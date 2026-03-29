@@ -439,7 +439,7 @@
             <!-- ★ 光のエフェクト ★ -->
             <div class="badge-glow"></div>
             
-            <!-- バッジ画像本体 -->
+            <!-- バッジ画像本体 (03BADGE.PNG に変更) -->
             <img src="03BADGE.PNG" onerror="this.src='https://placehold.co/300x300/transparent/fff?text=BADGE'" alt="03 BADGE" class="w-full h-full object-contain drop-shadow-2xl transform scale-[1.2] relative z-10">
           </div>
         </div>
@@ -539,13 +539,13 @@
       text.innerText = 'LOCATING...';
       text.classList.remove('opacity-0'); text.classList.add('animate-locating'); text.style.opacity = '';
       
-      // 最終位置を top:29%, left:8% に調整（黄色の印の位置）
+      // 最終位置を top:27.5%, left:6.5% に微調整（少し上、少し左）
       const steps = [
         {t:'30%',l:'25%'}, 
         {t:'15%',l:'10%'}, 
         {t:'40%',l:'30%'}, 
         {t:'60%',l:'15%'}, 
-        {t:'29%',l:'8%'}
+        {t:'27.5%',l:'6.5%'}
       ];
       let i = 0;
       const interval = setInterval(() => {
