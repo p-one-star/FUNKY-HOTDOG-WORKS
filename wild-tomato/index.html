@@ -173,6 +173,7 @@
     const MAP_WIDTH = 3000, MAP_HEIGHT = 3000, CENTER_X = 1500, CENTER_Y = 1500, BORDER_RADIUS = 1000;
     const TOTAL_MEDALS = 63, EMOJI_LIST = ['🍙', '🍅', '🧅', '🫑'], TOTAL_EMOJIS = 16;
     let objectData = [], currentId = 1, curClaimUrl = '', curContinueUrl = '';
+    let badgeOpenCount = 0;
 
     function findValidSpawnPosition(radius, titleRect) {
         let x, y, isValid = false, attempts = 0;
@@ -201,6 +202,7 @@
 
         for (let i = 0; i < TOTAL_MEDALS; i++) {
             let c = mConfigs[i], r = rMap[c.size], m = c.isStrong ? mMap[c.size]*15 : mMap[c.size], spd = c.isFast ? 2+Math.random() : 0.3+Math.random()*0.4, ang = Math.random()*Math.PI*2, pos = findValidSpawnPosition(r, tRect);
+            // 修正ポイント：isCaught プロパティで管理
             objectData.push({ type: 'medal', id: currentId++, x: pos.x, y: pos.y, color: c.color, sizeClass: c.size, radius: r, mass: m, invMass: 1/m, baseSpeed: spd, angle: ang, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, isFast: c.isFast, isEscaper: Math.random() < 0.2, shakePattern: Math.floor(Math.random()*3)+1, isCaught: false, isImage: false, badgeData: null, element: null });
         }
 
@@ -211,7 +213,7 @@
 
         ['001900.png', 'ura.PNG', 'ginn.PNG', '999FUNKY.PNG'].forEach(src => {
             let spd = 0.4+Math.random()*0.5, ang = Math.random()*Math.PI*2, pos = findValidSpawnPosition(45, tRect);
-            objectData.push({ type: 'sp', id: currentId++, src: src, x: pos.x, y: pos.y, radius: 45, mass: 0.5, invMass: 2, baseSpeed: spd, normalSpd: spd, angle: ang, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, caught: false, triggered: false, bounceCount: 0, isPaused: false, element: null });
+            objectData.push({ type: 'sp', id: currentId++, src: src, x: pos.x, y: pos.y, radius: 45, mass: 0.5, invMass: 2, baseSpeed: spd, normalSpd: spd, angle: ang, vx: Math.cos(ang)*spd, vy: Math.sin(ang)*spd, isCaught: false, triggered: false, bounceCount: 0, isPaused: false, element: null });
         });
 
         const evos = [
@@ -347,7 +349,8 @@
                 o.isCaught = false; o.baseSpeed = 15; o.angle = Math.random()*Math.PI*2; o.vx = Math.cos(o.angle)*o.baseSpeed; o.vy = Math.sin(o.angle)*o.baseSpeed;
                 setTimeout(() => { o.baseSpeed = o.isFast ? 2+Math.random() : 0.3+Math.random()*0.4; }, 3000);
             } else {
-                o.caught = false; mCnt.className = ''; 
+                // 修正ポイント：ここがタイポで o.caught = false; になっていたのを o.isCaught = false; に修正！
+                o.isCaught = false; mCnt.className = ''; 
                 if (o.isImage) {
                     tMys.classList.add('hidden'); tBdg.classList.remove('hidden'); mCnt.classList.add('is-badge-mode');
                     document.getElementById('badge-image').src = o.badgeData.url;
