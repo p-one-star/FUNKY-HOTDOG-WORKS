@@ -329,7 +329,7 @@
                   <!-- 偶数は上下線シアン (cyan-400) -->
                   <div class="w-[85%] mx-auto mb-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
                   <div class="relative w-[86%] aspect-[5/4] overflow-hidden rounded-xl shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
-                    <!-- ★画像の表示位置を元の object-center に戻し、5:4の画像を美しく表示 -->
+                    <!-- 画像の表示位置を元の object-center に戻し、5:4の画像を美しく表示 -->
                     <img src="miyogi.PNG" alt="Episode 4" class="absolute inset-0 w-full h-full object-cover object-center" onerror="this.src='https://placehold.co/500x400/222/FFF?text=miyogi.PNG'" />
                   </div>
                   <div class="w-[85%] mx-auto mt-2.5 z-10 flex-shrink-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"></div>
@@ -373,8 +373,8 @@
                 </div>
                 <div class="flex-1 flex flex-col justify-between items-center px-3 pt-1 pb-1">
                   <div class="flex-1 flex items-center justify-center w-full">
-                    <!-- 奇数は文字シアン -->
-                    <div data-i18n="comic.phrase5" data-i18n-italic="true" class="text-outline-cyan text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">STILL<br>BREWING...</div>
+                    <!-- ★修正箇所: 広島のフレーズを変更 -->
+                    <div data-i18n="comic.phrase5" data-i18n-italic="true" class="text-outline-cyan text-center font-black leading-[1.1] text-[5.5vw] sm:text-[22px] tracking-wider italic">GOT A BIT<br>CARRIED AWAY.</div>
                   </div>
                   <div class="flex-shrink-0 flex justify-center w-full">
                     <!-- 奇数はボタンライム、文字シアン -->
@@ -513,7 +513,8 @@
       ep2: { url: 'https://p-one-star.github.io/FUNKY-02/', xTextEn: "A stupid illusion, but he's dead serious.\nFUNKY ★02.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "おバカな勘違い、でも彼は本気だ。\nFUNKY ★02.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/f02e.jpg', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/f02j.jpg' },
       ep3: { url: 'https://funkyhotdog.com/comic/japan-gp/aichi-01', xTextEn: "THE ORIGIN OF FHW.\nAICHI ★01.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "FHW発祥の地。\n愛知 ★01.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/01p.jpg', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/01p.jpg' },
       ep4: { url: 'https://funkyhotdog.com/comic/japan-gp/gunma-02', xTextEn: "Wanna go faster?\nGUNMA ★02.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "近道、教えてやるよ。\n群馬 ★02.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/02p.jpg', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/02p.jpg' },
-      ep5: { url: 'https://funkyhotdog.com/comic/japan-gp/hiroshima-03', xTextEn: "STILL BREWING...\nHIROSHIMA ★03.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "準備中だぜ。\n広島 ★03.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/hiro03.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/hiro03.PNG' },
+      // ★05 (広島) のデータを更新 (GOT A BIT CARRIED AWAY.)
+      ep5: { url: 'https://funkyhotdog.com/comic/japan-gp/hiroshima-03', xTextEn: "Got a bit carried away.\nHIROSHIMA ★03.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "調子乗りすぎたな。\n広島 ★03.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/hiro03.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/hiro03.PNG' },
       ep6: { url: 'https://funkyhotdog.com/comic/japan-gp/funky-04', xTextEn: "STILL BREWING...\nFUNKY ★04.\n#FHW #FUNKYHOTDOGWORKS\n", xTextJa: "準備中だぜ。\nFUNKY ★04.\n#FHW #FUNKYHOTDOGWORKS\n", mediaEn: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/04ab.PNG', mediaJa: 'https://p-one-star.github.io/FUNKY-HOTDOG-WORKS/04ab.PNG' }
     };
 
@@ -521,13 +522,13 @@
     const translations = {
       en: {
         hero: { welcome: "Welcome", toThe: "To The", madGarage: "MAD GARAGE.", loud1: "Machines are", loud2: "LOUD", stupid1: "Stories are", stupid2: "STUPID", funky1: "And everything is", funky2: "FUNKY" },
-        comic: { title: "Too Funky Comic", subtitle: "Wild & Crazy Machines", from: "UNLIMITED DIFFUSION", swipe: "SWIPE", more: "THE GARAGE NEVER SLEEPS.<br>NEXT MACHINE IS BREWING... ∞", read: "PROCEED IF YOU DARE.", header1: "FUNKY", phrase1: "WHO’S FASTER<br>THAN ME?", header2: "FUNKY", phrase2: "THIS ROAD<br>IS MINE.", header3: "AICHI", phrase3: "THE ORIGIN OF<br>FHW", header4: "GUNMA", phrase4: "WANNA GO FASTER?", header5: "HIROSHIMA", phrase5: "STILL<br>BREWING...", header6: "FUNKY", phrase6: "STILL<br>BREWING...", shareCopy: "Copy Link", sharePin: "Share on Pinterest", shareX: "Share on X" },
+        comic: { title: "Too Funky Comic", subtitle: "Wild & Crazy Machines", from: "UNLIMITED DIFFUSION", swipe: "SWIPE", more: "THE GARAGE NEVER SLEEPS.<br>NEXT MACHINE IS BREWING... ∞", read: "PROCEED IF YOU DARE.", header1: "FUNKY", phrase1: "WHO’S FASTER<br>THAN ME?", header2: "FUNKY", phrase2: "THIS ROAD<br>IS MINE.", header3: "AICHI", phrase3: "THE ORIGIN OF<br>FHW", header4: "GUNMA", phrase4: "WANNA GO FASTER?", header5: "HIROSHIMA", phrase5: "GOT A BIT<br>CARRIED AWAY.", header6: "FUNKY", phrase6: "STILL<br>BREWING...", shareCopy: "Copy Link", sharePin: "Share on Pinterest", shareX: "Share on X" },
         details: { title1: "Building the ", title2: "impossible", title3: " since 20XX", desc: "Deep in the neon-lit alleys of Japan, we wrench on the wildest, most surreal machines known to humanity. It doesn't have to make sense. It just has to be FUNKY.", btn: "Join the Garage", back: "BACK TO FHW" },
         toast: "STILL BREWING IN THE GARAGE... 🎥"
       },
       ja: {
         hero: { welcome: "ようこそ", toThe: "狂気の", madGarage: "ガレージへ。", loud1: "マシンは", loud2: "爆音", stupid1: "ストーリーは", stupid2: "何でもあり", funky1: "And everything is", funky2: "FUNKY" },
-        comic: { title: "最高にファンキーなコミック", subtitle: "ワイルドでクレイジーなマシン", from: "止められるもんなら<br>止めてみな！", swipe: "スワイプ", more: "ガレージは眠らない。<br>次のバケモノを仕込み中... ∞", read: "心して進め。", header1: "FUNKY", phrase1: "俺より速いやついる？", header2: "FUNKY", phrase2: "この道は俺のもんだ。", header3: "愛知", phrase3: "FHW発祥の地", header4: "群馬", phrase4: "近道、教えてやるよ。", header5: "広島", phrase5: "準備中だぜ。", header6: "FUNKY", phrase6: "準備中だぜ。", shareCopy: "リンクをコピー", sharePin: "Pinterestでシェア", shareX: "Xでシェア" },
+        comic: { title: "最高にファンキーなコミック", subtitle: "ワイルドでクレイジーなマシン", from: "止められるもんなら<br>止めてみな！", swipe: "スワイプ", more: "ガレージは眠らない。<br>次のバケモノを仕込み中... ∞", read: "心して進め。", header1: "FUNKY", phrase1: "俺より速いやついる？", header2: "FUNKY", phrase2: "この道は俺のもんだ。", header3: "愛知", phrase3: "FHW発祥の地", header4: "群馬", phrase4: "近道、教えてやるよ。", header5: "広島", phrase5: "調子乗りすぎたな。", header6: "FUNKY", phrase6: "準備中だぜ。", shareCopy: "リンクをコピー", sharePin: "Pinterestでシェア", shareX: "Xでシェア" },
         details: { title1: "不可能を", title2: "創り出す ", title3: "20XX年から", desc: "ネオン輝く日本の路地裏深くで、人類が知る限り最もワイルドで超現実的なマシンを組み立てている。意味なんてなくていい。ただファンキーであればいいんだ。", btn: "ガレージに参加する", back: "BACK TO FHW" },
         toast: "まだガレージでバケモノを仕込み中だぜ... 🎥"
       }
