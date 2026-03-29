@@ -212,20 +212,18 @@
             objData.push({ type: 'e', id: gId++, char: emojis[i%4], x: p.x, y: p.y, r: 45, inv: 2, spd, a, vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, caught: false, el: null });
         }
 
-        // ==========================================
         // 3. 特殊画像の生成 (4個)
-        // ※もし画像が表示されない場合は、実際のファイル名（大文字・小文字、.pngか.jpgか等）と一致しているか確認してください！
-        // ==========================================
         const spImgs = ['001900.png', 'ura.PNG', 'ginn.PNG', '999FUNKY.PNG'];
         spImgs.forEach(src => {
             let spd = 0.4 + Math.random()*0.5, a = Math.random() * Math.PI*2, p = getPos(45);
             objData.push({ type: 'sp', id: gId++, src: src, x: p.x, y: p.y, r: 45, inv: 2, spd, normalSpd: spd, a, vx: Math.cos(a)*spd, vy: Math.sin(a)*spd, caught: false, triggered: false, bounceCount: 0, isPaused: false, el: null });
         });
 
-        // バッジ画像への進化
+        // ★ バッジ画像への進化（3種類に増えました）
         const evos = [
             { url: '01BADGE.PNG', t: 'AICHI ★ 01', sub: 'MISO KATSU', cUrl: 'https://funkyhotdog.com/wild-tomato', coUrl: 'https://funkyhotdog.com/comic/japan-gp/aichi-01' },
-            { url: 'gume.PNG', t: 'GUNMA ★ 02', sub: 'DARUMA', cUrl: 'https://funkyhotdog.com/wild-tomato', coUrl: 'https://funkyhotdog.com/comic/japan-gp/gunma-02' }
+            { url: 'gume.PNG', t: 'GUNMA ★ 02', sub: 'DARUMA', cUrl: 'https://funkyhotdog.com/wild-tomato', coUrl: 'https://funkyhotdog.com/comic/japan-gp/gunma-02' },
+            { url: '03BADGE.PNG', t: 'SPECIAL BADGE 03', sub: 'SECRET', cUrl: 'https://funkyhotdog.com/wild-tomato', coUrl: 'https://funkyhotdog.com/comic/japan-gp' } // ★ 3つ目を追加！仮文字です
         ];
         let nCand = objData.filter(o => o.type === 'm' && o.s === 'normal' && !o.esc);
         evos.forEach(evo => {
