@@ -90,7 +90,7 @@
         /* ゴールドのグラデーション枠線 (静止) */
         .border-gold-gradient {
             position: relative;
-            background: #000000; /* 内側を完全なブラックに統一 */
+            background: #0a0a0a; 
             z-index: 1;
         }
         .border-gold-gradient::before {
@@ -197,7 +197,7 @@
             </div>
         </section>
 
-        <!-- コンセプトセクション (背景を完全なブラックに変更) -->
+        <!-- コンセプトセクション -->
         <section class="py-24 px-6 bg-black relative z-10 border-t border-neutral-900">
             <div class="max-w-4xl mx-auto text-center border-gold-gradient p-8 md:p-16 shadow-2xl bg-black">
                 
@@ -222,7 +222,7 @@
             </div>
         </section>
 
-        <!-- アパレル商品セクション (背景を完全なブラックに変更) -->
+        <!-- アパレル商品セクション -->
         <section id="collection" class="py-16 pl-4 md:pl-8 bg-black">
             <div class="mb-10 pr-4">
                 <h2 class="text-3xl font-cinzel tracking-widest mb-2 flex items-center gap-3">
@@ -236,7 +236,7 @@
             </div>
         </section>
 
-        <!-- アートポスター商品セクション (背景を完全なブラックに変更) -->
+        <!-- アートポスター商品セクション -->
         <section class="py-16 pl-4 md:pl-8 bg-black">
             <div class="mb-10 pr-4">
                 <h2 class="text-3xl font-cinzel tracking-widest mb-2 flex items-center gap-3">
@@ -268,7 +268,7 @@
                     </p>
                     
                     <a href="#" class="inline-block relative z-10 bg-transparent border border-[#DEBE5D] text-[#DEBE5D] font-cinzel font-bold tracking-widest px-10 py-4 hover:bg-gold-gradient hover:text-black transition-all duration-300">
-                        VISIT ETSY STORE
+                        WEAR THE SOUL
                     </a>
                 </div>
             </div>
@@ -280,13 +280,11 @@
     <script>
         const externalLinkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
 
-        // 商品のプレースホルダー背景もブラックに統一
         const products = {
             apparel: [
                 {
                     id: 1,
                     name: "Tenka-Muteki Hoodie",
-                    price: "$65.00",
                     image: "https://placehold.co/600x800/000000/DEBE5D?text=Premium+Hoodie",
                     badge: "Best Seller",
                     etsyUrl: "#" 
@@ -294,7 +292,6 @@
                 {
                     id: 2,
                     name: "Kenka-Joto T-Shirt",
-                    price: "$35.00",
                     image: "https://placehold.co/600x800/000000/DEBE5D?text=Gold+Print+Tee",
                     badge: "New",
                     etsyUrl: "#"
@@ -302,14 +299,12 @@
                 {
                     id: 3,
                     name: "Yankee Soul Jacket",
-                    price: "$85.00",
                     image: "https://placehold.co/600x800/000000/DEBE5D?text=Outlaw+Jacket",
                     etsyUrl: "#"
                 },
                 {
                     id: 4,
                     name: "Kamikaze Long Sleeve",
-                    price: "$45.00",
                     image: "https://placehold.co/600x800/000000/DEBE5D?text=L/S+Tee",
                     etsyUrl: "#"
                 }
@@ -318,21 +313,18 @@
                 {
                     id: 5,
                     name: "Night Riders Poster",
-                    price: "$25.00",
                     image: "https://placehold.co/600x800/000000/DEBE5D?text=Art+Print",
                     etsyUrl: "#"
                 },
                 {
                     id: 6,
                     name: "Poetry of Rebel Art",
-                    price: "$30.00",
                     image: "https://placehold.co/600x800/000000/DEBE5D?text=Kanji+Typography",
                     etsyUrl: "#"
                 },
                 {
                     id: 7,
                     name: "Tokkofuku Blueprint",
-                    price: "$25.00",
                     image: "https://placehold.co/600x800/000000/DEBE5D?text=Blueprint+Design",
                     etsyUrl: "#"
                 }
@@ -346,7 +338,7 @@
 
             return `
                 <div class="min-w-[260px] md:min-w-[320px] bg-black snap-start flex-shrink-0 group relative border-gold-gradient p-[1px]">
-                    <div class="bg-black h-full flex flex-col">
+                    <div class="bg-[#0a0a0a] h-full flex flex-col">
                         <div class="relative aspect-[3/4] overflow-hidden bg-black">
                             ${badgeHtml}
                             <img 
@@ -357,11 +349,10 @@
                             >
                         </div>
                         <div class="p-6 flex flex-col flex-grow">
-                            <h3 class="text-white font-serif-jp tracking-wider text-lg mb-2">${product.name}</h3>
-                            <p class="text-[#DEBE5D] font-cinzel font-bold mb-6">${product.price}</p>
+                            <h3 class="text-white font-serif-jp tracking-wider text-lg mb-6">${product.name}</h3>
                             
                             <a href="${product.etsyUrl}" target="_blank" rel="noopener noreferrer" class="mt-auto w-full border border-[#DEBE5D]/50 text-[#DEBE5D] py-3 font-cinzel font-bold tracking-widest text-sm transition-all hover:bg-gold-gradient hover:text-black hover:border-transparent flex items-center justify-center gap-2">
-                                VIEW ON ETSY ${externalLinkIcon}
+                                CLAIM YOUR PIECE ${externalLinkIcon}
                             </a>
                         </div>
                     </div>
