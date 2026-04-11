@@ -1,0 +1,394 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>狂騒會 | THE ART OF TOKKOFUKU</title>
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cinzel と Noto Serif JP -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Noto+Serif+JP:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* -----------------------
+           横揺れ（意図しない横スクロール）防止
+           ----------------------- */
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+            background-color: #000000;
+            color: #cbd5e1; /* slate-300 */
+        }
+
+        /* フォント設定 */
+        .font-serif-jp { font-family: 'Noto Serif JP', serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+
+        /* -----------------------
+           ✨ グラデーションの設定
+           ----------------------- */
+        @keyframes goldShine {
+            0% { background-position: 250% center; }
+            100% { background-position: 0% center; }
+        }
+
+        :root {
+            /* ① メインタイトル用 (アニメーションする光の帯) */
+            --gold-grad-anim: linear-gradient(94deg, 
+                #DEBE5D 0%,    
+                #DEBE5D 20%,   
+                #EAD28B 38%,   
+                #FDF5BA 50%,   
+                #EAD28B 62%,   
+                #DEBE5D 80%,   
+                #DEBE5D 100%   
+            );
+
+            /* ② 静止要素用 (両サイドが薄く、中央が濃い) */
+            --gold-grad-static: linear-gradient(94deg, 
+                #FDF5BA 0%,    /* 左サイド：薄い(明るい) */
+                #EAD28B 25%,   
+                #DEBE5D 50%,   /* 中央：濃い(ベース色) */
+                #EAD28B 75%,   
+                #FDF5BA 100%   /* 右サイド：薄い(明るい) */
+            );
+        }
+
+        /* アニメーション用クラス（SOUL OF 特攻服 専用） */
+        .animate-gold-shine {
+            background: var(--gold-grad-anim);
+            background-size: 250% auto; 
+            color: #DEBE5D; 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: goldShine 12s linear infinite;
+        }
+
+        /* シャンパンゴールドのテキストグラデーション (静止) */
+        .text-gold-gradient {
+            background: var(--gold-grad-static);
+            background-size: 100% auto; 
+            color: #DEBE5D; 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* シャンパンゴールドの背景グラデーション (静止) */
+        .bg-gold-gradient {
+            background: var(--gold-grad-static);
+            background-size: 100% auto;
+        }
+
+        /* ゴールドのグラデーション枠線 (静止) */
+        .border-gold-gradient {
+            position: relative;
+            background: #000000; /* 内側を完全なブラックに統一 */
+            z-index: 1;
+        }
+        .border-gold-gradient::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: var(--gold-grad-static);
+            background-size: 100% auto;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        /* -----------------------
+           ✨ さりげない背景装飾（ゴールド）
+           ----------------------- */
+        /* 両サイドの極細ゴールドライン（アートフレーム風） */
+        .side-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .side-lines::before, .side-lines::after {
+            content: '';
+            position: absolute;
+            top: 5vh;
+            bottom: 5vh;
+            width: 1px;
+            /* 上下は透明に溶け込み、中央付近だけうっすら見える */
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(222,190,93,0.3) 50%, rgba(0,0,0,0) 100%);
+        }
+        .side-lines::before { left: 4vw; }
+        .side-lines::after { right: 4vw; }
+
+        /* -----------------------
+           その他ユーティリティ
+           ----------------------- */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        ::selection {
+            background-color: #D4AF37;
+            color: #000;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- ページ全体を囲むラッパー -->
+    <div class="w-full overflow-hidden">
+
+        <!-- ナビゲーションバー -->
+        <nav class="fixed w-full z-50 bg-black/90 backdrop-blur-md border-b border-neutral-800">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center relative">
+                <!-- 左側：FHW -->
+                <div class="absolute left-4">
+                    <a href="#" class="font-cinzel text-xl md:text-2xl font-bold tracking-[0.2em] text-gold-gradient hover:opacity-80 transition-opacity">
+                        FHW
+                    </a>
+                </div>
+                <!-- 中央：ロゴ -->
+                <div class="absolute left-1/2 -translate-x-1/2 font-serif-jp text-2xl md:text-3xl font-black tracking-[0.2em] text-gold-gradient whitespace-nowrap">
+                    狂騒會
+                </div>
+                <!-- 右側：🍙 リンク -->
+                <div class="absolute right-4">
+                    <a href="https://funkyhotdog.com/world" target="_blank" rel="noopener noreferrer" class="text-2xl hover:scale-125 transition-transform duration-300" aria-label="Funky Hot Dog World">
+                        🍙
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- ヒーローセクション（ファーストビュー） -->
+        <section class="relative min-h-screen flex items-center justify-center bg-black pt-16">
+            <!-- 両サイドの極細ラインのみ残す -->
+            <div class="side-lines"></div>
+            
+            <div class="relative z-10 flex flex-col items-center justify-center px-4 w-full text-center my-12">
+                
+                <!-- メインタイトル -->
+                <h1 class="animate-gold-shine drop-shadow-lg flex flex-col items-center text-5xl md:text-7xl lg:text-8xl mb-6">
+                    <span class="font-cinzel font-black tracking-widest pt-2 pb-1" style="font-size: 1.3em; line-height: 1.1;">SOUL</span>
+                    <span class="font-cinzel font-black tracking-widest px-2" style="font-size: 1.27em; line-height: 1.1; margin-top: -0.05em; margin-bottom: -0.2em;">OF</span>
+                    <span class="font-serif-jp font-black tracking-widest px-2 pb-2" style="font-size: 1.6em; line-height: 1.1; padding-top: 0.1em;">特攻服</span>
+                </h1>
+                
+                <!-- タイトル下のテキスト -->
+                <p class="font-cinzel text-[#DEBE5D] tracking-[0.4em] text-sm md:text-base mb-8 uppercase">
+                    TOKKOFUKU
+                </p>
+                
+                <!-- 区切り線 -->
+                <div class="w-24 h-[2px] bg-gold-gradient mx-auto mb-10"></div>
+                
+                <a href="#collection" class="group relative inline-flex items-center justify-center px-8 py-4 font-cinzel font-bold tracking-widest text-black bg-gold-gradient hover:scale-105 transition-transform duration-300 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                    ENTER THE STORE
+                </a>
+            </div>
+        </section>
+
+        <!-- コンセプトセクション (背景を完全なブラックに変更) -->
+        <section class="py-24 px-6 bg-black relative z-10 border-t border-neutral-900">
+            <div class="max-w-4xl mx-auto text-center border-gold-gradient p-8 md:p-16 shadow-2xl bg-black">
+                
+                <h2 class="font-cinzel font-bold tracking-[0.2em] mb-8 flex flex-col items-center gap-2">
+                    <span class="text-2xl md:text-3xl text-gold-gradient">BOSOZOKU</span>
+                    <span class="text-xl md:text-2xl text-gold-gradient opacity-80">X</span>
+                    <span class="text-2xl md:text-3xl text-gold-gradient">TOKKOFUKU</span>
+                </h2>
+                
+                <p class="text-slate-300 font-serif-jp text-sm md:text-base leading-loose tracking-wide text-justify md:text-center">
+                    Tokkofuku (特攻服) — the legendary uniforms of Japanese Bosozoku. 
+                    What was once considered a symbol of rebellion is now an undeniable masterpiece of classic Japanese subculture.<br><br>
+                    We have resurrected these beautiful, raw poetic verses. 
+                    Wear the poetry, carry the spirit, and keep the legend alive in premium quality.
+                </p>
+
+                <!-- TOKKOFUKU NEVER DIE -->
+                <div class="mt-16 font-cinzel text-2xl md:text-3xl font-bold tracking-[0.2em] flex flex-col items-center gap-2">
+                    <span class="text-gold-gradient">TOKKOFUKU</span>
+                    <span class="text-gold-gradient">NEVER DIE</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- アパレル商品セクション (背景を完全なブラックに変更) -->
+        <section id="collection" class="py-16 pl-4 md:pl-8 bg-black">
+            <div class="mb-10 pr-4">
+                <h2 class="text-3xl font-cinzel tracking-widest mb-2 flex items-center gap-3">
+                    <span class="text-gold-gradient">APPAREL</span> 
+                    <span class="text-gold-gradient">LINE</span>
+                </h2>
+            </div>
+            
+            <div id="apparel-container" class="flex overflow-x-auto gap-6 pb-12 pr-4 snap-x snap-mandatory hide-scrollbar">
+                <!-- Items injected by JS -->
+            </div>
+        </section>
+
+        <!-- アートポスター商品セクション (背景を完全なブラックに変更) -->
+        <section class="py-16 pl-4 md:pl-8 bg-black">
+            <div class="mb-10 pr-4">
+                <h2 class="text-3xl font-cinzel tracking-widest mb-2 flex items-center gap-3">
+                    <span class="text-gold-gradient">ART</span> 
+                    <span class="text-gold-gradient">PRINTS</span>
+                </h2>
+                <p class="text-[#DEBE5D] font-serif-jp text-sm tracking-[0.2em]">特攻詩アートポスター</p>
+            </div>
+            
+            <div id="poster-container" class="flex overflow-x-auto gap-6 pb-12 pr-4 snap-x snap-mandatory hide-scrollbar">
+                <!-- Items injected by JS -->
+            </div>
+        </section>
+
+        <!-- バナーセクション -->
+        <section class="py-20 px-4 bg-black mb-12">
+            <div class="max-w-6xl mx-auto border-gold-gradient p-1">
+                <div class="bg-black p-10 md:p-20 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(222,190,93,0.05)_0%,transparent_60%)]"></div>
+                    
+                    <h2 class="relative z-10 text-3xl md:text-5xl font-serif-jp font-black mb-6 tracking-widest">
+                        <span class="text-gold-gradient">魂を纏う</span>
+                    </h2>
+                    
+                    <p class="relative z-10 text-slate-300 font-cinzel mb-10 max-w-xl mx-auto tracking-[0.15em] leading-relaxed text-base md:text-lg uppercase">
+                        TOO DOPE.<br>
+                        TOO RAW.<br>
+                        TOO BADASS.
+                    </p>
+                    
+                    <a href="#" class="inline-block relative z-10 bg-transparent border border-[#DEBE5D] text-[#DEBE5D] font-cinzel font-bold tracking-widest px-10 py-4 hover:bg-gold-gradient hover:text-black transition-all duration-300">
+                        VISIT ETSY STORE
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div> <!-- ラッパー終了 -->
+
+    <!-- JavaScript -->
+    <script>
+        const externalLinkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>`;
+
+        // 商品のプレースホルダー背景もブラックに統一
+        const products = {
+            apparel: [
+                {
+                    id: 1,
+                    name: "Tenka-Muteki Hoodie",
+                    price: "$65.00",
+                    image: "https://placehold.co/600x800/000000/DEBE5D?text=Premium+Hoodie",
+                    badge: "Best Seller",
+                    etsyUrl: "#" 
+                },
+                {
+                    id: 2,
+                    name: "Kenka-Joto T-Shirt",
+                    price: "$35.00",
+                    image: "https://placehold.co/600x800/000000/DEBE5D?text=Gold+Print+Tee",
+                    badge: "New",
+                    etsyUrl: "#"
+                },
+                {
+                    id: 3,
+                    name: "Yankee Soul Jacket",
+                    price: "$85.00",
+                    image: "https://placehold.co/600x800/000000/DEBE5D?text=Outlaw+Jacket",
+                    etsyUrl: "#"
+                },
+                {
+                    id: 4,
+                    name: "Kamikaze Long Sleeve",
+                    price: "$45.00",
+                    image: "https://placehold.co/600x800/000000/DEBE5D?text=L/S+Tee",
+                    etsyUrl: "#"
+                }
+            ],
+            posters: [
+                {
+                    id: 5,
+                    name: "Night Riders Poster",
+                    price: "$25.00",
+                    image: "https://placehold.co/600x800/000000/DEBE5D?text=Art+Print",
+                    etsyUrl: "#"
+                },
+                {
+                    id: 6,
+                    name: "Poetry of Rebel Art",
+                    price: "$30.00",
+                    image: "https://placehold.co/600x800/000000/DEBE5D?text=Kanji+Typography",
+                    etsyUrl: "#"
+                },
+                {
+                    id: 7,
+                    name: "Tokkofuku Blueprint",
+                    price: "$25.00",
+                    image: "https://placehold.co/600x800/000000/DEBE5D?text=Blueprint+Design",
+                    etsyUrl: "#"
+                }
+            ]
+        };
+
+        function createProductCard(product) {
+            const badgeHtml = product.badge 
+                ? `<span class="absolute top-4 left-4 bg-gold-gradient text-black text-[10px] font-bold px-3 py-1 tracking-widest z-10 shadow-lg">${product.badge}</span>` 
+                : '';
+
+            return `
+                <div class="min-w-[260px] md:min-w-[320px] bg-black snap-start flex-shrink-0 group relative border-gold-gradient p-[1px]">
+                    <div class="bg-black h-full flex flex-col">
+                        <div class="relative aspect-[3/4] overflow-hidden bg-black">
+                            ${badgeHtml}
+                            <img 
+                                src="${product.image}" 
+                                alt="${product.name}"
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                                loading="lazy"
+                            >
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="text-white font-serif-jp tracking-wider text-lg mb-2">${product.name}</h3>
+                            <p class="text-[#DEBE5D] font-cinzel font-bold mb-6">${product.price}</p>
+                            
+                            <a href="${product.etsyUrl}" target="_blank" rel="noopener noreferrer" class="mt-auto w-full border border-[#DEBE5D]/50 text-[#DEBE5D] py-3 font-cinzel font-bold tracking-widest text-sm transition-all hover:bg-gold-gradient hover:text-black hover:border-transparent flex items-center justify-center gap-2">
+                                VIEW ON ETSY ${externalLinkIcon}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const viewAllCardHtml = `
+            <div class="min-w-[200px] flex items-center justify-center snap-start pr-4">
+                <a href="#" class="text-slate-500 hover:text-[#DEBE5D] flex flex-col items-center gap-4 transition-colors group">
+                    <div class="w-16 h-16 rounded-full border border-current flex items-center justify-center group-hover:border-[#DEBE5D] group-hover:shadow-[0_0_15px_rgba(222,190,93,0.3)] transition-all">
+                        <svg class="group-hover:translate-x-1 transition-transform" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </div>
+                    <span class="text-sm font-cinzel tracking-[0.2em]">VIEW ALL</span>
+                </a>
+            </div>
+        `;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('apparel-container').innerHTML = 
+                products.apparel.map(createProductCard).join('') + viewAllCardHtml;
+            document.getElementById('poster-container').innerHTML = 
+                products.posters.map(createProductCard).join('') + viewAllCardHtml;
+        });
+    </script>
+</body>
+</html>
+
+
+```
