@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <!-- 初期状態を英語(en)に設定 -->
 <html lang="en" class="dark">
@@ -183,15 +184,17 @@
     </div>
 
     <!-- ページ遷移時の真っ暗になるオーバーレイ -->
-    <div id="transition-overlay" class="fixed inset-0 bg-black z-[100] pointer-events-none opacity-0 transition-opacity duration-700 ease-in-out"></div>
+    <div id="transition-overlay" class="fixed inset-0 bg-black/95 z-[100] pointer-events-none opacity-0 transition-opacity duration-700 ease-in-out"></div>
 
     <!-- ヘッダー（吸い込まれるコンテンツの外に配置、スクロールで残る） -->
     <header class="fixed top-0 w-full z-50 bg-fhw-dark/60 dark:bg-fhw-dark/60 light:bg-white/60 backdrop-blur-lg border-b border-fhw-cyan/30 transition-colors duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             
-            <!-- 左：ロゴ（GitHubの画像 + ギミック） -->
-            <div class="flex-shrink-0 flex items-center cursor-pointer group">
-                <img src="icon.PNG" alt="FHW LOGO" class="w-[100px] object-contain translate-y-[10px] -rotate-[5deg] group-hover:scale-110 group-hover:-rotate-[12deg] group-active:scale-110 group-active:-rotate-[12deg] transition-transform duration-300 ease-out origin-center">
+            <!-- 左：ロゴ（GitHubの画像 + ギミック + プレビュー用フォールバック） -->
+            <div class="flex-shrink-0 flex items-center cursor-pointer group" onclick="showNotification('WELCOME TO FUNKY HOTDOG WORKS')">
+                <img src="icon.PNG" alt="FHW LOGO" 
+                     onerror="this.onerror=null; this.outerHTML='<div class=\'font-blackops text-xl sm:text-2xl text-fhw-cyan tracking-widest flex items-center gap-1 -rotate-[5deg] group-hover:scale-110 transition-transform\'>🌭 FHW</div>';" 
+                     class="w-[100px] object-contain translate-y-[10px] -rotate-[5deg] group-hover:scale-110 group-hover:-rotate-[12deg] group-active:scale-110 group-active:-rotate-[12deg] transition-transform duration-300 ease-out origin-center">
             </div>
 
             <!-- 右：コントロール群 -->
@@ -211,7 +214,7 @@
                 </div>
 
                 <!-- ワールドリンク（おにぎり） -->
-                <a href="https://funkyhotdog.com/world" class="focus:outline-none flex-shrink-0 ml-1 sm:ml-2 flex items-center h-full group" aria-label="World">
+                <a href="#" onclick="goToProduct('https://funkyhotdog.com/world'); return false;" class="focus:outline-none flex-shrink-0 ml-1 sm:ml-2 flex items-center h-full group" aria-label="World">
                     <!-- 40秒ループで1.15倍になる呼吸アニメーション -->
                     <div class="text-[36px] sm:text-[44px] animate-breathe origin-center leading-none group-hover:drop-shadow-[0_0_10px_rgba(0,240,255,0.8)] transition-all duration-300">
                         🍙
@@ -277,8 +280,10 @@
                                 
                                 <div class="aspect-square bg-zinc-900 border border-zinc-800 mb-6 flex items-center justify-center overflow-hidden relative group/img">
                                     <div class="absolute inset-0 bg-metal-texture opacity-30 z-10 pointer-events-none"></div>
-                                    <!-- 英語モード時は JUMP.jpg -->
-                                    <img src="JUMP.jpg" alt="MONSTER TRUCK BURGER" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-0">
+                                    <!-- 英語モード時は JUMP.jpg (プレビュー用フォールバック付) -->
+                                    <img src="JUMP.jpg" alt="MONSTER TRUCK BURGER" 
+                                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80';"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-0">
                                 </div>
 
                                 <h2 class="font-blackops text-2xl text-white dark:text-white light:text-fhw-dark leading-tight mb-2">MONSTER TRUCK BURGER</h2>
@@ -313,8 +318,10 @@
                                 
                                 <div class="aspect-square bg-zinc-900 border border-zinc-800 mb-6 flex items-center justify-center overflow-hidden relative group/img">
                                     <div class="absolute inset-0 bg-metal-texture opacity-30 z-10 pointer-events-none"></div>
-                                    <!-- ★日本語モード時は START.png -->
-                                    <img src="START.png" alt="FHW FIRST LINE" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-0">
+                                    <!-- ★日本語モード時は START.png (プレビュー用フォールバック付) -->
+                                    <img src="START.png" alt="FHW FIRST LINE" 
+                                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=600&q=80';"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-0">
                                 </div>
 
                                 <!-- タイトル・テキストの変更 -->
@@ -373,7 +380,7 @@
                                 </div>
                             </div>
 
-                            <button onclick="goToProduct('#')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
+                            <button onclick="goToProduct('https://funkyhotdogworks.gumroad.com/l/skater-dog')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
                                 <span class="relative z-10 flex items-center justify-center gap-2 group-active/btn:scale-105 transition-transform duration-100">
                                     <span class="text-xs opacity-50 group-hover/btn:translate-x-1.5 group-hover/btn:opacity-100 transition-all duration-300">&gt;</span> 
                                     <span class="lang-en is-inline">BUY NOW</span>
@@ -413,7 +420,7 @@
                                 </div>
                             </div>
 
-                            <button onclick="goToProduct('#')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
+                            <button onclick="goToProduct('https://suzuri.jp/FHW/space-fries')" class="cyber-button w-full relative group/btn bg-fhw-dark dark:bg-fhw-dark light:bg-white border border-fhw-cyan text-fhw-cyan font-blackops tracking-widest py-3 overflow-hidden transition-all duration-300 hover:border-fhw-lime hover:text-fhw-lime hover:shadow-[0_0_20px_rgba(204,255,0,0.6)] active:scale-95 active:bg-white/10 mt-auto">
                                 <span class="relative z-10 flex items-center justify-center gap-2 group-active/btn:scale-105 transition-transform duration-100">
                                     <span class="text-xs opacity-50 group-hover/btn:translate-x-1.5 group-hover/btn:opacity-100 transition-all duration-300">&gt;</span> 
                                     <span class="lang-en is-inline">BUY NOW</span>
@@ -484,7 +491,7 @@
                         </a>
 
                         <!-- YouTube (Coming Soon) -->
-                        <a href="#" onclick="return false;" class="text-zinc-600 cursor-not-allowed flex items-center group relative transition-colors" aria-label="YouTube">
+                        <a href="#" onclick="showNotification('SYS: YOUTUBE ARCHIVE COMING SOON...'); return false;" class="text-zinc-600 cursor-not-allowed flex items-center group relative transition-colors" aria-label="YouTube">
                             <!-- サイズを 26 -> 34 に拡大 -->
                             <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="opacity-50 group-hover:opacity-80">
                                 <rect x="2" y="5" width="20" height="14" rx="4"></rect>
@@ -518,16 +525,15 @@
                 darkBtn.classList.remove('grayscale');
                 lightBtn.classList.replace('opacity-100', 'opacity-40');
                 lightBtn.classList.add('grayscale');
+                showNotification("THEME: DARK MODE ACTIVATED");
             } else {
                 html.classList.remove('dark');
                 html.classList.add('light');
                 lightBtn.classList.replace('opacity-40', 'opacity-100');
-                
-                // ★【修正箇所】 remove -> classList.remove に修正！
                 lightBtn.classList.remove('grayscale');
-                
                 darkBtn.classList.replace('opacity-100', 'opacity-40');
                 darkBtn.classList.add('grayscale');
+                showNotification("THEME: LIGHT MODE ACTIVATED");
             }
         }
 
@@ -553,11 +559,13 @@
                     enBtn.classList.remove('grayscale');
                     jaBtn.classList.replace('opacity-100', 'opacity-40');
                     jaBtn.classList.add('grayscale');
+                    showNotification("LOCALE: ENGLISH (US)");
                 } else {
                     jaBtn.classList.replace('opacity-40', 'opacity-100');
                     jaBtn.classList.remove('grayscale');
                     enBtn.classList.replace('opacity-100', 'opacity-40');
                     enBtn.classList.add('grayscale');
+                    showNotification("LOCALE: JAPANESE (JP)");
                 }
             }, 150);
 
@@ -566,10 +574,29 @@
             }, 400);
         }
 
-        // 商品ページへ吸い込まれる遷移アニメーション
-        function goToProduct(url) {
-            if (url === '#') return;
+        // プレビュー用に最適化したトースト通知システム
+        function showNotification(message) {
+            const existing = document.getElementById('cyber-toast');
+            if (existing) existing.remove();
 
+            const toast = document.createElement('div');
+            toast.id = 'cyber-toast';
+            toast.className = 'fixed bottom-6 right-6 bg-fhw-dark border border-fhw-cyan text-fhw-cyan font-blackops px-6 py-3 rounded shadow-[0_0_20px_rgba(0,240,255,0.4)] z-[999] transition-all duration-300 transform translate-y-10 opacity-0 tracking-wider text-xs sm:text-sm';
+            toast.innerHTML = `<span class="text-fhw-lime">></span> ${message}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            }, 100);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // 商品ページへ吸い込まれる遷移アニメーション (プレビュー用に安全かつ面白いシミュレーションにアップグレード)
+        function goToProduct(url) {
             const pageContent = document.getElementById('page-content');
             const overlay = document.getElementById('transition-overlay');
 
@@ -578,11 +605,35 @@
             overlay.classList.add('opacity-100');
 
             setTimeout(() => {
-                window.location.href = url;
+                // iframe内での急な遷移によるエラーを防ぎつつ、SF感をシミュレート
+                overlay.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full text-center p-6 font-blackops select-none">
+                        <div class="text-fhw-lime text-3xl sm:text-4xl tracking-widest mb-4 animate-pulse">CONNECTING ARCHIVE...</div>
+                        <div class="text-zinc-500 text-xs sm:text-sm mb-8 font-mono break-all max-w-md bg-black/40 p-3 border border-fhw-cyan/20">${url}</div>
+                        <div class="flex gap-4">
+                            <button onclick="window.open('${url}', '_blank')" class="cyber-button px-6 py-3 bg-fhw-cyan text-black font-bold tracking-widest hover:bg-fhw-lime hover:shadow-[0_0_15px_rgba(204,255,0,0.8)] transition-all">
+                                OPEN EXTERNAL LINK
+                            </button>
+                            <button onclick="resetTransition()" class="cyber-button px-6 py-3 border border-zinc-700 text-zinc-400 hover:border-fhw-pink hover:text-fhw-pink transition-colors">
+                                ABORT
+                            </button>
+                        </div>
+                    </div>
+                `;
             }, 700);
+        }
+
+        function resetTransition() {
+            const pageContent = document.getElementById('page-content');
+            const overlay = document.getElementById('transition-overlay');
+            overlay.innerHTML = '';
+            overlay.classList.add('pointer-events-none', 'opacity-0');
+            overlay.classList.remove('opacity-100');
+            pageContent.classList.remove('suck-in');
+            showNotification("CONNECTION TERMINATED");
         }
     </script>
 </body>
 </html>
 
-
+```
