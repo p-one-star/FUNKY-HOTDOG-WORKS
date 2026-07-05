@@ -1,6 +1,6 @@
 ```html
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -144,36 +144,35 @@
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,90,9,0.06),transparent_40%)] pointer-events-none"></div>
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(212,175,55,0.04),transparent_50%)] pointer-events-none"></div>
 
-    <!-- HEADER -->
-    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-black/85 border-b border-zinc-900 px-4 py-2 flex items-center justify-between min-h-[75px] sm:min-h-[85px]">
+    <!-- HEADER (Height expanded to perfectly fit the 1.6x scaled logo icon) -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-black/85 border-b border-zinc-900 px-4 py-3 flex items-center justify-between min-h-[96px] sm:min-h-[118px] md:min-h-[128px]">
         
-        <!-- 左側：用意された icon.PNG ロゴ表示（超頑健ダブルフォールバック設計） -->
-        <div class="w-12 h-12 sm:w-16 sm:h-16 md:w-[70px] md:h-[70px] rounded-full border border-dashed border-zinc-800 flex items-center justify-center relative overflow-hidden group flex-shrink-0 bg-black">
-            <!-- JavaScriptによる大文字・小文字、キャッシュクリア自動チェック付き画像タグ -->
+        <!-- Left: 1.6x Scaled Circular Logo Container (No borders or dotted lines) -->
+        <div class="w-[76px] h-[76px] sm:w-[102px] sm:h-[102px] md:w-[112px] md:h-[112px] rounded-full flex items-center justify-center relative overflow-hidden group flex-shrink-0 bg-transparent">
+            <!-- Custom logo icon loaded from PNG with robust cross-browser test -->
             <img id="header-logo-img" alt="FSY Logo" class="absolute inset-0 w-full h-full object-cover z-10" style="display:none;">
             
-            <!-- 万が一画像が見つからない場合のテキスト表示 -->
-            <span id="header-logo-fallback" class="text-[8px] sm:text-[10px] tracking-widest text-zinc-500 font-mono group-hover:text-zinc-300 transition-colors uppercase text-center px-1 z-0">FSY<br>LOGO</span>
+            <!-- Shimmer sweep effect on hover over the logo area -->
             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 z-20 pointer-events-none"></div>
         </div>
 
-        <!-- 中央：エフェクト付きブランドタイトル -->
+        <!-- Center: Absolute Centered Brand Title with Gold Shimmer -->
         <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none w-[55%] z-10">
             <h1 class="font-luxury font-bold text-sm sm:text-base md:text-xl lg:text-2xl tracking-[0.22em] text-champagne leading-tight">FUNKY STACK YARDS</h1>
             <p class="text-[7px] sm:text-[9px] tracking-[0.18em] text-zinc-500 uppercase mt-0.5">POD Premium Exhibition</p>
         </div>
 
-        <!-- 右側：1.2x おにぎり絵文字（別ワールドリンク） -->
+        <!-- Right: 1.2x Scaled Riceball Emoji (External World Navigation Button) -->
         <button id="shuffle-trigger" class="w-10 h-10 sm:w-14 sm:h-14 flex flex-col items-center justify-center focus:outline-none select-none wiggle-hover relative group flex-shrink-0 ml-auto z-20" title="Visit Funky Hotdog World!">
             <span class="text-3xl sm:text-[38px] scale-110 leading-none select-none">🍙</span>
-            <span class="absolute -bottom-2 text-[7px] tracking-widest text-zinc-500 scale-90 opacity-0 group-hover:opacity-100 transition-opacity duration-300">WORLD</span>
+            <span class="absolute -bottom-2 text-[7px] tracking-widest text-zinc-500 scale-90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-medium">WORLD</span>
         </button>
     </header>
 
     <!-- MAIN EXHBIT CONTAINER -->
     <main class="max-w-md mx-auto px-4 pt-6 flex flex-col items-center">
         
-        <!-- SECTION 1: 扇状の選抜3枚エリア (シャッフル演出あり) -->
+        <!-- SECTION 1: FAN-OUT LUCKY 3 STAGE (Interactive shuffle animations active here) -->
         <section class="w-full mb-10 text-center flex flex-col items-center relative">
             
             <div class="inline-flex items-center gap-2 mb-6">
@@ -182,41 +181,41 @@
                 <span class="w-1.5 h-1.5 rounded-full bg-[#FF5A09] animate-ping"></span>
             </div>
 
-            <!-- 選抜ステージ -->
+            <!-- The Lucky Draw Stage -->
             <div class="relative w-full h-[320px] flex items-center justify-center" id="fan-stage">
-                <!-- バックグローエフェクト -->
+                <!-- Warm Glow Atmosphere -->
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] h-[240px] rounded-full bg-gradient-to-tr from-[#FF5A09]/10 to-[#D4AF37]/5 blur-3xl pointer-events-none"></div>
 
-                <!-- 回収・シャッフル時の束の原点 -->
+                <!-- Gather Target Origin Point -->
                 <div id="deck-origin" class="absolute w-[110px] aspect-[2/3] bg-transparent rounded-lg z-0 pointer-events-none opacity-0"></div>
             </div>
 
-            <!-- 情報パネル -->
+            <!-- Info & Interaction Panels -->
             <div id="featured-info-panel" class="mt-4 flex flex-col items-center gap-1.5 px-4 min-h-[50px] transition-all duration-300">
                 <p id="featured-title" class="text-xs font-luxury tracking-widest text-[#E5D3B3] font-semibold"></p>
                 <p class="text-[10px] text-zinc-400 tracking-wider leading-relaxed">
-                    中央のカードタップで <span class="text-[#FF5A09] font-semibold">Etsy ショップ</span> へ。
+                    Tap the center card to visit our <span class="text-[#FF5A09] font-semibold">Etsy Shop</span>.
                 </p>
                 <p class="text-[9px] text-zinc-500 italic">
-                    左右の選抜カード、またはアーカイブカードをタップすると上の3枚が美しくシャッフルされます！
+                    Tap the side lucky cards or any card below to dynamically reshuffle the top three!
                 </p>
             </div>
         </section>
 
-        <!-- 分割線 / アーカイブヘッダー -->
+        <!-- DIVIDER / ARCHIVE HEADER -->
         <div class="w-full flex items-center justify-between mb-4 border-t border-zinc-900 pt-6">
             <div class="flex flex-col items-start">
                 <h3 class="font-luxury text-[11px] tracking-[0.2em] text-[#E5D3B3] uppercase font-semibold">THE SHUFFLED ARCHIVE</h3>
-                <p class="text-[9px] text-zinc-600">フロアに美しく散りばめられたプレミアム・アーカイブ（演出なしで即時に並び替わります）</p>
+                <p class="text-[9px] text-zinc-600">A beautifully scattered premium archive on the floor (re-deals instantly with no animation)</p>
             </div>
             <button id="text-shuffle" class="text-[9px] text-zinc-400 hover:text-[#FF5A09] tracking-widest uppercase transition-colors flex items-center gap-1 select-none font-bold">
                 RE-DEAL <span class="text-[8px]">⚡</span>
             </button>
         </div>
 
-        <!-- SECTION 2: 散らばるアーカイブエリア (演出なし・瞬時配置) -->
+        <!-- SECTION 2: SCATTERED FLOOR ARCHIVE (Instant static layout - No transition lag) -->
         <section class="w-full relative min-h-[460px] sm:min-h-[500px] bg-zinc-950/10 rounded-2xl border border-zinc-900/60 p-4 overflow-hidden mb-12" id="scat-container">
-            <!-- バックマーク背景ロゴ -->
+            <!-- Background Motif Watermark -->
             <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.015] transform -rotate-12">
                 <span class="font-luxury text-7xl tracking-[0.25em] text-white">FSY</span>
             </div>
@@ -224,11 +223,11 @@
             <div id="scattered-ground" class="relative w-full h-full min-h-[420px] sm:min-h-[460px]"></div>
         </section>
 
-        <!-- ブランドストーリー紹介 -->
+        <!-- BRAND STORY SECTION -->
         <section class="w-full border border-zinc-900 rounded-xl p-5 bg-gradient-to-b from-zinc-950 to-black text-center mb-8">
             <h4 class="font-luxury text-xs tracking-widest text-[#E5D3B3] mb-2">ABOUT THE COLLECTION</h4>
             <p class="text-[10px] text-zinc-400 leading-relaxed max-w-[90%] mx-auto">
-                クラシックなトランプのシンボリズムと、ミニマルでラグジュアリーなポスターアートを融合した2:3プレミアムコレクション。エキシビションはアクセスするたびにリアルタイムで再構成され、常に一期一会の出会いを提供します。
+                A premium 2:3 art print collection blending classic playing card symbolism with minimalist luxury poster design. The exhibition is re-curated in real-time with every visit, offering a unique and serendipitous encounter every time.
             </p>
         </section>
 
@@ -241,14 +240,13 @@
 
     <!-- INTERACTION LOGIC -->
     <script>
-        // --- 頑健なヘッダーロゴ画像読み込み処理 ---
-        // GitHubの仕様（大文字小文字の厳密な区別）やキャッシュをバイパスする処理
+        // --- Robust Header Logo Image Loader ---
+        // Bypasses browser cache, tests multiple extensions, and resolves case-sensitivity issues automatically
         (function loadHeaderLogo() {
             const logoImg = document.getElementById('header-logo-img');
-            const fallbackText = document.getElementById('header-logo-fallback');
-            const timestamp = new Date().getTime(); // キャッシュバスター
+            const timestamp = new Date().getTime(); // Cache buster query
 
-            // テストしたい拡張子候補（大文字・小文字両対応）
+            // Extension combinations to test
             const srcCandidates = [
                 `icon.PNG?v=${timestamp}`,
                 `icon.png?v=${timestamp}`,
@@ -263,37 +261,30 @@
                     const nextSrc = srcCandidates[candidateIndex];
                     candidateIndex++;
                     
-                    // 新しい画像のインスタンスでロードテスト
                     const tempImg = new Image();
                     tempImg.onload = function() {
-                        // 読み込みに成功したら、本物のimg要素に代入して表示
                         logoImg.src = nextSrc;
                         logoImg.style.display = 'block';
-                        fallbackText.style.display = 'none';
                     };
                     tempImg.onerror = function() {
-                        // 失敗したら次の候補へ
                         tryNextSrc();
                     };
                     tempImg.src = nextSrc;
                 } else {
-                    // 全候補が読み込めなかった場合は、代わりにテキストフォールバックを表示
                     logoImg.style.display = 'none';
-                    fallbackText.style.display = 'block';
                 }
             }
 
-            // ロード開始
             tryNextSrc();
         })();
 
 
-        // スートとラグジュアリーカラーの定義
+        // Suits & Luxury Color Palette
         const suits = [
-            { symbol: '♠', name: 'spade', color: '#E5D3B3' }, // シャンパンゴールド
-            { symbol: '♥', name: 'heart', color: '#FF5A09' }, // ネオンオレンジ
-            { symbol: '♦', name: 'diamond', color: '#FF7A00' }, // アクセントオレンジ
-            { symbol: '♣', name: 'club', color: '#D4AF37' }  // アンティークゴールド
+            { symbol: '♠', name: 'spade', color: '#E5D3B3' }, // Champagne Gold
+            { symbol: '♥', name: 'heart', color: '#FF5A09' }, // Neon Orange
+            { symbol: '♦', name: 'diamond', color: '#FF7A00' }, // Accent Light Orange
+            { symbol: '♣', name: 'club', color: '#D4AF37' }  // Antique Gold
         ];
         
         const ranks = [
@@ -314,7 +305,7 @@
 
         let masterDeck = [];
 
-        // 52枚＋ジョーカー2枚のプレミアムデックを構築
+        // Build 52 Cards + 2 Custom Jokers
         function buildDeck() {
             masterDeck = [];
             let idCount = 1;
@@ -334,7 +325,7 @@
                 });
             });
 
-            // ジョーカーを2点追加
+            // Add 2 Rare Jokers
             masterDeck.push({
                 id: `c_j1`,
                 suit: '🃏',
@@ -359,7 +350,7 @@
             });
         }
 
-        // ラグジュアリーアートにマッチするUnsplash画像プール
+        // Curated photography pool fitting luxury art aesthetic
         function getPhotoId(index) {
             const pool = [
                 '1618005182384-a83a8bd57fbe', '1541701494587-cb58502866ab', '1579783902614-a3fb3927b6a5',
@@ -382,7 +373,7 @@
         const textShuffle = document.getElementById('text-shuffle');
         const featuredTitle = document.getElementById('featured-title');
 
-        // シャッフル用アルゴリズム
+        // Fisher-Yates Shuffling Algorithm
         function shuffleArray(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -390,15 +381,14 @@
             }
         }
 
-        // カードDOM生成（isScatteredフラグで、トランジションの有無や初期状態を最適化）
+        // Custom Card Creator (isScattered skips active animations)
         function createCardDOM(card, isScattered = false) {
             const container = document.createElement('div');
             container.id = `card-dom-${card.id}`;
             
-            // 下のエリア用(isScattered)の場合は 'no-transition' クラスを追加しアニメーション演出を除外
+            // Add 'no-transition' style to completely disable deck fly paths for floor cards
             container.className = `card-container absolute cursor-pointer no-select w-[110px] aspect-[2/3] ${isScattered ? 'no-transition' : ''}`;
             
-            // 下のエリア用は最初からめくられた（is-flipped）状態を設定
             const innerFlippedClass = isScattered ? 'is-flipped' : '';
 
             container.innerHTML = `
@@ -420,13 +410,13 @@
                     <div class="card-front p-[1.5px] rounded-lg bg-[#0d0d0d]">
                         <div class="w-full h-full rounded-[6px] relative overflow-hidden flex flex-col justify-between p-1.5 bg-black">
                             
-                            <!-- ポスター本画像 -->
+                            <!-- Card Image Art -->
                             <img src="${card.imagePlaceholder}" alt="${card.title}" 
                                  class="absolute inset-0 w-full h-full object-cover opacity-60 transition-opacity duration-300 hover:opacity-80" 
                                  loading="lazy" 
                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             
-                            <!-- バックアップ用グラフィック (画像読込エラー時の美しいフォールバック) -->
+                            <!-- Backup Graphic (SVG fallback) -->
                             <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-[#13100b] to-black hidden flex-col items-center justify-center p-2 text-center pointer-events-none">
                                 <span class="text-[7px] tracking-widest text-[#D4AF37]/40 uppercase mb-1 font-luxury">LIMITED ART</span>
                                 <div class="w-7 h-7 rounded-full border border-dashed border-[#D4AF37]/30 flex items-center justify-center mb-1">
@@ -437,19 +427,19 @@
 
                             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 pointer-events-none"></div>
 
-                            <!-- スート・ランク（左上） -->
+                            <!-- Suit & Rank (Top Left) -->
                             <div class="z-10 flex flex-col items-center leading-none" style="color: ${card.color}">
                                 <span class="font-bold text-[11px] font-luxury">${card.rank}</span>
                                 <span class="text-[9px] mt-0.5">${card.suit}</span>
                             </div>
 
-                            <!-- スート・ランク（右下） -->
+                            <!-- Suit & Rank (Bottom Right) -->
                             <div class="z-10 flex flex-col items-center leading-none self-end rotate-180" style="color: ${card.color}">
                                 <span class="font-bold text-[11px] font-luxury">${card.rank}</span>
                                 <span class="text-[9px] mt-0.5">${card.suit}</span>
                             </div>
 
-                            <!-- タイトルラベル -->
+                            <!-- Label Slider on Hover -->
                             <div class="absolute inset-x-0 bottom-0 p-1 text-center bg-black/95 border-t border-zinc-900 translate-y-full card-hover-panel transition-transform duration-200">
                                 <p class="text-[7px] font-luxury text-white truncate">${card.title}</p>
                             </div>
@@ -462,13 +452,13 @@
         }
 
         /**
-         * インタラクティブ・ディール：上の3枚だけアニメーション演出し、下のフロアは瞬時に更新
+         * Core Engine: Animate top stage elements with rich effects, instantly snap floor archive layout
          */
         async function runInteractiveDeal(targetCardId, needsScroll = false) {
             if (isDealing) return;
             isDealing = true;
 
-            // フロアクリック時のみ上部へスクロール
+            // Smooth scroll up on request
             if (needsScroll) {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 await new Promise(r => setTimeout(r, 220));
@@ -476,7 +466,7 @@
 
             const targetCard = masterDeck.find(c => c.id === targetCardId) || currentFanCards[1] || masterDeck[0];
 
-            // 注目タイトルの更新
+            // Animate banner text transition
             featuredTitle.style.opacity = '0';
             setTimeout(() => {
                 featuredTitle.innerText = `${targetCard.rank} ${targetCard.suit} - ${targetCard.title}`;
@@ -484,7 +474,7 @@
                 featuredTitle.style.opacity = '1';
             }, 500);
 
-            // 【上の3枚だけ回収演出】 上ステージのカードだけを山札に戻すアニメーション
+            // [Recall Animation - Top Only] Smoothly transition fan stage cards to center stack
             const activeFanCardDOMs = fanStage.querySelectorAll('.card-container');
             activeFanCardDOMs.forEach(cardDom => {
                 cardDom.style.transition = 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
@@ -494,15 +484,15 @@
                 cardDom.classList.remove('is-flipped');
             });
 
-            // 【下のエリアは演出なし】 瞬時に消去
+            // [Zero-Lag Floor Archive] Instantly wipe old elements
             scatteredGround.innerHTML = '';
 
             await new Promise(r => setTimeout(r, 520));
 
-            // ステージ側をパージ
+            // Clean top stage
             fanStage.innerHTML = '';
 
-            // 山札シャッフル配分の用意
+            // Segment new deal assignments
             const remainingDeck = masterDeck.filter(c => c.id !== targetCard.id);
             shuffleArray(remainingDeck);
 
@@ -513,7 +503,7 @@
             ];
             currentScatteredCards = remainingDeck.slice(2);
 
-            // 上ステージ用：疑似スタック生成とシェイク演出
+            // Create visual stacked deck pile
             const mockDeck = [];
             for (let i = 0; i < 12; i++) {
                 const dummy = document.createElement('div');
@@ -526,12 +516,12 @@
                 mockDeck.push(dummy);
             }
 
-            // シェイクアニメーション
+            // Trigger deck shake
             fanStage.classList.add('animate-shake');
             await new Promise(r => setTimeout(r, 600));
             fanStage.classList.remove('animate-shake');
 
-            // 疑似スタックの退場
+            // Quick fade and removal of mock pile
             mockDeck.forEach(el => {
                 el.style.transition = 'all 0.15s ease';
                 el.style.opacity = '0';
@@ -540,7 +530,7 @@
             await new Promise(r => setTimeout(r, 120));
             fanStage.innerHTML = '';
 
-            // 上の選抜3枚のBurst（配牌）アニメーション開始
+            // Deal top 3 Fan cards with premium 3D transition bursts
             const fanConfigs = [
                 { left: 'calc(50% - 132px)', top: 'calc(50% - 70px)', rotate: -15, scale: 0.95, z: 20 },
                 { left: 'calc(50% - 55px)', top: 'calc(50% - 95px)', rotate: 0, scale: 1.15, z: 30, isFeatured: true },
@@ -570,7 +560,7 @@
                     }
                 }, 100 + i * 140);
 
-                // 選抜カードクリック処理
+                // Interactions on fan stage cards
                 cardDom.addEventListener('click', () => {
                     if (isDealing) return;
                     if (config.isFeatured) {
@@ -581,7 +571,7 @@
                 });
             });
 
-            // 【下のエリアは演出なし】 演出を挟まず瞬時に最終的な位置に静止状態で展開
+            // [Zero-Lag Floor Archive] Display instantaneously with zero motion delay
             renderScatteredFloor();
 
             setTimeout(() => {
@@ -589,7 +579,7 @@
             }, 850);
         }
 
-        // アーカイブフロア：演出・アニメーション遅延なしで瞬時に全要素を静的にレイアウト
+        // Layout the floor scattered archive cleanly with zero transitions
         function renderScatteredFloor() {
             scatteredGround.innerHTML = '';
             
@@ -622,12 +612,12 @@
                 const scale = (0.85 + Math.random() * 0.2).toFixed(2);
                 const zIndex = Math.floor(Math.random() * 20) + 10;
 
-                // isScattered = trueでアニメーション用トランジションをカット
+                // passes 'true' to completely eliminate CSS transition actions on ground cards
                 const cardDom = createCardDOM(card, true);
                 cardDom.style.width = `${cardWidth}px`;
                 cardDom.style.height = `${cardHeight}px`;
                 
-                // 配置処理
+                // Set final layout transforms directly with zero delays
                 cardDom.classList.add('is-flipped');
                 cardDom.style.left = `${posX}px`;
                 cardDom.style.top = `${posY}px`;
@@ -636,7 +626,7 @@
 
                 scatteredGround.appendChild(cardDom);
 
-                // クリック処理
+                // Interactions on scattered cards
                 cardDom.addEventListener('click', () => {
                     if (isDealing) return;
                     runInteractiveDeal(card.id, true);
@@ -644,30 +634,30 @@
             });
         }
 
-        // --- インタラクションフック ---
+        // --- COMMAND HOOKS ---
         function triggerWiggleShuffle() {
             const randSelect = masterDeck[Math.floor(Math.random() * masterDeck.length)];
             runInteractiveDeal(randSelect.id, false);
         }
 
-        // 右上のおにぎりリンク
+        // Top-Right Riceball Navigation World Link
         shuffleBtn.addEventListener('click', () => {
             window.open('https://funkyhotdog.com/world/', '_blank');
         });
 
-        // RE-DEAL テキストボタン
+        // RE-DEAL link action
         textShuffle.addEventListener('click', () => {
             triggerWiggleShuffle();
         });
 
-        // 初回読み込み
+        // Initialize Live Session
         window.addEventListener('DOMContentLoaded', () => {
             buildDeck();
             const initialCard = masterDeck[Math.floor(Math.random() * masterDeck.length)];
             runInteractiveDeal(initialCard.id, false);
         });
 
-        // ウィンドウ幅リサイズ対応
+        // Responsive Resizing Handler
         let resizeTimer;
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
