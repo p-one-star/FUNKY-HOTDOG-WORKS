@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FUNKY STACK YARDS - Premium Poster Exhibition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Luxury Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000000;
+            color: #E5D3B3; /* Champagne Gold Base */
+            overflow-x: hidden;
+            perspective: 1000px; /* Enable 3D effects for cards */
+        }
+        
+        .font-luxury {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Metallic Champagne Gold text animation (Sweeps left to right every 8 seconds)
+           - Base color represents a luxurious deep/dark gold.
+           - Sweep light is a high-contrast elegant shiny white-gold.
+        */
+        .text-champagne {
+            color: #7a5f2d;
+            background: linear-gradient(
+                110deg, 
+                #7a5f2d 15%, 
+                #a38342 35%, 
+                #FFF6E5 50%, 
+                #a38342 65%, 
+                #7a5f2d 85%
+            );
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gold-sweep-animation 8s ease-in-out infinite;
+        }
+
+        @keyframes gold-sweep-animation {
+            0% {
+                background-position: 250% 0;
+            }
+            30% {
+                background-position: -50% 0; /* Sweeps in the first ~2.4 seconds */
+            }
+            100% {
+                background-position: -50% 0; /* Remains dark and stable for the rest of the 8s loop */
+            }
+        }
+
+        .border-champagne {
+            border-color: rgba(229, 211, 179, 0.2);
+        }
+
+        /* Ambient Glow effect for the featured spotlight */
+        .glow-orange {
+            box-shadow: 0 0 35px rgba(255, 90, 9, 0.35);
+        }
+
+        /* 3D Card Setup */
+        .card-container {
+            perspective: 1000px;
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* When flipped, rotate Y axis */
+        .is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Front represents the card face */
+        .card-front {
+            background-color: #0d0d0d;
+            transform: rotateY(180deg);
+            border: 1px solid rgba(229, 211, 179, 0.3);
+        }
+
+        /* Back represents the card design (Gold Pattern) */
+        .card-back {
+            background: radial-gradient(circle at center, #1a150e 0%, #000000 100%);
+            border: 1.5px solid #D4AF37;
+            /* Classic card pattern using SVG */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15 0 L30 15 L15 30 L0 15 Z' fill='none' stroke='%23B89047' stroke-opacity='0.15' stroke-width='1'/%3E%3C/svg%3E");
+        }
+
+        /* Wiggle animation for hover on interactive elements */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(-10deg) scale(1.15); }
+            75% { transform: rotate(10deg) scale(1.15); }
+        }
+        .wiggle-hover:hover {
+            animation: wiggle 0.3s ease-in-out;
+        }
+        .animate-wiggle {
+            animation: wiggle 0.4s ease-in-out;
+        }
+
+        /* Shuffle vibration for deck stack */
+        @keyframes deck-shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-4px, 2px) rotate(-1deg); }
+            30% { transform: translate(3px, -2px) rotate(1deg); }
+            50% { transform: translate(-3px, -1px) rotate(-1deg); }
+            70% { transform: translate(4px, 3px) rotate(1deg); }
+            90% { transform: translate(-2px, 1px) rotate(0deg); }
+        }
+        .animate-shake {
+            animation: deck-shake 0.6s ease-in-out;
+        }
+
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen pb-24 selection:bg-[#FF5A09] selection:text-black">
+
+    <!-- Subtle Ambient Background Effects -->
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,90,9,0.06),transparent_40%)] pointer-events-none"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(212,175,55,0.04),transparent_50%)] pointer-events-none"></div>
+
+    <!-- HEADER (Slimmer Heights, Absolute Center Title with Shiny Sweep, Circular Logo) -->
+    <header class="sticky top-0 z-50 w-full backdrop-blur-md bg-black/85 border-b border-zinc-900 px-4 py-2 flex items-center justify-between min-h-[75px] sm:min-h-[85px]">
+        
+        <!-- Left: Circular Logo Placeholder -->
+        <div class="w-12 h-12 sm:w-16 sm:h-16 md:w-[75px] md:h-[75px] rounded-full border border-dashed border-zinc-800 flex items-center justify-center relative overflow-hidden group flex-shrink-0">
+            <span class="text-[7px] sm:text-[9px] tracking-widest text-zinc-600 font-mono group-hover:text-zinc-400 transition-colors uppercase text-center px-1">FSY<br>LOGO</span>
+            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+        </div>
+
+        <!-- Center: Absolute Centered Brand Name with custom 8s gold glow sweep -->
+        <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none w-[55%] sm:w-[55%] z-10">
+            <h1 class="font-luxury font-bold text-sm sm:text-base md:text-xl lg:text-2xl tracking-[0.22em] text-champagne leading-tight">FUNKY STACK YARDS</h1>
+            <p class="text-[7px] sm:text-[9px] tracking-[0.18em] text-zinc-500 uppercase mt-0.5">POD Premium Exhibition</p>
+        </div>
+
+        <!-- Right: 1.2x Scaled Riceball Emoji (Taps to visit World Link) -->
+        <button id="shuffle-trigger" class="w-10 h-10 sm:w-14 sm:h-14 flex flex-col items-center justify-center focus:outline-none select-none wiggle-hover relative group flex-shrink-0 ml-auto z-20" title="Visit Funky Hotdog World!">
+            <span class="text-3xl sm:text-[38px] scale-110 leading-none select-none">🍙</span>
+            <span class="absolute -bottom-2.5 text-[7px] tracking-widest text-zinc-500 scale-90 opacity-0 group-hover:opacity-100 transition-opacity duration-300">WORLD</span>
+        </button>
+    </header>
+
+    <!-- MAIN INTERACTIVE SPACE -->
+    <main class="max-w-md mx-auto px-4 pt-6 flex flex-col items-center">
+        
+        <!-- SECTION 1: THE FAN-OUT STAGED LUCKY 3 (扇状の選抜3枚エリア) -->
+        <section class="w-full mb-12 text-center flex flex-col items-center relative">
+            
+            <!-- Opening Title Accent -->
+            <div class="inline-flex items-center gap-2 mb-6">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#FF5A09] animate-ping"></span>
+                <span class="text-[10px] uppercase tracking-[0.25em] text-[#FF5A09] font-semibold">LUCKY FAN-THREE DRAW</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#FF5A09] animate-ping"></span>
+            </div>
+
+            <!-- The Stage (Fan area container) -->
+            <div class="relative w-full h-[320px] flex items-center justify-center" id="fan-stage">
+                <!-- Golden Ambient Backglow for the Stage -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[240px] h-[240px] rounded-full bg-gradient-to-tr from-[#FF5A09]/10 to-[#D4AF37]/5 blur-3xl pointer-events-none"></div>
+
+                <!-- Deck position for shuffling effect -->
+                <div id="deck-origin" class="absolute w-[110px] aspect-[2/3] bg-transparent rounded-lg z-0 pointer-events-none opacity-0"></div>
+            </div>
+
+            <!-- English Hint Text -->
+            <div class="mt-4 flex flex-col items-center gap-1 px-4">
+                <p class="text-[10px] text-zinc-400 tracking-wider leading-relaxed">
+                    Tap the center card (Lucky Pick) to visit our <span class="text-[#FF5A09] font-medium">Etsy Shop</span>.
+                </p>
+                <p class="text-[9px] text-zinc-600 italic">
+                    Tap any card below or on sides to initiate the dynamic deck reshuffle!
+                </p>
+            </div>
+        </section>
+
+        <!-- DIVIDER / ARCHIVE HEADER -->
+        <div class="w-full flex items-center justify-between mb-4 border-t border-zinc-900 pt-6">
+            <div class="flex flex-col items-start">
+                <h3 class="font-luxury text-[11px] tracking-[0.2em] text-[#E5D3B3] uppercase font-semibold">THE SHUFFLED ARCHIVE</h3>
+                <p class="text-[9px] text-zinc-600">The rest of the premium deck is scattered across the floor</p>
+            </div>
+            <!-- Text-based shuffle link -->
+            <button id="text-shuffle" class="text-[9px] text-zinc-500 hover:text-[#FF5A09] tracking-widest uppercase transition-colors flex items-center gap-1 select-none font-medium">
+                RE-DEAL <span class="text-[7px]">⚡</span>
+            </button>
+        </div>
+
+        <!-- SECTION 2: THE SCATTERED ARCHIVE -->
+        <section class="w-full relative min-h-[460px] sm:min-h-[500px] bg-zinc-950/20 rounded-2xl border border-zinc-900/60 p-4 overflow-hidden mb-12" id="scat-container">
+            <!-- Background Watermark -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none opacity-[0.02] transform -rotate-12">
+                <span class="font-luxury text-6xl tracking-[0.25em] text-white">FSY</span>
+            </div>
+            
+            <!-- Cards scattered randomly here -->
+            <div id="scattered-ground" class="relative w-full h-full min-h-[420px] sm:min-h-[460px]"></div>
+        </section>
+
+        <!-- MINI ABOUT BRAND -->
+        <section class="w-full border border-zinc-900 rounded-xl p-5 bg-gradient-to-b from-zinc-950 to-black text-center mb-8">
+            <h4 class="font-luxury text-xs tracking-widest text-[#E5D3B3] mb-2">ABOUT THE COLLECTION</h4>
+            <p class="text-[10px] text-zinc-400 leading-relaxed max-w-[90%] mx-auto">
+                An exclusive 2:3 ratio vertical art print showcase curated like a premium deck of playing cards. Every single visit dynamically shuffles the exhibition, ensuring a unique, serendipitous encounter with your next masterpiece.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full text-center py-8 border-t border-zinc-950 absolute bottom-0 left-0">
+        <p class="text-[9px] tracking-[0.3em] text-zinc-600 uppercase">© FUNKY HOTDOG WORKS. ALL RIGHTS RESERVED.</p>
+    </footer>
+
+    <!-- INTERACTION LOGIC -->
+    <script>
+        // Suits & Ranks for English Deck Setup
+        const suits = [
+            { symbol: '♠', name: 'spade', color: '#E5D3B3' }, // Champagne Gold
+            { symbol: '♥', name: 'heart', color: '#FF5A09' }, // Neon Orange Accent
+            { symbol: '♦', name: 'diamond', color: '#FF7A00' }, // Accent Orange Light
+            { symbol: '♣', name: 'club', color: '#D4AF37' }  // Darker Gold
+        ];
+        
+        const ranks = [
+            { label: 'A', value: 1 },
+            { label: '2', value: 2 },
+            { label: '3', value: 3 },
+            { label: '4', value: 4 },
+            { label: '5', value: 5 },
+            { label: '6', value: 6 },
+            { label: '7', value: 7 },
+            { label: '8', value: 8 },
+            { label: '9', value: 9 },
+            { label: '10', value: 10 },
+            { label: 'J', value: 11 },
+            { label: 'Q', value: 12 },
+            { label: 'K', value: 13 }
+        ];
+
+        let masterDeck = [];
+
+        // Build the deck dynamically (52 cards + 2 Jokers)
+        function buildDeck() {
+            masterDeck = [];
+            let idCount = 1;
+            suits.forEach(suit => {
+                ranks.forEach(rank => {
+                    masterDeck.push({
+                        id: `c_${idCount++}`,
+                        suit: suit.symbol,
+                        suitName: suit.name,
+                        color: suit.color,
+                        rank: rank.label,
+                        title: `${suit.name.toUpperCase()} ${rank.label} ART`,
+                        desc: `A limited premium 2:3 POD vertical poster combining classic ${suit.name} motifs with elegant modern minimalism.`,
+                        imagePlaceholder: `https://images.unsplash.com/photo-${getPhotoId(idCount)}?auto=format&fit=crop&w=400&h=600&q=80`,
+                        etsyUrl: `https://www.etsy.com/shop/FunkyStackYards?ref=card_${suit.name}_${rank.label}`
+                    });
+                });
+            });
+
+            // Add 2 Jokers
+            masterDeck.push({
+                id: `c_j1`,
+                suit: '🃏',
+                suitName: 'joker',
+                color: '#FF5A09',
+                rank: 'JOKER',
+                title: 'THE FUNKY EMBLEM',
+                desc: 'The official studio mascot poster. A playful and exotic composition featuring neon gold tones.',
+                imagePlaceholder: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=400&h=600&q=80',
+                etsyUrl: 'https://www.etsy.com/shop/FunkyStackYards?ref=joker_funky'
+            });
+            masterDeck.push({
+                id: `c_j2`,
+                suit: '🃏',
+                suitName: 'joker',
+                color: '#E5D3B3',
+                rank: 'JOKER',
+                title: 'GOLDEN LUXURY EMULSION',
+                desc: 'An abstract simulation celebrating rich golden liquid and premium textures designed for dark interior decors.',
+                imagePlaceholder: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&h=600&q=80',
+                etsyUrl: 'https://www.etsy.com/shop/FunkyStackYards?ref=joker_gold'
+            });
+        }
+
+        function getPhotoId(index) {
+            const pool = [
+                '1618005182384-a83a8bd57fbe', '1541701494587-cb58502866ab', '1579783902614-a3fb3927b6a5',
+                '1563245372-f21724e3856d', '1618005198143-e5283b519a7f', '1549490349-8643362247b5',
+                '1600585154340-be6161a56a0c', '1561055657-b9e0bf0fa360', '1506744038136-46273834b3fb',
+                '1518531933037-91b2f5f229cc', '1500485035595-cbe6f645feb1', '1492691527719-9d1e07e534b4',
+                '1507525428034-b723cf961d3e', '1470071459604-3b5ec3a7fe05', '1447752875215-b2761acb3c5d',
+                '1469474968028-56623f02e42e', '1501854140801-50d01698950b', '1461896836934-ffe607ba8211'
+            ];
+            return pool[index % pool.length];
+        }
+
+        // Active State
+        let currentFanCards = []; 
+        let currentScatteredCards = []; 
+        let isDealing = false;
+
+        const fanStage = document.getElementById('fan-stage');
+        const scatteredGround = document.getElementById('scattered-ground');
+        const shuffleBtn = document.getElementById('shuffle-trigger');
+        const textShuffle = document.getElementById('text-shuffle');
+
+        // Fisher-Yates Shuffle
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+
+        function createCardDOM(card, isScattered = false) {
+            const container = document.createElement('div');
+            container.id = `card-dom-${card.id}`;
+            container.className = 'card-container absolute cursor-pointer no-select w-[110px] aspect-[2/3]';
+            
+            container.innerHTML = `
+                <div class="card-inner w-full h-full shadow-2xl rounded-lg">
+                    <!-- CARD BACK -->
+                    <div class="card-back flex flex-col items-center justify-between p-2 rounded-lg">
+                        <div class="w-full flex justify-between text-[7px] text-[#D4AF37]/50 font-luxury font-bold">
+                            <span>F</span><span>S</span>
+                        </div>
+                        <div class="w-8 h-8 rounded-full border border-[#D4AF37]/40 flex items-center justify-center bg-black/50">
+                            <span class="font-luxury text-[8px] tracking-wider text-[#E5D3B3]">FSY</span>
+                        </div>
+                        <div class="w-full flex justify-between text-[7px] text-[#D4AF37]/50 font-luxury font-bold rotate-180">
+                            <span>F</span><span>S</span>
+                        </div>
+                    </div>
+                    
+                    <!-- CARD FRONT -->
+                    <div class="card-front p-[1.5px] rounded-lg bg-[#0e0e0e]">
+                        <div class="w-full h-full rounded-[6px] relative overflow-hidden flex flex-col justify-between p-1.5 bg-black">
+                            <img src="${card.imagePlaceholder}" alt="${card.title}" class="absolute inset-0 w-full h-full object-cover opacity-65 group-hover:opacity-85 transition-opacity" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-black/90 pointer-events-none"></div>
+
+                            <div class="z-10 flex flex-col items-center leading-none" style="color: ${card.color}">
+                                <span class="font-bold text-[11px]">${card.rank}</span>
+                                <span class="text-[10px]">${card.suit}</span>
+                            </div>
+
+                            <div class="z-10 flex flex-col items-center leading-none self-end rotate-180" style="color: ${card.color}">
+                                <span class="font-bold text-[11px]">${card.rank}</span>
+                                <span class="text-[10px]">${card.suit}</span>
+                            </div>
+
+                            <div class="absolute inset-x-0 bottom-0 p-1 text-center bg-black/95 border-t border-zinc-900 translate-y-full card-hover-panel transition-transform duration-200">
+                                <p class="text-[7px] font-luxury text-white truncate">${card.title}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return container;
+        }
+
+        /**
+         * Core Engine: Perform highly dynamic shuffle sequence where ALL cards
+         * fly back to the center stack, shake, and then redeal with selected card as featured center.
+         */
+        async function runInteractiveDeal(targetCardId, needsScroll = false) {
+            if (isDealing) return;
+            isDealing = true;
+
+            // 1. Smooth scroll to showcase top area if triggered from scattered bottom archive
+            if (needsScroll) {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Short buffer delay for scroll initialization
+                await new Promise(r => setTimeout(r, 220));
+            }
+
+            // Find selected card or fallback to first card of active fan
+            const targetCard = masterDeck.find(c => c.id === targetCardId) || currentFanCards[1] || masterDeck[0];
+
+            // 2. MAGICAL RECALL: Animate every single active card DOM flying backwards into the center stack
+            const activeCardDOMs = document.querySelectorAll('.card-container');
+            activeCardDOMs.forEach(cardDom => {
+                cardDom.style.transition = 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+                cardDom.style.left = 'calc(50% - 55px)';
+                cardDom.style.top = 'calc(50% - 82px)';
+                cardDom.style.transform = 'scale(0.35) rotate(0deg)';
+                cardDom.classList.remove('is-flipped'); // Flip to back instantly for consistency
+            });
+
+            // Wait for recall animation flight path
+            await new Promise(r => setTimeout(r, 520));
+
+            // Clear visual playground
+            fanStage.innerHTML = '';
+            scatteredGround.innerHTML = '';
+
+            // 3. Assemble deck with targetCard destined for index 1 (Center lucky spotlight)
+            const remainingDeck = masterDeck.filter(c => c.id !== targetCard.id);
+            shuffleArray(remainingDeck);
+
+            currentFanCards = [
+                remainingDeck[0], // Left Fan
+                targetCard,       // Center Lucky Spotlight
+                remainingDeck[1]  // Right Fan
+            ];
+            currentScatteredCards = remainingDeck.slice(2);
+
+            // 4. Generate beautiful stacked pile for shuffler visual
+            const mockDeck = [];
+            for (let i = 0; i < 15; i++) {
+                const dummy = document.createElement('div');
+                dummy.className = 'absolute w-[110px] aspect-[2/3] bg-gradient-to-tr from-[#1a150e] to-black rounded-lg border border-[#D4AF37]/50 shadow-2xl';
+                dummy.style.left = `calc(50% - 55px)`;
+                dummy.style.top = `calc(50% - 82px)`;
+                dummy.style.transform = `rotate(${Math.random() * 6 - 3}deg) translate(${i * 0.2}px, ${-i * 0.4}px)`;
+                dummy.style.zIndex = i;
+                fanStage.appendChild(dummy);
+                mockDeck.push(dummy);
+            }
+
+            // Shake the entire stack
+            fanStage.classList.add('animate-shake');
+            await new Promise(r => setTimeout(r, 650));
+            fanStage.classList.remove('animate-shake');
+
+            // Flyout / Fade stack
+            mockDeck.forEach(el => {
+                el.style.transition = 'all 0.2s ease';
+                el.style.opacity = '0';
+                el.style.transform += ' scale(0.9)';
+            });
+            await new Promise(r => setTimeout(r, 150));
+            fanStage.innerHTML = '';
+
+            // 5. Redeal the 3 Fan Stage Cards with high-end angles and values
+            const fanConfigs = [
+                { left: 'calc(50% - 135px)', top: 'calc(50% - 70px)', rotate: -15, scale: 0.95, z: 20 },
+                { left: 'calc(50% - 55px)', top: 'calc(50% - 95px)', rotate: 0, scale: 1.15, z: 30, isFeatured: true },
+                { left: 'calc(50% + 25px)', top: 'calc(50% - 70px)', rotate: 15, scale: 0.95, z: 20 }
+            ];
+
+            currentFanCards.forEach((card, i) => {
+                const cardDom = createCardDOM(card);
+                const config = fanConfigs[i];
+                
+                cardDom.style.left = 'calc(50% - 55px)';
+                cardDom.style.top = 'calc(50% - 82px)';
+                cardDom.style.transform = 'scale(0.5) rotateY(0deg)';
+                cardDom.style.zIndex = config.z;
+
+                fanStage.appendChild(cardDom);
+
+                // Burst outward
+                setTimeout(() => {
+                    cardDom.classList.add('is-flipped');
+                    cardDom.style.left = config.left;
+                    cardDom.style.top = config.top;
+                    cardDom.style.transform = `rotate(${config.rotate}deg) scale(${config.scale})`;
+                    
+                    if (config.isFeatured) {
+                        const inner = cardDom.querySelector('.card-inner');
+                        inner.classList.add('glow-orange', 'border-2', 'border-[#FF5A09]');
+                    }
+                }, 100 + i * 150);
+
+                // Fan Card Interactions
+                cardDom.addEventListener('click', () => {
+                    if (isDealing) return;
+                    if (config.isFeatured) {
+                        window.open(card.etsyUrl, '_blank');
+                    } else {
+                        // Click left/right fan card -> Initiate full animated deck reshuffle with this card as center!
+                        runInteractiveDeal(card.id, false);
+                    }
+                });
+            });
+
+            // 6. Redisperse floor deck
+            renderScatteredFloor();
+
+            setTimeout(() => {
+                isDealing = false;
+            }, 1000);
+        }
+
+        function renderScatteredFloor() {
+            scatteredGround.innerHTML = '';
+            
+            const total = currentScatteredCards.length;
+            const containerWidth = scatteredGround.clientWidth || 360;
+            const containerHeight = scatteredGround.clientHeight || 460;
+            
+            const cardWidth = 80; 
+            const cardHeight = cardWidth * 1.5;
+
+            const columns = 4;
+            const rows = Math.ceil(total / columns);
+            const cellWidth = containerWidth / columns;
+            const cellHeight = containerHeight / rows;
+
+            currentScatteredCards.forEach((card, index) => {
+                const col = index % columns;
+                const row = Math.floor(index / columns);
+
+                const baseX = (col * cellWidth) + (cellWidth / 2) - (cardWidth / 2);
+                const baseY = (row * cellHeight) + (cellHeight / 2) - (cardHeight / 2);
+
+                const offsetX = (Math.random() * cellWidth * 0.35 - (cellWidth * 0.175));
+                const offsetY = (Math.random() * cellHeight * 0.35 - (cellHeight * 0.175));
+
+                const posX = Math.max(5, Math.min(containerWidth - cardWidth - 5, baseX + offsetX));
+                const posY = Math.max(5, Math.min(containerHeight - cardHeight - 5, baseY + offsetY));
+
+                const rot = (Math.random() * 32 - 16).toFixed(1);
+                const scale = (0.85 + Math.random() * 0.2).toFixed(2);
+                const zIndex = Math.floor(Math.random() * 20) + 10;
+
+                const cardDom = createCardDOM(card, true);
+                cardDom.style.width = `${cardWidth}px`;
+                cardDom.style.height = `${cardHeight}px`;
+                
+                cardDom.style.left = 'calc(50% - 40px)';
+                cardDom.style.top = 'calc(50% - 60px)';
+                cardDom.style.transform = 'scale(0.3) rotate(0deg)';
+                cardDom.style.zIndex = zIndex;
+
+                scatteredGround.appendChild(cardDom);
+
+                setTimeout(() => {
+                    cardDom.classList.add('is-flipped');
+                    cardDom.style.left = `${posX}px`;
+                    cardDom.style.top = `${posY}px`;
+                    cardDom.style.transform = `rotate(${rot}deg) scale(${scale})`;
+                }, 300 + Math.random() * 400);
+
+                // Clicking a scattered card -> Fly to top, trigger recall, shuffle, set as central lucky star!
+                cardDom.addEventListener('click', () => {
+                    if (isDealing) return;
+                    runInteractiveDeal(card.id, true);
+                });
+            });
+        }
+
+        // --- SHUFFLE COMMANDS ---
+        function triggerWiggleShuffle() {
+            const randSelect = masterDeck[Math.floor(Math.random() * masterDeck.length)];
+            runInteractiveDeal(randSelect.id, false);
+        }
+
+        // 🍙 Click to visit external world url
+        shuffleBtn.addEventListener('click', () => {
+            window.open('https://funkyhotdog.com/world/', '_blank');
+        });
+
+        // RE-DEAL text link shuffles everything seamlessly
+        textShuffle.addEventListener('click', () => {
+            triggerWiggleShuffle();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            buildDeck();
+            const initialCard = masterDeck[Math.floor(Math.random() * masterDeck.length)];
+            runInteractiveDeal(initialCard.id, false);
+        });
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                if (!isDealing) {
+                    renderScatteredFloor();
+                }
+            }, 250);
+        });
+    </script>
+</body>
+</html>
+
+```
