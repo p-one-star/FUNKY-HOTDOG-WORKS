@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -18,6 +19,7 @@
             --pink: #ff00ff;
             --red: #ff3333; 
             --orange: #ff9900; 
+            --neon-orange: #ff5500; 
             --yellow: #ffcc00; 
             --purple: #b026ff; 
             --white: #ffffff; 
@@ -170,11 +172,18 @@
             left: -999%; top: -999%;
             transform: translate(-50%, -50%);
             z-index: 20;
-            width: 220px;
+            /* ★ 縦横比を正方形に変更 */
+            width: 200px;
+            height: 200px;
             background: #111;
             border: 4px solid var(--theme-color);
             border-radius: 0;
-            padding: 20px;
+            /* パディングを調整してコンテンツを中央に */
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
@@ -198,7 +207,7 @@
 
         .zone-icon {
             font-size: 3.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 5px; /* マージンを少し調整 */
             transition: transform 0.2s ease;
         }
 
@@ -208,9 +217,9 @@
 
         .zone-title {
             font-family: var(--font-stencil);
-            font-size: 1.4rem;
+            font-size: 1.3rem; /* 正方形に合わせて少しサイズ調整 */
             color: var(--theme-color);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             text-transform: uppercase;
             font-style: italic;
             line-height: 1.1;
@@ -230,9 +239,9 @@
         }
 
         .zone-desc {
-            font-size: 0.85rem;
+            font-size: 0.8rem; /* 正方形に合わせて少しサイズ調整 */
             color: #ccc;
-            line-height: 1.4;
+            line-height: 1.3;
             font-family: sans-serif;
             font-weight: bold;
         }
@@ -242,6 +251,7 @@
         .zone.pink { --theme-color: var(--pink); }
         .zone.red  { --theme-color: var(--red); }
         .zone.orange { --theme-color: var(--orange); }
+        .zone.neon-orange { --theme-color: var(--neon-orange); } 
         .zone.yellow { --theme-color: var(--yellow); }
         .zone.purple { --theme-color: var(--purple); } 
         .zone.white  { --theme-color: var(--white); } 
@@ -252,10 +262,7 @@
             --theme-color: #444; 
             background: #222;
             border-style: dashed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 180px;
+            /* display: flex は .zone に移動したので削除 */
         }
 
         .zone.locked:hover {
@@ -290,10 +297,10 @@
 
         .zone-huge-question {
             font-family: var(--font-stencil);
-            font-size: 7.5rem;
+            font-size: 6.5rem; /* 正方形に合わせて少しサイズ調整 */
             color: #ffffff;
             line-height: 1;
-            margin-top: 10px;
+            /* margin-top は不要になったので削除 */
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
             transition: transform 0.2s ease;
         }
@@ -499,7 +506,7 @@
             <!-- === PLAYER CAR === -->
             <div id="player-car" class="player-car">
                 <div class="car-sprite">
-                    <img src="track.PNG?v=20" onerror="this.onerror=null; this.src='track.png?v=20';" alt="Player Car">
+                    <img src="track.PNG?v=21" onerror="this.onerror=null; this.src='track.png?v=21';" alt="Player Car">
                 </div>
             </div>
 
@@ -520,10 +527,9 @@
                 <div class="zone-desc">Mysteries Farm<br>How many made it?</div>
             </div>
 
-            <!-- ★ 変更: アイコンを🥞に変更 -->
             <div class="zone lime locked-visible" onclick="handleZoneClick(this, '', 'construction')">
                 <div class="locked-badge">LOCKED</div>
-                <div class="zone-icon">🥞</div>
+                <div class="zone-icon">🥐</div>
                 <div class="zone-title">OUTLAW POETRY</div>
                 <div class="zone-desc">wild child mind<br>cartel from street</div>
             </div>
@@ -534,11 +540,12 @@
                 <div class="zone-desc">Strange stories<br>Inside the hole</div>
             </div>
 
-            <div class="zone purple locked-visible" onclick="handleZoneClick(this, '', 'construction')">
+            <!-- ★ 新規: LAYERED PANCAKE -->
+            <div class="zone neon-orange locked-visible" onclick="handleZoneClick(this, '', 'construction')">
                 <div class="locked-badge">LOCKED</div>
-                <div class="zone-icon">🍥</div>
-                <div class="zone-title">GLITCH LAB</div>
-                <div class="zone-desc">AI accidents<br>Desert parking</div>
+                <div class="zone-icon">🥞</div>
+                <div class="zone-title">LAYERED PANCAKE</div>
+                <div class="zone-desc">Heavy weight<br>Too many stacks</div>
             </div>
 
             <div class="zone orange locked-visible" onclick="handleZoneClick(this, '', 'construction')">
@@ -857,3 +864,4 @@
 </html>
 
 
+```
