@@ -15,16 +15,16 @@
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #000000;
-            color: #E5D3B3; /* シャンパンゴールドをベースカラーに */
+            color: #E5D3B3; /* Champagne Gold Base */
             overflow-x: hidden;
-            perspective: 1000px; /* カード用の3D視点を有効化 */
+            perspective: 1000px; /* Enable 3D effects for cards */
         }
         
         .font-luxury {
             font-family: 'Cinzel', serif;
         }
 
-        /* メタリックシャンパンゴールドのテキスト光沢アニメーション */
+        /* Metallic Champagne Gold text animation (Sweeps left to right every 8 seconds) */
         .text-champagne {
             color: #7a5f2d;
             background: linear-gradient(
@@ -57,18 +57,18 @@
             border-color: rgba(229, 211, 179, 0.2);
         }
 
-        /* 注目スポットライト用のアビエント・グロー */
+        /* Ambient Glow effect for the featured spotlight */
         .glow-orange {
             box-shadow: 0 0 35px rgba(255, 90, 9, 0.45);
         }
 
-        /* 3Dカードの初期設定 */
+        /* 3D Card Setup */
         .card-container {
             perspective: 1000px;
             transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 下のカードエリア用のトランジション無効化設定 */
+        /* Disable transitions for floor archive cards to prevent animations */
         .no-transition, .no-transition * {
             transition: none !important;
         }
@@ -81,7 +81,7 @@
             transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* カードがめくれた時のY軸回転 */
+        /* Y-axis rotation when flipped */
         .is-flipped .card-inner {
             transform: rotateY(180deg);
         }
@@ -95,21 +95,21 @@
             overflow: hidden;
         }
 
-        /* カードの表面 */
+        /* Card Front Face */
         .card-front {
             background-color: #0d0d0d;
             transform: rotateY(180deg);
             border: 1.5px solid rgba(229, 211, 179, 0.35);
         }
 
-        /* カードの裏面（ゴールド幾何学パターン） */
+        /* Card Back Face (Geometric Gold Pattern) */
         .card-back {
             background: radial-gradient(circle at center, #16120c 0%, #000000 100%);
             border: 1.5px solid #D4AF37;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M15 0 L30 15 L15 30 L0 15 Z' fill='none' stroke='%23B89047' stroke-opacity='0.18' stroke-width='1'/%3E%3C/svg%3E");
         }
 
-        /* ホバー時のウィグル（揺れ）アニメーション */
+        /* Wiggle animation for hover on interactive elements */
         @keyframes wiggle {
             0%, 100% { transform: rotate(0deg) scale(1); }
             25% { transform: rotate(-8deg) scale(1.1); }
@@ -119,7 +119,7 @@
             animation: wiggle 0.3s ease-in-out;
         }
 
-        /* 山札シャッフル時のシェイクアニメーション */
+        /* Shuffle vibration for deck stack */
         @keyframes deck-shake {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
             10% { transform: translate(-3px, 2px) rotate(-1deg); }
@@ -140,7 +140,7 @@
 </head>
 <body class="relative min-h-screen pb-24 selection:bg-[#FF5A09] selection:text-black">
 
-    <!-- 背景装飾ライト -->
+    <!-- Ambient Grid & Glow Background Elements -->
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,90,9,0.06),transparent_40%)] pointer-events-none"></div>
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(212,175,55,0.04),transparent_50%)] pointer-events-none"></div>
 
@@ -241,7 +241,6 @@
     <!-- INTERACTION LOGIC -->
     <script>
         // --- Robust Header Logo Image Loader ---
-        // Bypasses browser cache, tests multiple extensions, and resolves case-sensitivity issues automatically
         (function loadHeaderLogo() {
             const logoImg = document.getElementById('header-logo-img');
             const timestamp = new Date().getTime(); // Cache buster query
@@ -305,27 +304,88 @@
 
         let masterDeck = [];
 
+        // Custom Images Mapping with dedicated Etsy URLs and Titles
+        const customCardsData = [
+            { file: 'kiwi.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4532505861/kiwi-garage-poster-kiwi-hot-rod-wall-art?ref=share_ios_native_control', title: 'KIWI GARAGE' },
+            { file: 'SOFT.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4532477345/soft-cream-garage-poster-ice-cream-hot?ref=share_ios_native_control', title: 'SOFT CREAM GARAGE' },
+            { file: 'pizza.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531849825/pizza-garage-poster-pizza-hot-rod-wall?ref=share_ios_native_control', title: 'PIZZA GARAGE' },
+            { file: 'HOTDOG.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531785185/hotdog-garage-poster-hot-rod-garage-wall?ref=share_ios_native_control', title: 'HOTDOG GARAGE' },
+            { file: 'French toast.PNG', url: 'https://www.etsy.com/jp/listing/4532036308/french-toast-garage-poster-hot-rod-wall?ref=share_ios_native_control', title: 'FRENCH TOAST GARAGE' },
+            { file: 'KABO.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4532800288/kabocha-garage-poster-japanese-pumpkin?ref=share_ios_native_control', title: 'KABOCHA GARAGE' },
+            { file: 'choco.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4532889946/chocolate-garage-poster-chocolate-hot?ref=share_ios_native_control', title: 'CHOCOLATE GARAGE' },
+            { file: 'PANCAKE.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531849628/pancake-garage-poster-breakfast-hot-rod?ref=share_ios_native_control', title: 'PANCAKE GARAGE' },
+            { file: 'corn.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4533125012/corn-garage-poster-sweet-corn-hot-rod?ref=share_ios_native_control', title: 'CORN GARAGE' },
+            { file: 'croissant.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4533290019/croissant-garage-poster-buttery?ref=share_ios_native_control', title: 'CROISSANT GARAGE' },
+            { file: 'Pine.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4532884151/pineapple-garage-poster-tropical?ref=share_ios_native_control', title: 'PINEAPPLE GARAGE' },
+            { file: 'DONUT.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531802705/pink-donut-garage-poster-neon-donut-hot?ref=share_ios_native_control', title: 'DONUT GARAGE' },
+            { file: 'BURGER.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531792655/burger-garage-poster-industrial-garage?ref=share_ios_native_control', title: 'BURGER GARAGE' },
+            { file: 'crape.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531976172/mixed-berry-crepe-garage-poster-o?ref=share_ios_native_control', title: 'CREPE GARAGE' },
+            { file: 'CRAFTBEER.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531773716/craft-beer-garage-poster-industrial?ref=share_ios_native_control', title: 'CRAFT BEER GARAGE' },
+            { file: 'TOMATO.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4532722363/tomato-garage-poster-tomato-hot-rod-wall?ref=share_ios_native_control', title: 'TOMATO GARAGE' },
+            { file: 'WAFFLE.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4532019156/waffle-garage-poster-waffle-hot-rod-wall?ref=share_ios_native_control', title: 'WAFFLE GARAGE' },
+            { file: 'strawberry.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531990571/strawberry-shortcake-garage-poster?ref=share_ios_native_control', title: 'STRAWBERRY GARAGE' },
+            { file: 'TACOS.GARAGE.PNG', url: 'https://www.etsy.com/jp/listing/4531924231/tacos-garage-poster-taco-hot-rod-wall?ref=share_ios_native_control', title: 'TACOS GARAGE' }
+        ];
+
+        // Centralized logic to fetch appropriate card image, URL and Title based on deck index
+        function getCardData(index, suitName, rankLabel) {
+            const actualIndex = index - 1; // 0-based index
+            const timestamp = new Date().getTime(); // Cache buster
+            const defaultUrl = `https://www.etsy.com/shop/FunkyStackYards?ref=card_${suitName}_${rankLabel}`;
+
+            if (actualIndex < customCardsData.length) {
+                // Return Data for Custom Uploaded Art
+                const data = customCardsData[actualIndex];
+                return {
+                    imagePlaceholder: `${encodeURI(data.file)}?v=${timestamp}`,
+                    etsyUrl: data.url || defaultUrl, 
+                    title: data.title
+                };
+            } else {
+                // Return Data for Original Unsplash Pool (Remaining cards)
+                const unsplashPool = [
+                    '1618005182384-a83a8bd57fbe', '1541701494587-cb58502866ab', '1579783902614-a3fb3927b6a5',
+                    '1563245372-f21724e3856d', '1618005198143-e5283b519a7f', '1549490349-8643362247b5',
+                    '1600585154340-be6161a56a0c', '1561055657-b9e0bf0fa360', '1506744038136-46273834b3fb',
+                    '1518531933037-91b2f5f229cc', '1500485035595-cbe6f645feb1', '1492691527719-9d1e07e534b4',
+                    '1507525428034-b723cf961d3e', '1470071459604-3b5ec3a7fe05', '1447752875215-b2761acb3c5d',
+                    '1469474968028-56623f02e42e', '1501854140801-50d01698950b', '1461896836934-ffe607ba8211'
+                ];
+                const unsplashIndex = (actualIndex - customCardsData.length) % unsplashPool.length;
+                
+                return {
+                    imagePlaceholder: `https://images.unsplash.com/photo-${unsplashPool[unsplashIndex]}?auto=format&fit=crop&w=400&h=600&q=80`,
+                    etsyUrl: defaultUrl,
+                    title: `${suitName.toUpperCase()} ${rankLabel} EDITION`
+                };
+            }
+        }
+
         // Build 52 Cards + 2 Custom Jokers
         function buildDeck() {
             masterDeck = [];
             let idCount = 1;
+            
             suits.forEach(suit => {
                 ranks.forEach(rank => {
+                    const cardData = getCardData(idCount, suit.name, rank.label);
+                    
                     masterDeck.push({
-                        id: `c_${idCount++}`,
+                        id: `c_${idCount}`,
                         suit: suit.symbol,
                         suitName: suit.name,
                         color: suit.color,
                         rank: rank.label,
-                        title: `${suit.name.toUpperCase()} ${rank.label} EDITION`,
+                        title: cardData.title,
                         desc: `Minimalist ${suit.name} motifs with elegant modern champagne gold lines.`,
-                        imagePlaceholder: `https://images.unsplash.com/photo-${getPhotoId(idCount)}?auto=format&fit=crop&w=400&h=600&q=80`,
-                        etsyUrl: `https://www.etsy.com/shop/FunkyStackYards?ref=card_${suit.name}_${rank.label}`
+                        imagePlaceholder: cardData.imagePlaceholder,
+                        etsyUrl: cardData.etsyUrl
                     });
+                    idCount++;
                 });
             });
 
-            // Add 2 Rare Jokers
+            // Add 2 Rare Jokers (Keep Original Images & Logic)
             masterDeck.push({
                 id: `c_j1`,
                 suit: '🃏',
@@ -350,18 +410,6 @@
             });
         }
 
-        // Curated photography pool fitting luxury art aesthetic
-        function getPhotoId(index) {
-            const pool = [
-                '1618005182384-a83a8bd57fbe', '1541701494587-cb58502866ab', '1579783902614-a3fb3927b6a5',
-                '1563245372-f21724e3856d', '1618005198143-e5283b519a7f', '1549490349-8643362247b5',
-                '1600585154340-be6161a56a0c', '1561055657-b9e0bf0fa360', '1506744038136-46273834b3fb',
-                '1518531933037-91b2f5f229cc', '1500485035595-cbe6f645feb1', '1492691527719-9d1e07e534b4',
-                '1507525428034-b723cf961d3e', '1470071459604-3b5ec3a7fe05', '1447752875215-b2761acb3c5d',
-                '1469474968028-56623f02e42e', '1501854140801-50d01698950b', '1461896836934-ffe607ba8211'
-            ];
-            return pool[index % pool.length];
-        }
 
         let currentFanCards = []; 
         let currentScatteredCards = []; 
@@ -670,5 +718,6 @@
     </script>
 </body>
 </html>
+
 
 ```
