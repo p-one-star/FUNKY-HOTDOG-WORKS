@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -205,7 +204,6 @@
         }
 
         .zone-icon {
-            /* ★ 絵文字をさらに大きく変更 */
             font-size: 4.5rem; 
             margin-bottom: 8px; 
             line-height: 1; /* 余計な高さをなくす */
@@ -540,15 +538,14 @@
                 <div class="zone-desc">Strange stories<br>Inside the hole</div>
             </div>
 
-            <div class="zone neon-orange locked-visible" onclick="handleZoneClick(this, '', 'construction')">
-                <div class="locked-badge">LOCKED</div>
+            <div class="zone neon-orange" onclick="handleZoneClick(this, 'https://funkyhotdog.com/yards/', false)">
                 <div class="zone-icon">🥞</div>
                 <div class="zone-title">LAYERED PANCAKE</div>
                 <div class="zone-desc">Heavy weight<br>Too many stacks</div>
             </div>
 
-            <div class="zone orange locked-visible" onclick="handleZoneClick(this, '', 'construction')">
-                <div class="locked-badge">LOCKED</div>
+            <!-- ★ 変更: CRAFT BEER オープン (ランダム迷宮) -->
+            <div class="zone orange" onclick="handleZoneClick(this, 'labyrinth', false)">
                 <div class="zone-icon">🍺</div>
                 <div class="zone-title">CRAFT BEER</div>
                 <div class="zone-desc">Labyrinth Brewery<br>Wait and see.</div>
@@ -802,7 +799,27 @@
 
                 isDriving = false;
             } else if (url) {
-                window.location.href = url;
+                
+                // ★ CRAFT BEER (labyrinth) の場合のルーレット抽選処理
+                let finalUrl = url;
+                if (url === 'labyrinth') {
+                    const labyrinthUrls = [
+                        // HOTDOG MAFIAへの確率を極端に低くする (22個中1個 = 約4.5%)
+                        'https://funkyhotdog.com/garage',
+                        
+                        // 他のエリアは3個ずつ入れて確率を高くする
+                        'https://funkyhotdog.com/wild-tomato', 'https://funkyhotdog.com/wild-tomato', 'https://funkyhotdog.com/wild-tomato',
+                        'https://funkyhotdog.com/comic', 'https://funkyhotdog.com/comic', 'https://funkyhotdog.com/comic',
+                        'https://funkyhotdog.com/yards/', 'https://funkyhotdog.com/yards/', 'https://funkyhotdog.com/yards/',
+                        'https://funkyhotdog.com/volcano', 'https://funkyhotdog.com/volcano', 'https://funkyhotdog.com/volcano',
+                        'https://funkyhotdog.com/stadium', 'https://funkyhotdog.com/stadium', 'https://funkyhotdog.com/stadium',
+                        'https://funkyhotdog.com/world', 'https://funkyhotdog.com/world', 'https://funkyhotdog.com/world',
+                        'https://funkyhotdog.com/', 'https://funkyhotdog.com/', 'https://funkyhotdog.com/' // 公式サイト
+                    ];
+                    finalUrl = labyrinthUrls[Math.floor(Math.random() * labyrinthUrls.length)];
+                }
+
+                window.location.href = finalUrl;
                 
                 setTimeout(() => {
                     element.classList.remove('zoom-attack');
